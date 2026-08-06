@@ -113,6 +113,39 @@ export default function TokensPage() {
 
       {/* ---------------------------------------------------------------- */}
       <Section
+        title="Glass — shared translucent surface"
+        note="One definition, two consumers: the expanded cursor label and the scrolled header. Text on glass is always ink, never white — a translucent surface has no fixed contrast ratio, so the white tint is what keeps dark text legible over anything."
+      >
+        {/* Swatches sit on a busy photo, because glass over a flat colour
+         * tells you nothing about whether it actually works. */}
+        <div
+          className="relative flex flex-wrap gap-(--spacing-6) bg-cover bg-center p-(--spacing-8)"
+          style={{
+            backgroundImage:
+              "url(https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=1200&q=80)",
+          }}
+        >
+          <div className="glass px-(--spacing-6) py-(--spacing-4)">
+            <p className="type-label text-ink">--color-glass · 0.72</p>
+            <p className="type-caption text-ink">Expanded cursor label</p>
+          </div>
+
+          <div className="glass-strong px-(--spacing-6) py-(--spacing-4)">
+            <p className="type-label text-ink">--color-glass-strong · 0.88</p>
+            <p className="type-caption text-ink">Scrolled header</p>
+          </div>
+
+          <div className="px-(--spacing-6) py-(--spacing-4)">
+            <p className="type-label text-on-media text-ink">.text-on-media</p>
+            <p className="type-caption text-on-media text-ink">
+              Header rest state — no panel, halo only
+            </p>
+          </div>
+        </div>
+      </Section>
+
+      {/* ---------------------------------------------------------------- */}
+      <Section
         title="Contrast audit — WCAG 2.1 AA"
         note="Computed live from the token values. AA needs 4.5:1 for normal text and 3:1 for large text (≥24px). Two known issues are expected below — they are the §3.2 action items, not regressions."
       >

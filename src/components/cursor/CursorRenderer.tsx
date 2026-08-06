@@ -109,23 +109,36 @@ export function CursorRenderer() {
     const spec = VARIANTS[variant];
     const showsLabel = spec.showsLabel && label.length > 0;
 
-    /* A labelled pill sizes to its text. Measuring scrollWidth is a forced
+    /* A labelled box sizes to its text. Measuring scrollWidth is a forced
      * layout read, but it happens once per hover boundary — not per frame —
      * so the cost is irrelevant here and gives an exact fit. */
     const targetWidth = showsLabel
       ? labelEl.scrollWidth + PILL_PADDING_X
       : spec.width;
 
+    /* backdrop-filter cannot be tweened by GSAP, so the glass treatment is a
+     * class toggle rather than an animated property. The size morph still
+     * animates, which is what carries the transition visually — the blur
+     * appearing instantly underneath it is not perceptible.
+     *
+     * The class must be applied BEFORE the tween sets backgroundColor, or
+     * GSAP's inline style would lose to the class on the next frame. */
+    dot.classList.toggle("glass", spec.fill === "glass");
+
     gsap.to(dot, {
       width: targetWidth,
       height: spec.height,
       borderRadius: spec.radius,
+      /* Glass gets its fill from the class; clearing the inline value lets
+       * the class win rather than fighting it. */
       backgroundColor:
-        spec.fill === "ink"
-          ? "var(--color-ink)"
-          : spec.fill === "none"
-            ? "transparent"
-            : "var(--color-brand-500)",
+        spec.fill === "glass"
+          ? "var(--color-glass)"
+          : spec.fill === "ink"
+            ? "var(--color-ink)"
+            : spec.fill === "none"
+              ? "transparent"
+              : "var(--color-brand-500)",
       duration: MORPH_DURATION,
       ease: MORPH_EASE,
       overwrite: "auto",
@@ -184,8 +197,11 @@ export function CursorRenderer() {
         ref={labelRef}
         className="type-label px-(--spacing-4) whitespace-nowrap"
         style={{
-          /* White on brand-500 measures 5.64:1 — AA, even decorative (§3.2). */
-          color: "var(--color-paper)",
+          /* INK, not white. A translucent surface has no fixed contrast
+           * ratio — the effective background is whatever is behind it. The
+           * glass token is white-tinted at 0.72 precisely so dark text stays
+           * legible over anything; white text would not. See tokens.css. */
+          color: "var(--color-ink)",
           opacity: 0,
         }}
       >

@@ -43,6 +43,36 @@
   --color-hairline: #e4e4e4;
 
   /* ---------------------------------------------------------------------
+   * Glass — the shared translucent surface.
+   *
+   * ONE definition, used by both the expanded cursor label and the scrolled
+   * header. They are the same material: a light, semi-transparent panel that
+   * blurs whatever sits behind it. Defining it once means the two can never
+   * drift apart.
+   *
+   * ⚠️ THE CONTRAST PROBLEM, and why this is white-tinted rather than a
+   * transparent brand blue:
+   *
+   * A translucent surface has no fixed contrast ratio — the effective
+   * background is whatever happens to be behind it, which for the cursor is
+   * literally anything on the page, and for the header is unpredictable video.
+   * A 30%-opacity blue panel over a dark video frame gives white text almost
+   * no contrast at all.
+   *
+   * Pushing the white tint to 0.72 fixes that. At that opacity the backdrop
+   * contributes at most ~28% of the final colour, so the surface stays close
+   * to white no matter what is behind it, and INK text on it clears AA in
+   * every realistic case. Hence: glass surfaces carry ink text, never white.
+   *
+   * The blur is not decorative — it destroys the high-frequency detail behind
+   * the panel, which is what stops busy video from reading through as noise.
+   * ------------------------------------------------------------------- */
+  --color-glass: rgb(255 255 255 / 0.72); /* the shared translucent fill */
+  --color-glass-strong: rgb(255 255 255 / 0.88); /* scrolled header, denser */
+  --color-glass-border: rgb(255 255 255 / 0.5); /* catches the panel edge */
+  --blur-glass: 12px;
+
+  /* ---------------------------------------------------------------------
    * Typography — §3.3 · CONFIRMED against the supplied type spec
    *
    * ONE family across every level: Rethink Sans (Google Fonts, OFL, variable

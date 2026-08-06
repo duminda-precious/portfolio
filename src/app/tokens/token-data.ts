@@ -135,6 +135,26 @@ export const CONTRAST_PAIRS = [
     usage: "❌ The mockup's nav grey. Expected to FAIL — this is the §3.2 fix.",
     expect: "FAIL",
   },
+  /* Glass composited over pure black — the WORST case for a translucent
+   * surface, i.e. a fully dark video frame behind the header or cursor.
+   * The composite is precomputed here because the audit takes solid hex
+   * pairs; 0.72 white over #000 resolves to #B7B7B7. */
+  {
+    label: "ink on glass (worst case)",
+    fg: NEUTRALS.ink,
+    bg: "#B7B7B7",
+    usage:
+      "✅ Glass 0.72 over BLACK video. Holds AAA — this is why glass carries ink text.",
+    expect: "AAA",
+  },
+  {
+    label: "white on glass (worst case)",
+    fg: NEUTRALS.paper,
+    bg: "#B7B7B7",
+    usage:
+      "❌ Why glass never carries white text. Fails against every backdrop.",
+    expect: "FAIL",
+  },
 ] as const;
 
 /**

@@ -53,16 +53,32 @@ export function Header({ items }: { items: NavItem[] }) {
         className="pointer-events-none absolute top-0 left-0 h-[80px] w-px"
       />
 
+      {/*
+        Rest state is FULLY transparent; scrolling brings in the glass panel —
+        the same translucent surface the expanded cursor uses (tokens.css).
+
+        Only background-color and border-color transition. Never height, which
+        would thrash layout (§9.2). `backdrop-filter` is applied by the .glass
+        class rather than animated, because it cannot be interpolated — it
+        arrives with the background, which reads as a single change.
+      */}
       <header
         className={cn(
           "fixed top-0 right-0 left-0 z-(--z-header)",
           "transition-colors duration-(--duration-base)",
           isScrolled
-            ? "border-b border-hairline bg-paper"
-            : "border-b border-transparent bg-paper/40 backdrop-blur-[8px]",
+            ? "glass-strong border-b border-(--color-glass-border)"
+            : "border-b border-transparent bg-transparent",
         )}
       >
-        <div className="mx-auto flex max-w-(--container-max) items-center justify-between px-(--container-pad) py-(--spacing-4)">
+        {/* The scrim applies ONLY while transparent. Once the glass panel is
+         * in, it provides the contrast and the halo would just look smudged. */}
+        <div
+          className={cn(
+            "mx-auto flex max-w-(--container-max) items-center justify-between px-(--container-pad) py-(--spacing-4)",
+            !isScrolled && "text-on-media",
+          )}
+        >
           <Link
             href="/"
             aria-label="Duminda M — home"

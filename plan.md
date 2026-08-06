@@ -191,6 +191,42 @@ interpolated from the two blue anchors and are not themselves brand-supplied.
 fills every placeholder in the mockup. `brand-700` is the _accessible_ blue — required
 for any blue text sitting on the grey page background. See the audit below.
 
+#### Glass — the shared translucent surface
+
+```css
+--color-glass: rgb(255 255 255 / 0.72); /* expanded cursor label */
+--color-glass-strong: rgb(255 255 255 / 0.88); /* scrolled header */
+--color-glass-border: rgb(255 255 255 / 0.5);
+--blur-glass: 12px;
+```
+
+One definition, two consumers: the **expanded cursor label** and the **scrolled
+header** are the same material. Use the `.glass` / `.glass-strong` component classes
+rather than reassembling the properties — they carry the `backdrop-filter` and its
+fallback.
+
+**Why white-tinted rather than a translucent brand blue.** A translucent surface has
+no fixed contrast ratio: the effective background is whatever sits behind it, which
+for the cursor is _anything on the page_ and for the header is unpredictable video.
+A 30%-opacity blue panel over a dark frame leaves white text nearly invisible.
+
+At 0.72 white the backdrop contributes at most ~28% of the final colour, so the
+surface stays near-white regardless of what is behind it. That is what makes it safe.
+The consequence is a rule:
+
+> **Text on glass is always `--color-ink`, never white.**
+
+The blur is functional, not decorative — it destroys high-frequency detail behind the
+panel, which is what stops busy video reading through as noise. Where
+`backdrop-filter` is unsupported the fallback goes to 95% white: degrading to
+"legible but flatter" beats degrading to "pretty but unreadable".
+
+**Header rest state.** The header is now _fully transparent_ until scroll, so nav
+labels sit directly on video — the §3.2 failure case. `.text-on-media` applies a soft
+white halo as a hedge. It cannot produce a measurable ratio, so **if the final hero
+footage is light and detailed under the header, switch to the gradient scrim in
+§9.2(b)** rather than trusting the halo.
+
 ### 3.2 Contrast audit (WCAG 2.1 AA)
 
 Re-run against the confirmed palette. These are computed values, and the same maths

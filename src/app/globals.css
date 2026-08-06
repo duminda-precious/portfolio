@@ -65,6 +65,56 @@
 
 @layer components {
   /**
+   * Glass — the shared translucent surface (cursor label + header).
+   *
+   * ⚠️ The @supports fallback is load-bearing, not politeness. Where
+   * backdrop-filter is unavailable, an unblurred 72%-white panel over busy
+   * video is genuinely hard to read, so those browsers get a near-opaque
+   * surface instead. Degrading to "still legible" beats degrading to "pretty
+   * but unreadable".
+   *
+   * Text on glass must be --color-ink. See the token comment for why white
+   * text on a translucent surface has no guaranteed contrast ratio.
+   */
+  .glass {
+    background-color: var(--color-glass);
+    backdrop-filter: blur(var(--blur-glass)) saturate(160%);
+    -webkit-backdrop-filter: blur(var(--blur-glass)) saturate(160%);
+  }
+
+  .glass-strong {
+    background-color: var(--color-glass-strong);
+    backdrop-filter: blur(var(--blur-glass)) saturate(160%);
+    -webkit-backdrop-filter: blur(var(--blur-glass)) saturate(160%);
+  }
+
+  @supports not (backdrop-filter: blur(1px)) {
+    .glass,
+    .glass-strong {
+      background-color: rgb(255 255 255 / 0.95);
+    }
+  }
+
+  /**
+   * Legibility scrim for text sitting directly on video.
+   *
+   * The header is fully transparent at rest, so nav labels sit on whatever
+   * the hero loop happens to be showing — the §3.2 failure case. A soft white
+   * halo lifts dark text off a dark or busy frame without putting a visible
+   * panel behind it.
+   *
+   * This is a hedge, not a guarantee: it cannot produce a measurable contrast
+   * ratio, because there is no fixed background to measure against. If the
+   * hero footage turns out to be light and high-detail under the header, the
+   * real fix is a gradient scrim over the video's top 120px (§9.2 option b).
+   */
+  .text-on-media {
+    text-shadow:
+      0 1px 2px rgb(255 255 255 / 0.6),
+      0 0 12px rgb(255 255 255 / 0.4);
+  }
+
+  /**
    * Named type styles, straight from the spec. Each bundles size + weight +
    * leading + tracking so a component asks for `type-h1`, not four tokens it
    * has to keep in sync by hand.

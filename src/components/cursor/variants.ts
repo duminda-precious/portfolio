@@ -15,8 +15,17 @@ export type VariantSpec = {
   radius: number;
   /** Whether the label pill renders for this variant. */
   showsLabel: boolean;
-  /** Fill uses the brand blue unless stated. */
-  fill: "brand" | "ink" | "none";
+  /**
+   * Surface treatment.
+   *
+   * `brand` — solid blue, for the small resting square.
+   * `glass` — translucent blurred panel, for anything carrying a LABEL. The
+   *   label text is --color-ink on glass; white would have no guaranteed
+   *   contrast, since the effective background is whatever is behind it.
+   * `ink`   — solid dark, for the text caret.
+   * `none`  — transparent; the variant is hidden.
+   */
+  fill: "brand" | "glass" | "ink" | "none";
 };
 
 /**
@@ -34,8 +43,8 @@ export const VARIANTS: Record<CursorVariant, VariantSpec> = {
     fill: "brand",
   },
 
-  /** Square label box, expands from the dot. Blue fill, white text. */
-  cta: { width: 0, height: 40, radius: 0, showsLabel: true, fill: "brand" },
+  /** Square label box, expands from the square. Glass fill, ink text. */
+  cta: { width: 0, height: 40, radius: 0, showsLabel: true, fill: "glass" },
 
   /** Grows to ~72px. */
   expand: {
@@ -43,12 +52,12 @@ export const VARIANTS: Record<CursorVariant, VariantSpec> = {
     height: 72,
     radius: 0,
     showsLabel: true,
-    fill: "brand",
+    fill: "glass",
   },
 
-  play: { width: 72, height: 72, radius: 0, showsLabel: true, fill: "brand" },
+  play: { width: 72, height: 72, radius: 0, showsLabel: true, fill: "glass" },
 
-  drag: { width: 72, height: 72, radius: 0, showsLabel: true, fill: "brand" },
+  drag: { width: 72, height: 72, radius: 0, showsLabel: true, fill: "glass" },
 
   /** Thin vertical bar, caret-like, over body text. */
   text: { width: 2, height: 28, radius: 0, showsLabel: false, fill: "ink" },

@@ -8,6 +8,8 @@ import {
   DOT_DURATION,
   EASE,
   LABEL_DURATION,
+  MORPH_DURATION,
+  MORPH_EASE,
   PILL_PADDING_X,
   VARIANTS,
   type CursorVariant,
@@ -124,17 +126,18 @@ export function CursorRenderer() {
           : spec.fill === "none"
             ? "transparent"
             : "var(--color-brand-500)",
-      duration: 0.3,
-      ease: "expo.out",
+      duration: MORPH_DURATION,
+      ease: MORPH_EASE,
       overwrite: "auto",
     });
 
-    /* The label cross-fades on a longer duration so the text doesn't scramble
-     * mid-morph (§8.3) and trails the dot slightly (§8.2). */
+    /* The label cross-fades rather than cutting, so text doesn't scramble
+     * mid-morph (§8.3). Fading OUT is quicker than in — a label lingering
+     * after you've left the target reads as lag. */
     gsap.to(labelEl, {
       opacity: showsLabel ? 1 : 0,
-      duration: showsLabel ? LABEL_DURATION : 0.15,
-      ease: "power2.out",
+      duration: showsLabel ? LABEL_DURATION : 0.08,
+      ease: MORPH_EASE,
       overwrite: "auto",
     });
   }, [variant, label]);
@@ -165,6 +168,7 @@ export function CursorRenderer() {
       style={{
         width: VARIANTS.default.width,
         height: VARIANTS.default.height,
+        /* Square by default — matches the square-cornered media containers. */
         borderRadius: VARIANTS.default.radius,
         backgroundColor: "var(--color-brand-500)",
         /* Centre the element on the pointer. GSAP writes x/y as transforms,

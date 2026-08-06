@@ -19,31 +19,36 @@ export type VariantSpec = {
   fill: "brand" | "ink" | "none";
 };
 
+/**
+ * Square-cornered throughout — this matches the media containers, which the
+ * design keeps at --radius-none. The pill radius stays reserved for the
+ * scroll chip and the filter chips.
+ */
 export const VARIANTS: Record<CursorVariant, VariantSpec> = {
-  /** 12px dot — the resting state. */
+  /** 12px square — the resting state. */
   default: {
     width: 12,
     height: 12,
-    radius: 999,
+    radius: 0,
     showsLabel: false,
     fill: "brand",
   },
 
-  /** Pill expands from the dot, blue fill, white text. */
-  cta: { width: 0, height: 40, radius: 999, showsLabel: true, fill: "brand" },
+  /** Square label box, expands from the dot. Blue fill, white text. */
+  cta: { width: 0, height: 40, radius: 0, showsLabel: true, fill: "brand" },
 
-  /** Circle grows to ~72px. */
+  /** Grows to ~72px. */
   expand: {
     width: 72,
     height: 72,
-    radius: 999,
+    radius: 0,
     showsLabel: true,
     fill: "brand",
   },
 
-  play: { width: 72, height: 72, radius: 999, showsLabel: true, fill: "brand" },
+  play: { width: 72, height: 72, radius: 0, showsLabel: true, fill: "brand" },
 
-  drag: { width: 72, height: 72, radius: 999, showsLabel: true, fill: "brand" },
+  drag: { width: 72, height: 72, radius: 0, showsLabel: true, fill: "brand" },
 
   /** Thin vertical bar, caret-like, over body text. */
   text: { width: 2, height: 28, radius: 0, showsLabel: false, fill: "ink" },
@@ -55,12 +60,24 @@ export const VARIANTS: Record<CursorVariant, VariantSpec> = {
 /**
  * Movement timings (§8.2).
  *
- * The label pill trails the dot slightly — a longer duration on the same
- * pointer input reads as weight rather than lag.
+ * Tuned for a SHARP, responsive cursor rather than a floaty one. Two things
+ * produce that together, and changing only one won't do it:
+ *
+ *   1. A short duration (0.12s). The long 0.4s lerp is what reads as "drifting
+ *      toward" the pointer instead of tracking it.
+ *   2. `power2.out` rather than `power3`. A higher-power ease spends most of
+ *      its time decelerating, which is exactly the soft tail we don't want.
+ *
+ * Set DOT_DURATION to 0 for a cursor that pins exactly to the pointer with no
+ * interpolation at all.
  */
-export const DOT_DURATION = 0.4;
-export const LABEL_DURATION = 0.55;
-export const EASE = "power3";
+export const DOT_DURATION = 0.12;
+export const LABEL_DURATION = 0.15;
+export const EASE = "power2.out";
+
+/** Variant morph (size/shape change) — 150ms, matching --duration-fast. */
+export const MORPH_DURATION = 0.15;
+export const MORPH_EASE = "power2.out";
 
 /**
  * Horizontal breathing room added to the measured label width when sizing the

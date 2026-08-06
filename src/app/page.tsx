@@ -16,14 +16,24 @@ import { Container } from "@/components/primitives/Container";
 export default function HomePage() {
   return (
     <>
-      {/* Full-bleed band. Phase 3: the Gumlet hero loop lives here. */}
-      <div
-        className="h-(--hero-band-height) w-full bg-page"
-        aria-hidden="true"
-      />
+      {/*
+        Full-bleed hero band — 74vh, capped at the artboard's 800px.
 
-      <Container as="main" paper overlap className="pb-(--space-section)">
-        <div id="main" className="pt-(--space-section)">
+        Phase 3 swaps this div for the Gumlet loop. When it does, the <video>
+        needs `object-cover object-bottom` so the framing stays anchored to the
+        BOTTOM CENTRE as the viewport resizes — the subject sits low in frame
+        and top-cropping would cut it. The wrapper already clips overflow, so
+        the video only has to fill it.
+      */}
+      <div
+        className="h-(--hero-band-height) w-full overflow-hidden bg-page"
+        aria-hidden="true"
+      >
+        {/* <video className="h-full w-full object-cover object-bottom" … /> */}
+      </div>
+
+      <Container as="main" paper belowHero className="pb-(--space-section)">
+        <div id="main" className="hero-optical-top">
           <h1 className="type-h1 text-ink">
             Hey! I&apos;m Duminda. Crafting Experiences That Move{" "}
             <span className="text-brand-500">Literally.</span>

@@ -301,13 +301,51 @@ the design genuinely needs the literal px size, append the `-fixed` sibling clas
 
 ### 3.5 Layout
 
+✅ **CONFIRMED 2026-08-06** against the redlined 1920px artboard.
+
 ```css
 @theme {
-  --container-max: 1280px; /* the white content container */
+  --container-max: 1280px; /* ✅ the white content container */
   --container-pad: var(--space-gutter);
   --grid-gallery: 3; /* columns in the experiments grid at desktop */
+
+  --hero-band-height: clamp(420px, 74vh, 800px); /* ✅ 800px @ 1920×1080 */
+  --hero-content-gap: 120px; /* ✅ band bottom → hero content, constant */
+  --hero-cap-offset: 14px; /* optical compensation, see below */
 }
 ```
+
+**Reading the redlines.** The artboard measures a 120px left offset, which at
+1920px would imply a 1680px container. It does not — the container is **1280px and
+centred**, giving a true 320px margin at 1920. The 120px redline is measuring the
+band's inner padding, not the container edge. Confirmed by decision; do not
+"correct" `--container-max` to 1680 later.
+
+**The band scales, it does not sit fixed.** 800px is the value at 1920×1080
+(≈74vh). Held fixed, a 1366×768 laptop would push the h1 entirely below the fold,
+so the token clamps: floor 420px, ceiling the artboard's 800px.
+
+**The hero video anchors bottom-centre.** As the viewport resizes the band crops
+from the top, never the bottom — `object-fit: cover` + `object-position: bottom
+center`. The subject sits low in frame and top-cropping would cut it.
+
+**⚠️ The container no longer overlaps the band.** The plan originally described the
+white container rising ~56px into the video (negative margin). The artboard
+measures a **120px gap** instead, so the two surfaces are separated, not
+overlapping. `Container`'s prop is `belowHero`, not `overlap`. If the overlap is
+ever reinstated, that prop is the single place to change.
+
+#### Optical spacing — why 64px is not `padding-top: 64px`
+
+The artboard's 64px gap above the h1 is measured to the type's **cap height**. CSS
+padding applies to the **layout box**, which sits higher by the half-leading plus
+the font's internal ascent gap — at 90px/0.85 that is roughly 14px. Padding
+literally would render visibly tighter than the design.
+
+The `.hero-optical-top` utility handles this: it pads by `64px + --hero-cap-offset`
+by default, and where `text-box-trim` is supported (Chrome 133+, Safari 18.2+) it
+trims the box to the cap edge and uses the literal 64px, which is exact rather than
+approximated.
 
 Breakpoints — Tailwind v4 defaults are fine and match the skill's recommended scale:
 `sm 480 · md 640 · lg 768 · xl 1024 · 2xl 1280`
@@ -737,16 +775,28 @@ Reading the layout top to bottom. The defining structural move: a **full-bleed v
 
 ### 9.3 Video hero band
 
-- Full-bleed, ~`60vh` (`CONFIRM` exact height against Figma — the mockup suggests ~380/2560 of total scroll height, so `min(60vh, 720px)` is a reasonable starting point).
+- Full-bleed, `--hero-band-height` = `clamp(420px, 74vh, 800px)`. ✅ Measured: 800px
+  at the 1920×1080 artboard. Clamped rather than fixed so the h1 stays above the
+  fold on shorter laptops.
 - Single Gumlet-hosted loop: `muted playsInline loop autoPlay preload="auto"`, `aria-hidden="true"`, `object-fit: cover`.
+- **`object-position: bottom center`.** ✅ Confirmed behaviour: the band crops from
+  the top as the viewport resizes, never from the bottom. The subject sits low in
+  frame. In Tailwind this is `object-cover object-bottom` on the `<video>`, inside
+  an `overflow-hidden` wrapper.
 - **Poster is mandatory** — a blurred or brand-blue first frame. Never a white flash.
 - Silent, no audio track, `-an` at encode.
 - Reduced motion → static poster image only.
-- The white container's overlap is achieved with negative margin-top on the container (~`-56px`, `CONFIRM`), not absolute positioning — keeps the document flow sane.
+- **No overlap.** ✅ The artboard measures a constant **120px gap**
+  (`--hero-content-gap`) between the band's bottom edge and the hero content — the
+  white container does _not_ rise into the video. This supersedes the earlier
+  `-56px` negative-margin plan. `Container` exposes this as `belowHero`.
 
 ### 9.4 Hero statement
 
-- `h1`, `--text-hero`, `--leading-hero`, `--tracking-hero`.
+- `h1` → `.type-h1` (90px Bold, 85% leading, -1% tracking).
+- **Top spacing is optical.** The artboard's 64px is measured to cap height, not
+  the layout box. Use `.hero-optical-top`, which compensates for leading — see
+  §3.5. Do not replace it with a literal `padding-top: 64px`.
 - `Literally.` in `brand-500`. Semantically part of the same `h1` — wrap in `<span class="text-brand-500">`, don't split into two headings.
 - **Reveal animation:** line-by-line mask reveal on load (translateY + clip). Stagger 60ms. This is the page-load moment — get it right. Under reduced motion, render immediately at full opacity.
 - **CTA chip:** `Scroll For My Work` with the small circle glyph. Brief says non-interactive for now — so render as a `<div>`, **not** a `<button>`. Do not put a disabled button in the a11y tree with no action. Add a subtle vertical bob (`3px`, 2s, ease-in-out) so it reads as an affordance, and kill it under reduced motion. Note in a code comment that this becomes an anchor to `#featured-work` in phase 2.
@@ -914,9 +964,10 @@ Resolve these before or during Phase 0. Marked `CONFIRM` throughout the document
 3. ~~Display and body typeface names and licence status~~ — ✅ **RESOLVED
    2026-08-06.** Rethink Sans across every level, OFL via Google Fonts, loaded
    through `next/font/google`. No licence issue and no second face.
-4. Video hero band height, and the exact container overlap distance. **← still
-   open.** Currently `min(60vh, 720px)` and `56px`, both tokenised so changing
-   them is a one-line edit in `tokens.css`.
+4. ~~Video hero band height, and the exact container overlap distance~~ — ✅
+   **RESOLVED 2026-08-06** from the redlined artboard. Band is
+   `clamp(420px, 74vh, 800px)`; there is **no overlap** — a constant 120px gap
+   instead. Video anchors bottom-centre on resize. See §3.5.
 
 **Content** 5. Real captions for the eight experiments grid tiles. All currently `Untitled 3D experiments`. 6. Real footer social destinations — the mockup has `LinkedIn` three times. Is Behance/Dribbble current? 7. Which projects have `isPublic: false` and need anonymisation? The precious.studio pieces are presumably fine, but confirm per project. 8. The three featured card titles all read `Upgrading iTrvl responsive webapp…` — confirm the actual three hero projects map to Three.js Fractal Viewer / Endeavor / Lumin as planned.
 

@@ -12,14 +12,15 @@ type ContainerProps = {
    */
   paper?: boolean;
   /**
-   * Pull the container up into the preceding full-bleed band by
-   * --hero-overlap. This is the mockup's signature structural move.
+   * Sit the container directly beneath the full-bleed hero band, separated by
+   * the measured --hero-content-gap (120px, constant at every viewport).
    *
-   * Done with negative margin rather than absolute positioning so the element
-   * stays in document flow — the page below it moves up too, which is what we
-   * want, and nothing needs a manually maintained height.
+   * ⚠️ Note for whoever revisits this: the original plan described the white
+   * container OVERLAPPING the video by ~56px (negative margin). The redlined
+   * artboard measures a 120px GAP instead, so the container no longer rises
+   * into the band. If the overlap comes back, this is the one place to change.
    */
-  overlap?: boolean;
+  belowHero?: boolean;
   as?: ElementType;
   className?: string;
 };
@@ -31,7 +32,7 @@ export function Container({
   children,
   bleed = false,
   paper = false,
-  overlap = false,
+  belowHero = false,
   as: Component = "div",
   className,
 }: ContainerProps) {
@@ -41,7 +42,7 @@ export function Container({
         "w-full",
         !bleed && "mx-auto max-w-(--container-max) px-(--container-pad)",
         paper && "bg-paper",
-        overlap && "relative z-(--z-media) -mt-(--hero-overlap)",
+        belowHero && "relative z-(--z-media) mt-(--hero-content-gap)",
         className,
       )}
     >

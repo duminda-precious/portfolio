@@ -173,6 +173,32 @@
 }
 
 @layer utilities {
+  /**
+   * Optical top spacing for the hero h1.
+   *
+   * Figma's 64px is measured to the cap height; CSS padding applies to the
+   * layout box, which sits higher by the half-leading plus the font's internal
+   * ascent gap. Padding it literally would render ~14px tighter than the design.
+   *
+   * Baseline: pad by 64px + --hero-cap-offset so the VISIBLE gap reads as 64px.
+   *
+   * Progressive enhancement: where text-box-trim is supported (Chrome 133+,
+   * Safari 18.2+) we trim the box to the cap edge and use the literal 64px,
+   * which is exact rather than approximated. Browsers without it keep the
+   * fallback, which is close enough that no one will measure the difference.
+   */
+  .hero-optical-top {
+    padding-top: calc(64px + var(--hero-cap-offset));
+  }
+
+  @supports (text-box-trim: trim-start) {
+    .hero-optical-top {
+      text-box-trim: trim-start;
+      text-box-edge: cap alphabetic;
+      padding-top: 64px;
+    }
+  }
+
   /* Applied to <body> by the cursor provider ONLY when the custom cursor is
    * actually mounted and active (§8.4.3). Never set `cursor: none` statically —
    * if the JS fails to load the user must still have a cursor. */

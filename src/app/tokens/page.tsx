@@ -284,6 +284,61 @@ export default function TokensPage() {
 
       {/* ---------------------------------------------------------------- */}
       <Section
+        title="Layout — measured from the 1920px artboard"
+        note="Resize the window to watch the hero band clamp. At 1920×1080 it should read 800px; it never drops below 420px."
+      >
+        <dl className="space-y-(--spacing-4)">
+          {[
+            {
+              t: "--container-max",
+              v: "1280px",
+              n: "White content container, centred. At 1920 the true side margin is 320px.",
+            },
+            {
+              t: "--hero-band-height",
+              v: "clamp(420px, 74vh, 800px)",
+              n: "800px at the artboard. Clamped so the h1 stays above the fold on short laptops.",
+            },
+            {
+              t: "--hero-content-gap",
+              v: "120px",
+              n: "Band bottom → hero content. Constant at every viewport — does not scale.",
+            },
+            {
+              t: "--hero-cap-offset",
+              v: "14px",
+              n: "Optical compensation: Figma's 64px is to cap height, CSS pads the layout box.",
+            },
+          ].map((row) => (
+            <div
+              key={row.t}
+              className="border-l-2 border-brand-500 pl-(--spacing-4)"
+            >
+              <dt className="font-(family-name:--font-mono) text-(length:--text-caption) text-ink">
+                {row.t} — {row.v}
+              </dt>
+              <dd className="type-caption mt-(--spacing-1) text-ink-muted">
+                {row.n}
+              </dd>
+            </div>
+          ))}
+        </dl>
+
+        <div className="mt-(--spacing-8)">
+          <p className="font-(family-name:--font-mono) text-(length:--text-caption) text-ink-muted">
+            Live hero band height — resize to verify
+          </p>
+          <div className="mt-(--spacing-3) flex h-(--hero-band-height) w-full items-end justify-center overflow-hidden bg-page">
+            <p className="type-caption pb-(--spacing-3) text-ink">
+              object-position: bottom center — the video anchors here as the
+              viewport resizes
+            </p>
+          </div>
+        </div>
+      </Section>
+
+      {/* ---------------------------------------------------------------- */}
+      <Section
         title="Motion"
         note="Hover a swatch to see its duration and easing. Under prefers-reduced-motion these collapse to near-zero via the globals.css backstop — toggle it in your OS to verify."
       >

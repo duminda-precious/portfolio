@@ -142,15 +142,42 @@
   --space-gutter: clamp(1rem, 0.5rem + 2.5vw, 2.5rem);
 
   /* ---------------------------------------------------------------------
-   * Layout — §3.5
+   * Layout — §3.5 · measured from the 1920px redlined artboard
    * ------------------------------------------------------------------- */
-  --container-max: 1280px; /* the white content container */
+  --container-max: 1280px; /* ✅ confirmed — the white content container */
   --container-pad: var(--space-gutter);
   --grid-gallery: 3; /* columns in the experiments grid at desktop */
 
-  /* Hero band — CONFIRM against Figma (§13.4) */
-  --hero-band-height: min(60vh, 720px);
-  --hero-overlap: 56px; /* how far the white container rises into the video */
+  /* -----------------------------------------------------------------
+   * Hero band — ✅ measured 2026-08-06
+   *
+   * 800px at the 1920×1080 artboard ≈ 74vh, and it scales with the
+   * viewport rather than staying fixed: at 800px fixed, a 1366×768
+   * laptop would push the h1 entirely below the fold.
+   *
+   * The floor (420px) keeps the band present on short/landscape screens;
+   * the ceiling (800px) is the artboard value, so 1080p renders the
+   * design exactly.
+   * ----------------------------------------------------------------- */
+  --hero-band-height: clamp(420px, 74vh, 800px);
+
+  /* Gap between the bottom of the video band and the hero content.
+   * Constant at every viewport — this rhythm is deliberate, so it does
+   * NOT scale with --space-section. */
+  --hero-content-gap: 120px;
+
+  /* Optical compensation for the h1's leading.
+   *
+   * Figma measures the 64px top gap to the CAP HEIGHT of the type, but CSS
+   * padding applies to the layout BOX. At 90px/0.85 the box sits above the
+   * caps by roughly half the negative leading — (1 − 0.85) ÷ 2 × 90 ≈ 6.75px
+   * — plus the font's internal ascent gap above the cap line (~7px for
+   * Rethink Sans at this size). Padding must therefore exceed 64px for the
+   * VISIBLE gap to read as 64px.
+   *
+   * Applied via the .hero-optical-top utility in globals.css, which uses
+   * a cap-height-relative unit where supported and falls back to this. */
+  --hero-cap-offset: 14px;
 
   /* ---------------------------------------------------------------------
    * Motion & radius — §3.6

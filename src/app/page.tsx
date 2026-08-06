@@ -1,19 +1,27 @@
 import Link from "next/link";
 
+import { ExperimentsGrid } from "@/components/sections/ExperimentsGrid";
 import { Container } from "@/components/primitives/Container";
+import { getExperiments, getSite, getSocialLinks } from "@/lib/content";
 
 /**
- * Homepage — Phase 0 skeleton.
+ * Homepage (§9).
  *
- * This stands up the one structural move that everything else hangs off (§9.1):
- * a full-bleed band, with the 1280px white container rising into it by
- * --hero-overlap, and the footer sitting on the grey page OUTSIDE the container.
+ * Structure per §9.1: a full-bleed video band, the 1280px white container
+ * below it separated by --hero-content-gap, and the footer on the grey page
+ * OUTSIDE the container.
  *
- * The real hero, featured work, and experiments grid land in Phase 3. The blue
- * blocks below are stand-ins for <Media /> (Phase 2) and are intentionally the
- * same brand blue the mockup uses as its loading state (§6.4.2).
+ * Featured work is still a stand-in — it needs getProjects() and the zod
+ * schemas from Phase 1. The blue blocks are the mockup's own loading state
+ * (§6.4.2), not arbitrary placeholders.
  */
-export default function HomePage() {
+export default async function HomePage() {
+  const [experiments, socials, site] = await Promise.all([
+    getExperiments(),
+    getSocialLinks(),
+    getSite(),
+  ]);
+
   return (
     <>
       {/*
@@ -77,15 +85,36 @@ export default function HomePage() {
               </div>
             ))}
           </div>
+
+          <div className="mt-(--space-section)">
+            <ExperimentsGrid experiments={experiments} />
+          </div>
         </div>
       </Container>
 
       {/* Footer sits on the grey page, OUTSIDE the white container (§9.7). */}
       <Container as="footer" className="py-(--space-section)">
+        {/* ink, not brand — blue fails AA on the grey page at body size. */}
         <p className="type-h4 text-ink">
-          Site Content © Duminda M · All Rights Reserved ·{" "}
-          {new Date().getFullYear()} · Made With Love &amp; Caffeine
+          {site.copyright(new Date().getFullYear())}
         </p>
+
+        <ul className="mt-(--spacing-8) flex flex-wrap gap-(--spacing-8)">
+          {socials.map((social) => (
+            <li key={social.label}>
+              <a
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-cursor="cta"
+                data-cursor-label={social.cursorLabel}
+                className="type-action inline-flex min-h-[44px] items-center text-ink underline-offset-4 hover:underline"
+              >
+                {social.label}
+              </a>
+            </li>
+          ))}
+        </ul>
       </Container>
     </>
   );

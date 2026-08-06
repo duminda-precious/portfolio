@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Rethink_Sans } from "next/font/google";
 
+import { Header } from "@/components/layout/Header";
+import { getNavItems } from "@/lib/content";
+
 import "./globals.css";
 
 /**
@@ -35,7 +38,9 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const navItems = await getNavItems();
+
   return (
     <html lang="en" className={`${rethinkSans.variable} h-full`}>
       <body className="flex min-h-full flex-col">
@@ -51,9 +56,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </a>
 
         {/*
-          Header / Footer / CursorProvider / Lenis land here in later phases.
-          Order per §4: fonts → CursorProvider → Lenis → Header → children → Footer.
+          CursorProvider and Lenis wrap this in later phases.
+          Order per §4: fonts → CursorProvider → Lenis → Header → children.
         */}
+        <Header items={navItems} />
         {children}
       </body>
     </html>

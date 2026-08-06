@@ -122,17 +122,42 @@ export function CursorRenderer() {
       ? labelEl.scrollWidth + PILL_PADDING_X
       : spec.width;
 
-    /* backdrop-filter cannot be tweened, so the blur is applied directly and
-     * instantly. The size morph is what carries the transition visually; the
-     * blur arriving under it is not perceptible at 150ms.
+    /*
+     * ⚠️ GLASS FILL IS SET DIRECTLY, NEVER PASSED TO gsap.to(). Do not move
+     * `backgroundColor: "var(--color-glass)"` into the tween below.
      *
-     * Set on the SURFACE, never the parent — the parent is transformed and so
-     * establishes a stacking context with nothing behind it to sample. */
+     * GSAP's colour plugin resolves the CSS custom property to its computed
+     * value and interpolates the four RGB(A) channels per frame. In doing so
+     * it silently drops alpha on the `rgb(255 255 255 / 0.72)` syntax — the
+     * animated colour lands fully OPAQUE white-blue, which both hides the
+     * backdrop-filter (nothing shows through an opaque layer) and reads as
+     * the solid brand-blue box seen in testing. gsap.set (or a direct style
+     * write, as here) never interpolates, so the alpha survives intact.
+     *
+     * The filter is set alongside it for the same reason — neither property
+     * can be safely tweened, so both change instantly. The SIZE tween below
+     * is what carries the transition visually; a 150ms morph reads as
+     * smooth even though the fill itself snaps.
+     *
+     * Both are set on the SURFACE, never the parent — the parent is
+     * transformed and so establishes a stacking context with nothing behind
+     * it to sample.
+     */
     const filter = isGlass ? `blur(${GLASS_BLUR_PX}px) saturate(160%)` : "";
     surface.style.backdropFilter = filter;
     /* setProperty rather than the camelCase form — the prefixed property is
      * not in the CSSStyleDeclaration type, and Safari still needs it. */
     surface.style.setProperty("-webkit-backdrop-filter", filter);
+
+    gsap.set(surface, {
+      backgroundColor: isGlass
+        ? "var(--color-glass)"
+        : spec.fill === "ink"
+          ? "var(--color-ink)"
+          : spec.fill === "none"
+            ? "transparent"
+            : "var(--color-brand-500)",
+    });
 
     /* Size animates on the parent, which owns layout for the whole cursor. */
     gsap.to(dot, {
@@ -143,16 +168,9 @@ export function CursorRenderer() {
       overwrite: "auto",
     });
 
-    /* Fill and radius animate on the surface, which fills the parent. */
+    /* Radius is safe to tween — no alpha involved. */
     gsap.to(surface, {
       borderRadius: spec.radius,
-      backgroundColor: isGlass
-        ? "var(--color-glass)"
-        : spec.fill === "ink"
-          ? "var(--color-ink)"
-          : spec.fill === "none"
-            ? "transparent"
-            : "var(--color-brand-500)",
       duration: MORPH_DURATION,
       ease: MORPH_EASE,
       overwrite: "auto",

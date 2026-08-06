@@ -1,26 +1,103 @@
 @import "tailwindcss";
+@import "../styles/tokens.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/**
+ * Global base styles. Keep this file thin — it is base layer only.
+ * Component styling belongs in components, using the tokens from tokens.css.
+ *
+ * No dark mode: this site is a fixed light identity (white container on a grey
+ * page). Do not add a prefers-color-scheme block without a design decision.
+ */
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  html {
+    /* Lenis drives smooth scroll on capable devices; this is the no-JS and
+     * reduced-motion fallback for in-page anchors. */
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  body {
+    background-color: var(--color-page);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: var(--leading-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-tight);
+    text-wrap: balance;
+  }
+
+  /* Focus rings must be visible on BOTH --color-paper and --color-page (§7).
+   * A brand ring with a white offset satisfies both. */
+  :focus-visible {
+    outline: 2px solid var(--color-brand-500);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Only remove the outline where focus-visible is supported and handled. */
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  ::selection {
+    background-color: var(--color-brand-500);
+    color: var(--color-paper);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer utilities {
+  /* Applied to <body> by the cursor provider ONLY when the custom cursor is
+   * actually mounted and active (§8.4.3). Never set `cursor: none` statically —
+   * if the JS fails to load the user must still have a cursor. */
+  .cursor-none-active,
+  .cursor-none-active * {
+    cursor: none;
+  }
+
+  /* Visually hidden but available to screen readers. Used by the skip link
+   * before it receives focus. */
+  .sr-only-focusable:not(:focus):not(:active) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border-width: 0;
+  }
+}
+
+/**
+ * Reduced motion — global backstop (§10, §11).
+ *
+ * Every animation should ALSO be behind a usePrefersReducedMotion() check in
+ * JS, because GSAP writes inline styles that CSS cannot always override. This
+ * block is the safety net, not the strategy.
+ */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

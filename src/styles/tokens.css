@@ -1,0 +1,134 @@
+/**
+ * Design tokens — the single source of truth. See plan.md §3.
+ *
+ * Everything in this @theme block becomes BOTH a CSS custom property and a
+ * Tailwind utility. Define a token once here; never hardcode a colour, size,
+ * or spacing value in a component.
+ *
+ * Values marked CONFIRM are read off a PNG mockup and need verifying against
+ * the Figma file before launch. See plan.md §13.
+ */
+
+@theme {
+  /* ---------------------------------------------------------------------
+   * Colour — §3.1 · CONFIRMED against the supplied palette
+   * The blue does a lot of work: accent type, media placeholders, links.
+   *
+   * Two blues are given by the brand: 500 (#2E57EF) is the media/accent blue
+   * from the mockup; 700 (#1035BF) is the deep blue. The rest of the ramp is
+   * interpolated from those two anchors — do not re-derive them.
+   *
+   * ⚠️ 700 is not decorative. It is the ACCESSIBLE blue: brand-500 fails AA
+   * for normal text on the grey page (3.62:1), brand-700 passes (5.90:1).
+   * Any blue text on --color-page must be brand-700. See §3.2.
+   * ------------------------------------------------------------------- */
+  --color-brand-50: #f2f5fe;
+  --color-brand-100: #e2e7fd;
+  --color-brand-200: #c4d0fb;
+  --color-brand-300: #9baef7;
+  --color-brand-400: #6986f3;
+  --color-brand-500: #2e57ef; /* base brand blue — media fill, accent type */
+  --color-brand-600: #1e44d5;
+  --color-brand-700: #1035bf; /* deep blue — AA-safe on grey */
+  --color-brand-800: #0c268a;
+  --color-brand-900: #081b60;
+
+  /* Neutrals */
+  --color-ink: #1f1f1f; /* headings + body */
+  --color-ink-muted: #747474; /* captions, nav rest state — paper only, see §3.2 */
+  --color-paper: #ffffff; /* the 1280px content container */
+  --color-surface: #f8f8f8; /* subtle off-white fill, inset panels */
+  --color-page: #cfcfcf; /* page background behind the container */
+  --color-chip: #cfcfcf; /* "Scroll For My Work" pill background */
+  --color-hairline: #e4e4e4;
+
+  /* ---------------------------------------------------------------------
+   * Typography — §3.3
+   * Display face is CONFIRM. General Sans / Satoshi are the licence-safe
+   * fallbacks (Fontshare, free for commercial use) and what we self-host now.
+   * ------------------------------------------------------------------- */
+  --font-display: "General Sans", system-ui, -apple-system, sans-serif;
+  --font-body: "Satoshi", system-ui, -apple-system, sans-serif;
+  --font-mono: "Fira Code", ui-monospace, "SF Mono", monospace;
+
+  /* Fluid scale — 1.25 ratio at desktop, compressed at mobile */
+  --text-hero: clamp(2.5rem, 1.2rem + 5.4vw, 5.5rem); /* homepage h1 */
+  --text-display: clamp(
+    2rem,
+    1.2rem + 3.4vw,
+    3.75rem
+  ); /* section titles, footer */
+  --text-h2: clamp(1.5rem, 1.1rem + 1.8vw, 2.25rem);
+  --text-h3: clamp(1.25rem, 1.05rem + 0.9vw, 1.5rem);
+  --text-lead: clamp(
+    1.125rem,
+    1rem + 0.6vw,
+    1.375rem
+  ); /* project card titles */
+  --text-body: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
+  --text-caption: 0.8125rem; /* gallery captions, eyebrow tags */
+
+  /* Line height + tracking. The hero is set very tight — that tightness is
+   * part of the identity, don't loosen it. */
+  --leading-hero: 0.95;
+  --leading-tight: 1.05;
+  --leading-body: 1.55;
+  --tracking-hero: -0.03em;
+  --tracking-tight: -0.015em;
+
+  /* ---------------------------------------------------------------------
+   * Spacing — §3.4 · 8pt grid
+   * ------------------------------------------------------------------- */
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+  --spacing-12: 48px;
+  --spacing-16: 64px;
+  --spacing-20: 80px;
+  --spacing-24: 96px;
+  --spacing-32: 128px;
+
+  /* Responsive section rhythm */
+  --space-section: clamp(3rem, 2rem + 5vw, 7.5rem); /* 48px → 120px */
+  --space-gutter: clamp(1rem, 0.5rem + 2.5vw, 2.5rem);
+
+  /* ---------------------------------------------------------------------
+   * Layout — §3.5
+   * ------------------------------------------------------------------- */
+  --container-max: 1280px; /* the white content container */
+  --container-pad: var(--space-gutter);
+  --grid-gallery: 3; /* columns in the experiments grid at desktop */
+
+  /* Hero band — CONFIRM against Figma (§13.4) */
+  --hero-band-height: min(60vh, 720px);
+  --hero-overlap: 56px; /* how far the white container rises into the video */
+
+  /* ---------------------------------------------------------------------
+   * Motion & radius — §3.6
+   * Media containers have SQUARE corners. The pill radius is reserved for
+   * the CTA chip and the cursor.
+   * ------------------------------------------------------------------- */
+  --radius-none: 0;
+  --radius-sm: 4px;
+  --radius-pill: 999px;
+
+  --duration-fast: 150ms;
+  --duration-base: 300ms;
+  --duration-slow: 600ms;
+  --duration-reveal: 900ms;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+
+  /* ---------------------------------------------------------------------
+   * Z-index — §3.7
+   * ------------------------------------------------------------------- */
+  --z-base: 0;
+  --z-media: 10;
+  --z-header: 100;
+  --z-lightbox: 200;
+  --z-cursor: 9999; /* the cursor is always on top of everything */
+}

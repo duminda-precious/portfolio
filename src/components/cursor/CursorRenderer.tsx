@@ -7,6 +7,7 @@ import { createPortal } from "react-dom";
 import {
   DOT_DURATION,
   EASE,
+  GLASS_BLUR_PX,
   LABEL_DURATION,
   MORPH_DURATION,
   MORPH_EASE,
@@ -38,7 +39,10 @@ import {
  *     It is a child of the dot's transform, so it inherits position for free.
  */
 export function CursorRenderer() {
+  /** Moves with the pointer. Transformed, so it cannot carry the blur. */
   const dotRef = useRef<HTMLDivElement>(null);
+  /** Untransformed child carrying the fill and the backdrop-filter. */
+  const surfaceRef = useRef<HTMLDivElement>(null);
   const labelRef = useRef<HTMLSpanElement>(null);
 
   const [variant, setVariant] = useState<CursorVariant>("default");
@@ -103,11 +107,13 @@ export function CursorRenderer() {
   // ---------------------------------------------------------------------
   useEffect(() => {
     const dot = dotRef.current;
+    const surface = surfaceRef.current;
     const labelEl = labelRef.current;
-    if (!dot || !labelEl) return;
+    if (!dot || !surface || !labelEl) return;
 
     const spec = VARIANTS[variant];
     const showsLabel = spec.showsLabel && label.length > 0;
+    const isGlass = spec.fill === "glass";
 
     /* A labelled box sizes to its text. Measuring scrollWidth is a forced
      * layout read, but it happens once per hover boundary — not per frame —
@@ -116,29 +122,37 @@ export function CursorRenderer() {
       ? labelEl.scrollWidth + PILL_PADDING_X
       : spec.width;
 
-    /* backdrop-filter cannot be tweened by GSAP, so the glass treatment is a
-     * class toggle rather than an animated property. The size morph still
-     * animates, which is what carries the transition visually — the blur
-     * appearing instantly underneath it is not perceptible.
+    /* backdrop-filter cannot be tweened, so the blur is applied directly and
+     * instantly. The size morph is what carries the transition visually; the
+     * blur arriving under it is not perceptible at 150ms.
      *
-     * The class must be applied BEFORE the tween sets backgroundColor, or
-     * GSAP's inline style would lose to the class on the next frame. */
-    dot.classList.toggle("glass", spec.fill === "glass");
+     * Set on the SURFACE, never the parent — the parent is transformed and so
+     * establishes a stacking context with nothing behind it to sample. */
+    const filter = isGlass ? `blur(${GLASS_BLUR_PX}px) saturate(160%)` : "";
+    surface.style.backdropFilter = filter;
+    /* setProperty rather than the camelCase form — the prefixed property is
+     * not in the CSSStyleDeclaration type, and Safari still needs it. */
+    surface.style.setProperty("-webkit-backdrop-filter", filter);
 
+    /* Size animates on the parent, which owns layout for the whole cursor. */
     gsap.to(dot, {
       width: targetWidth,
       height: spec.height,
+      duration: MORPH_DURATION,
+      ease: MORPH_EASE,
+      overwrite: "auto",
+    });
+
+    /* Fill and radius animate on the surface, which fills the parent. */
+    gsap.to(surface, {
       borderRadius: spec.radius,
-      /* Glass gets its fill from the class; clearing the inline value lets
-       * the class win rather than fighting it. */
-      backgroundColor:
-        spec.fill === "glass"
-          ? "var(--color-glass)"
-          : spec.fill === "ink"
-            ? "var(--color-ink)"
-            : spec.fill === "none"
-              ? "transparent"
-              : "var(--color-brand-500)",
+      backgroundColor: isGlass
+        ? "var(--color-glass)"
+        : spec.fill === "ink"
+          ? "var(--color-ink)"
+          : spec.fill === "none"
+            ? "transparent"
+            : "var(--color-brand-500)",
       duration: MORPH_DURATION,
       ease: MORPH_EASE,
       overwrite: "auto",
@@ -177,13 +191,10 @@ export function CursorRenderer() {
     <div
       ref={dotRef}
       aria-hidden="true"
-      className="pointer-events-none fixed top-0 left-0 z-(--z-cursor) flex items-center justify-center overflow-hidden"
+      className="pointer-events-none fixed top-0 left-0 z-(--z-cursor) flex items-center justify-center"
       style={{
         width: VARIANTS.default.width,
         height: VARIANTS.default.height,
-        /* Square by default — matches the square-cornered media containers. */
-        borderRadius: VARIANTS.default.radius,
-        backgroundColor: "var(--color-brand-500)",
         /* Centre the element on the pointer. GSAP writes x/y as transforms,
          * and translate(-50%,-50%) composes with them via CSS `translate`,
          * which applies independently of the transform property. */
@@ -193,9 +204,32 @@ export function CursorRenderer() {
         willChange: "transform",
       }}
     >
+      {/*
+        ⚠️ THE BACKDROP LAYER MUST BE A SEPARATE CHILD. Do not merge it back
+        into the parent.
+
+        `backdrop-filter` samples what is painted BEHIND an element, but only
+        within the same stacking context. The parent is transformed by GSAP
+        every frame and carries `will-change: transform`, either of which
+        establishes its own stacking context — inside which there is nothing
+        to sample, so the blur silently does nothing.
+
+        Keeping the filter on an untransformed child leaves it sampling the
+        real page behind the cursor. The child moves because the parent moves;
+        it just is not itself the transformed box.
+      */}
+      <div
+        ref={surfaceRef}
+        className="absolute inset-0 overflow-hidden"
+        style={{
+          backgroundColor: "var(--color-brand-500)",
+          borderRadius: VARIANTS.default.radius,
+        }}
+      />
+
       <span
         ref={labelRef}
-        className="type-label px-(--spacing-4) whitespace-nowrap"
+        className="type-label relative px-(--spacing-4) whitespace-nowrap"
         style={{
           /* INK, not white. A translucent surface has no fixed contrast
            * ratio — the effective background is whatever is behind it. The

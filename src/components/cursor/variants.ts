@@ -89,6 +89,17 @@ export const MORPH_DURATION = 0.15;
 export const MORPH_EASE = "power2.out";
 
 /**
+ * Glass blur radius, in px.
+ *
+ * ⚠️ Must stay in step with --blur-glass in tokens.css and the literal values
+ * in the .glass rules in globals.css. It is duplicated here rather than read
+ * from the custom property because the CSS minifier deduplicates prefixed and
+ * standard backdrop-filter declarations when both use an identical var() —
+ * keeping only the -webkit- form, which Chrome and Firefox ignore.
+ */
+export const GLASS_BLUR_PX = 12;
+
+/**
  * Horizontal breathing room added to the measured label width when sizing the
  * pill. Must stay in step with the label's px-(--spacing-4) — 16px a side.
  */

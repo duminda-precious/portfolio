@@ -76,16 +76,28 @@
    * Text on glass must be --color-ink. See the token comment for why white
    * text on a translucent surface has no guaranteed contrast ratio.
    */
+  /**
+   * ⚠️ The blur value is written out LITERALLY, not as var(--blur-glass).
+   *
+   * Lightning CSS (Tailwind v4's minifier) collapses the prefixed and
+   * standard `backdrop-filter` declarations into one when both carry an
+   * identical `var()` value — and it keeps the `-webkit-` form, which Chrome
+   * and Firefox ignore. The result is a rule that silently blurs nothing in
+   * every browser except Safari.
+   *
+   * Using the literal length avoids the dedupe. If the blur radius changes,
+   * update --blur-glass in tokens.css AND these two rules together.
+   */
   .glass {
     background-color: var(--color-glass);
-    backdrop-filter: blur(var(--blur-glass)) saturate(160%);
-    -webkit-backdrop-filter: blur(var(--blur-glass)) saturate(160%);
+    -webkit-backdrop-filter: blur(12px) saturate(160%);
+    backdrop-filter: blur(12px) saturate(160%);
   }
 
   .glass-strong {
     background-color: var(--color-glass-strong);
-    backdrop-filter: blur(var(--blur-glass)) saturate(160%);
-    -webkit-backdrop-filter: blur(var(--blur-glass)) saturate(160%);
+    -webkit-backdrop-filter: blur(12px) saturate(160%);
+    backdrop-filter: blur(12px) saturate(160%);
   }
 
   @supports not (backdrop-filter: blur(1px)) {

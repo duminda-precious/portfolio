@@ -74,10 +74,9 @@ export default async function WorkWithMePage() {
             </p>
 
             {email ? (
+              /* No data-cursor — a large underlined link is its own CTA. */
               <a
                 href={email.href}
-                data-cursor="cta"
-                data-cursor-label={email.cursorLabel}
                 className="type-h4 mt-(--spacing-8) inline-flex min-h-[44px] items-center text-brand-700 underline underline-offset-8"
               >
                 {/* mailto: is stripped for display — the href carries it. */}

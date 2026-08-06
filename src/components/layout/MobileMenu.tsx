@@ -88,14 +88,14 @@ export function MobileMenu({ items }: { items: NavItem[] }) {
 
   return (
     <>
+      {/* No data-cursor — this trigger only renders below md, where the
+       * custom cursor never mounts (touch has no fine pointer). */}
       <button
         ref={triggerRef}
         type="button"
         onClick={() => setIsOpen(true)}
         aria-expanded={isOpen}
         aria-haspopup="dialog"
-        data-cursor="cta"
-        data-cursor-label="Open menu"
         className="type-action min-h-[44px] px-(--spacing-2) text-ink md:hidden"
       >
         Menu
@@ -113,8 +113,6 @@ export function MobileMenu({ items }: { items: NavItem[] }) {
             <button
               type="button"
               onClick={close}
-              data-cursor="cta"
-              data-cursor-label="Close menu"
               className="type-action min-h-[44px] px-(--spacing-2) text-ink"
             >
               Close

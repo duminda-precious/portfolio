@@ -8,10 +8,6 @@
 export type NavItem = {
   label: string;
   href: string;
-  /** Cursor pill copy (§8.5). Must stay under ~18 chars or the pill fights
-   * the cursor's movement. Every label needs an accessible-text equivalent
-   * on the same element — the cursor is never the sole carrier (§8.4.6). */
-  cursorLabel: string;
 };
 
 /**
@@ -19,18 +15,20 @@ export type NavItem = {
  *
  * Note "AI Workflow", not the mockup's "Ai Workflow" — "Ai" reads as a typo
  * and this label is doing brand work (§2.3 labelling decisions).
+ *
+ * No cursor labels: nav links already carry a clear hover state, so the
+ * cursor's CTA reinforcement (§8.5) was redundant here — dropped by decision.
  */
 export const NAV_ITEMS: NavItem[] = [
-  { label: "My Work", href: "/work", cursorLabel: "Go to my work" },
-  { label: "About Me", href: "/about", cursorLabel: "Meet Duminda" },
-  { label: "AI Workflow", href: "/ai-workflow", cursorLabel: "See the tricks" },
-  { label: "Work With Me", href: "/work-with-me", cursorLabel: "Let's talk" },
+  { label: "My Work", href: "/work" },
+  { label: "About Me", href: "/about" },
+  { label: "AI Workflow", href: "/ai-workflow" },
+  { label: "Work With Me", href: "/work-with-me" },
 ];
 
 export type SocialLink = {
   label: string;
   href: string;
-  cursorLabel: string;
 };
 
 /**
@@ -40,28 +38,14 @@ export type SocialLink = {
  * are the recommended set from §2.3 but the URLs are guesses. Open question
  * §13.6 — confirm the real handles, and whether Behance is current, before
  * launch.
+ *
+ * No cursor labels — same reasoning as NAV_ITEMS above.
  */
 export const SOCIAL_LINKS: SocialLink[] = [
-  {
-    label: "LinkedIn",
-    href: "https://linkedin.com/in/", // TODO §13.6 — real handle
-    cursorLabel: "Go to LinkedIn",
-  },
-  {
-    label: "Instagram",
-    href: "https://instagram.com/", // TODO §13.6 — real handle
-    cursorLabel: "Go to Instagram",
-  },
-  {
-    label: "Behance",
-    href: "https://behance.net/", // TODO §13.6 — confirm still current
-    cursorLabel: "Go to Behance",
-  },
-  {
-    label: "Email",
-    href: "mailto:hello@example.com", // TODO §13.6 — real address
-    cursorLabel: "Say hello",
-  },
+  { label: "LinkedIn", href: "https://linkedin.com/in/" }, // TODO §13.6 — real handle
+  { label: "Instagram", href: "https://instagram.com/" }, // TODO §13.6 — real handle
+  { label: "Behance", href: "https://behance.net/" }, // TODO §13.6 — confirm still current
+  { label: "Email", href: "mailto:hello@example.com" }, // TODO §13.6 — real address
 ];
 
 export const SITE = {

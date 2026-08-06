@@ -28,8 +28,8 @@ export async function Footer() {
               href={social.href}
               target="_blank"
               rel="noopener noreferrer"
-              data-cursor="cta"
-              data-cursor-label={social.cursorLabel}
+              /* No data-cursor — these are text links with a clear underline
+               * hover state, so the cursor's CTA reinforcement is redundant. */
               /* Padded to a ≥44px touch target — these are small text links
                * in the mockup and would otherwise be hard to hit (§9.7). */
               className="type-action inline-flex min-h-[44px] items-center text-ink underline-offset-4 hover:underline"

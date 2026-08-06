@@ -79,11 +79,11 @@ export function Header({ items }: { items: NavItem[] }) {
             !isScrolled && "text-on-media",
           )}
         >
+          {/* No data-cursor — navigation elements keep the native cursor;
+           * the hover/underline states already make them clickable. */}
           <Link
             href="/"
             aria-label="Duminda M — home"
-            data-cursor="cta"
-            data-cursor-label="Back to top"
             className="inline-flex min-h-[44px] items-center"
           >
             {/*

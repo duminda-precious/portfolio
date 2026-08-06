@@ -41,8 +41,9 @@ export function Nav({ items, variant = "header", onNavigate }: NavProps) {
               /* aria-current is the accessible equivalent of the visual
                * active state — a screen reader user gets the same info. */
               aria-current={isCurrent ? "page" : undefined}
-              data-cursor="cta"
-              data-cursor-label={item.cursorLabel}
+              /* No data-cursor here on purpose. Nav links already carry a
+               * clear hover state (colour change); the cursor's CTA
+               * reinforcement is redundant on something this legible. */
               className={cn(
                 "text-ink transition-colors duration-(--duration-fast)",
                 "hover:text-brand-700",

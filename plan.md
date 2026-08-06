@@ -742,18 +742,26 @@ what the implementation added beyond the spec:
 
 ### 8.5 Label copy (in voice)
 
-| Context               | Label             |
-| --------------------- | ----------------- |
-| Featured project card | `View case study` |
-| Experiment tile       | `Expand`          |
-| Showreel              | `Play reel`       |
-| Nav → My Work         | `Go to my work`   |
-| Nav → About Me        | `Meet Duminda`    |
-| Nav → AI Workflow     | `See the tricks`  |
-| Nav → Work With Me    | `Let's talk`      |
-| Footer → LinkedIn     | `Go to LinkedIn`  |
-| Footer → Instagram    | `Go to Instagram` |
-| Footer → Email        | `Say hello`       |
+✅ **UPDATED 2026-08-06 — scope narrowed by decision.** The cursor no longer changes
+over primary nav, the header logo, the mobile menu trigger, footer social links, or
+the standalone email CTA. Those are all plain text/underlined links with an obvious
+native hover state; the cursor's reinforcement was redundant on something already
+legible, and it read as busywork on every pointer move across the header. `NavItem`
+and `SocialLink` no longer carry a `cursorLabel` field at all — removed, not just
+unused, so nothing drifts back in by habit.
+
+The cursor still activates on **media-forward, whole-block links** — featured cards,
+work-index tiles, experiment tiles, case-study prev/next — where "this entire card is
+one link" is exactly the ambiguity the cursor exists to resolve (§8).
+
+| Context                 | Label             |
+| ----------------------- | ----------------- |
+| Featured project card   | `View case study` |
+| Work index project card | `View case study` |
+| Experiment tile         | `Expand`          |
+| Case study prev/next    | `View case study` |
+| Showreel                | `Play reel`       |
+| Filter chip             | `Filter work`     |
 
 Keep every label under ~18 characters — longer pills fight the cursor's movement and become hard to read while tracking.
 

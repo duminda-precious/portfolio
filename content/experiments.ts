@@ -8,90 +8,125 @@
  * content change here, never a change to ExperimentsGrid.
  */
 
-export type ExperimentMedia = {
-  kind: "local-loop" | "image";
-  /** Path under /public. Empty string renders the brand-blue placeholder,
-   * which is the mockup's loading state and a legitimate interim look. */
-  src: string;
-  poster?: string;
-  /** Required. Non-negotiable — see §5 MediaSchema. */
-  alt: string;
-  aspect: "16/9" | "4/3" | "1/1" | "3/4";
-};
+import type { Experiment } from "@/lib/content/schema";
 
-export type Experiment = {
-  id: string;
-  /** The small grey line under each tile. Prime voice real estate (§9.6) —
-   * "Don't Tell My Client" energy, not "Untitled 3D experiment". */
-  caption: string;
-  media: ExperimentMedia;
-  gridSpan: 1 | 2;
-  order: number;
-};
+/** Unsplash with explicit sizing so next/image gets a stable, cacheable URL. */
+const unsplash = (id: string, w = 1200) =>
+  `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80`;
 
 /**
  * ⚠️ PLACEHOLDER CAPTIONS + MEDIA. Open question §13.5.
  *
- * The captions below are written in voice as a demonstration of the register,
- * NOT as final copy — they describe work that may not exist. Replace every one
- * of them with a real caption for the real tile before launch. The `src` fields
- * are deliberately empty so each tile renders the brand-blue placeholder rather
- * than 404ing on a file that was never encoded.
+ * Captions are deliberately obvious placeholders so nothing ships by accident,
+ * but they run to a realistic length — a caption's line count affects the grid's
+ * vertical rhythm, so lorem-short strings would misrepresent the layout.
+ *
+ * Imagery is Unsplash standing in for the real micro-loops. Phase 2 replaces
+ * these with local encoded .mp4/.webm (§6.2), at which point `kind` becomes
+ * "local-loop" and the encoding budget applies.
  */
 export const EXPERIMENTS: Experiment[] = [
   {
     id: "exp-01",
-    caption: "Placeholder — real caption pending (§13.5)",
-    media: { kind: "local-loop", src: "", alt: "", aspect: "4/3" },
+    caption: "Placeholder caption — real copy pending (§13.5)",
+    media: {
+      kind: "image",
+      src: unsplash("1618005182384-a83a8bd57fbe"),
+      alt: "Placeholder experiment still.",
+      aspect: "4/3",
+      hasAudio: false,
+    },
     gridSpan: 1,
     order: 1,
   },
   {
     id: "exp-02",
-    caption: "Placeholder — real caption pending (§13.5)",
-    media: { kind: "local-loop", src: "", alt: "", aspect: "4/3" },
+    caption: "Placeholder caption — real copy pending (§13.5)",
+    media: {
+      kind: "image",
+      src: unsplash("1620121692029-d088224ddc74"),
+      alt: "Placeholder experiment still.",
+      aspect: "4/3",
+      hasAudio: false,
+    },
     gridSpan: 1,
     order: 2,
   },
   {
     id: "exp-03",
-    caption: "Placeholder — real caption pending (§13.5)",
-    media: { kind: "local-loop", src: "", alt: "", aspect: "4/3" },
+    caption: "Placeholder caption — real copy pending (§13.5)",
+    media: {
+      kind: "image",
+      src: unsplash("1614851099511-773084f6911d"),
+      alt: "Placeholder experiment still.",
+      aspect: "4/3",
+      hasAudio: false,
+    },
     gridSpan: 1,
     order: 3,
   },
   {
     id: "exp-04",
-    caption: "Placeholder — real caption pending (§13.5)",
-    media: { kind: "local-loop", src: "", alt: "", aspect: "16/9" },
+    caption: "Placeholder caption for a wider tile — real copy pending (§13.5)",
+    media: {
+      kind: "image",
+      src: unsplash("1633356122102-3fe601e05bd2"),
+      alt: "Placeholder experiment still.",
+      aspect: "16/9",
+      hasAudio: false,
+    },
     gridSpan: 2,
     order: 4,
   },
   {
     id: "exp-05",
-    caption: "Placeholder — real caption pending (§13.5)",
-    media: { kind: "local-loop", src: "", alt: "", aspect: "4/3" },
+    caption: "Placeholder caption — real copy pending (§13.5)",
+    media: {
+      kind: "image",
+      src: unsplash("1550859492-d5da9d8e45f3"),
+      alt: "Placeholder experiment still.",
+      aspect: "4/3",
+      hasAudio: false,
+    },
     gridSpan: 1,
     order: 5,
   },
   {
     id: "exp-06",
-    caption: "Placeholder — real caption pending (§13.5)",
-    media: { kind: "local-loop", src: "", alt: "", aspect: "4/3" },
+    caption: "Placeholder caption — real copy pending (§13.5)",
+    media: {
+      kind: "image",
+      src: unsplash("1502691876148-a84978e59af8"),
+      alt: "Placeholder experiment still.",
+      aspect: "4/3",
+      hasAudio: false,
+    },
     gridSpan: 1,
     order: 6,
   },
   {
     id: "exp-07",
-    caption: "Placeholder — real caption pending (§13.5)",
-    media: { kind: "local-loop", src: "", alt: "", aspect: "16/9" },
+    caption: "Placeholder caption for a wider tile — real copy pending (§13.5)",
+    media: {
+      kind: "image",
+      src: unsplash("1604871000636-074fa5117945"),
+      alt: "Placeholder experiment still.",
+      aspect: "16/9",
+      hasAudio: false,
+    },
     gridSpan: 2,
     order: 7,
   },
   {
     id: "exp-08",
-    caption: "Placeholder — real caption pending (§13.5)",
-    media: { kind: "local-loop", src: "", alt: "", aspect: "16/9" },
+    caption: "Placeholder caption for a wider tile — real copy pending (§13.5)",
+    media: {
+      kind: "image",
+      src: unsplash("1517483000871-1dbf64a6e1c6"),
+      alt: "Placeholder experiment still.",
+      aspect: "16/9",
+      hasAudio: false,
+    },
     gridSpan: 2,
     order: 8,
   },

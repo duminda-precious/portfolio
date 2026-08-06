@@ -1,3 +1,4 @@
+import { SectionHeading } from "@/components/primitives/SectionHeading";
 import type { Experiment } from "@/lib/content";
 
 import { ExperimentTile } from "./ExperimentTile";
@@ -22,9 +23,9 @@ export function ExperimentsGrid({
 
   return (
     <section aria-labelledby="experiments-heading">
-      <h2 id="experiments-heading" className="type-h4 text-ink">
+      <SectionHeading id="experiments-heading">
         Things That Kept Me Up
-      </h2>
+      </SectionHeading>
 
       <div className="mt-(--spacing-8) grid grid-cols-1 items-start gap-(--spacing-4) md:grid-cols-2 lg:grid-cols-3">
         {experiments.map((experiment) => (

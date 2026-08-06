@@ -247,7 +247,7 @@ export function CursorRenderer() {
 
       <span
         ref={labelRef}
-        className="type-label relative px-(--spacing-2) whitespace-nowrap"
+        className="type-action relative px-(--spacing-2) whitespace-nowrap"
         style={{
           /* INK, not white. A translucent surface has no fixed contrast
            * ratio — the effective background is whatever is behind it. The

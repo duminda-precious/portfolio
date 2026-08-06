@@ -44,7 +44,7 @@ export const VARIANTS: Record<CursorVariant, VariantSpec> = {
   },
 
   /** Square label box, expands from the square. Glass fill, ink text. */
-  cta: { width: 0, height: 40, radius: 0, showsLabel: true, fill: "glass" },
+  cta: { width: 0, height: 32, radius: 0, showsLabel: true, fill: "glass" },
 
   /** Grows to ~72px. */
   expand: {
@@ -101,6 +101,10 @@ export const GLASS_BLUR_PX = 12;
 
 /**
  * Horizontal breathing room added to the measured label width when sizing the
- * pill. Must stay in step with the label's px-(--spacing-4) — 16px a side.
+ * box. This is the TOTAL, both sides combined.
+ *
+ * ⚠️ Must stay in step with the label's inline padding in CursorRenderer
+ * (currently 8px a side via `px-(--spacing-2)`) — half of this value on each
+ * side, or the text sits off-centre in the box.
  */
-export const PILL_PADDING_X = 40;
+export const PILL_PADDING_X = 16;

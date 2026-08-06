@@ -1,9 +1,14 @@
 /**
  * Cursor variants (§8.3).
  *
- * Sizes are in px rather than tokens because GSAP animates these as raw
- * numeric values — a CSS custom property would have to be resolved and parsed
- * on every variant change, which is work on the hot path for no gain.
+ * Sizes are in px rather than reading CSS custom properties, because GSAP
+ * animates these as raw numeric values on the hot path (every pointer event,
+ * every variant change) — resolving a var() there is unnecessary work, and
+ * GSAP's tween engine wants numbers to interpolate reliably.
+ *
+ * ⚠️ KEPT IN SYNC WITH TOKENS.CSS "Cursor" section — every value below has a
+ * --cursor-* reference token there for humans and for /tokens to render
+ * against. If you change a number here, change the matching token too.
  */
 
 export type CursorVariant =
@@ -34,7 +39,7 @@ export type VariantSpec = {
  * scroll chip and the filter chips.
  */
 export const VARIANTS: Record<CursorVariant, VariantSpec> = {
-  /** 12px square — the resting state. */
+  /** 12px square — the resting state. Token: --cursor-size-default. */
   default: {
     width: 12,
     height: 12,
@@ -43,10 +48,13 @@ export const VARIANTS: Record<CursorVariant, VariantSpec> = {
     fill: "brand",
   },
 
-  /** Square label box, expands from the square. Glass fill, ink text. */
-  cta: { width: 0, height: 32, radius: 0, showsLabel: true, fill: "glass" },
+  /**
+   * Square label box, expands from the square. Glass fill, ink text.
+   * Token: --cursor-size-cta-height.
+   */
+  cta: { width: 0, height: 48, radius: 0, showsLabel: true, fill: "glass" },
 
-  /** Grows to ~72px. */
+  /** Grows to ~72px. Token: --cursor-size-expand. */
   expand: {
     width: 72,
     height: 72,
@@ -59,7 +67,8 @@ export const VARIANTS: Record<CursorVariant, VariantSpec> = {
 
   drag: { width: 72, height: 72, radius: 0, showsLabel: true, fill: "glass" },
 
-  /** Thin vertical bar, caret-like, over body text. */
+  /** Thin vertical bar, caret-like, over body text.
+   * Tokens: --cursor-size-text-width, --cursor-size-text-height. */
   text: { width: 2, height: 28, radius: 0, showsLabel: false, fill: "ink" },
 
   /** Custom cursor hides entirely; the native one returns. */
@@ -79,17 +88,28 @@ export const VARIANTS: Record<CursorVariant, VariantSpec> = {
  *
  * Set DOT_DURATION to 0 for a cursor that pins exactly to the pointer with no
  * interpolation at all.
+ *
+ * Token: --cursor-duration-track (120ms) — deliberately faster than any
+ * --duration-* in §3.6, because pointer-follow needs to read as sharper than
+ * a UI transition or it feels laggy.
  */
 export const DOT_DURATION = 0.12;
 export const LABEL_DURATION = 0.15;
+/** GSAP easing name — no CSS equivalent exists; --cursor-ease-track in
+ * tokens.css documents the closest cubic-bezier for reference only. */
 export const EASE = "power2.out";
 
-/** Variant morph (size/shape change) — 150ms, matching --duration-fast. */
+/**
+ * Variant morph (size/shape change).
+ * Token: --cursor-duration-morph, which literally equals --duration-fast —
+ * the cursor's shape change deliberately rides the site's fast timing rather
+ * than inventing a separate one.
+ */
 export const MORPH_DURATION = 0.15;
 export const MORPH_EASE = "power2.out";
 
 /**
- * Glass blur radius, in px.
+ * Glass blur radius, in px. Token: --blur-glass.
  *
  * ⚠️ Must stay in step with --blur-glass in tokens.css and the literal values
  * in the .glass rules in globals.css. It is duplicated here rather than read
@@ -98,6 +118,14 @@ export const MORPH_EASE = "power2.out";
  * keeping only the -webkit- form, which Chrome and Firefox ignore.
  */
 export const GLASS_BLUR_PX = 12;
+
+/**
+ * Saturation lift applied alongside the glass blur. Token: --glass-saturate.
+ * Same "must be a literal, not a var()" constraint as GLASS_BLUR_PX above —
+ * kept as a separate constant so both are named rather than a bare "160%" in
+ * the filter string.
+ */
+export const GLASS_SATURATE = "160%";
 
 /**
  * Horizontal breathing room added to the measured label width when sizing the

@@ -392,7 +392,7 @@ Breakpoints — Tailwind v4 defaults are fine and match the skill's recommended 
 @theme {
   --radius-none: 0;
   --radius-sm: 4px;
-  --radius-pill: 999px; /* the CTA chip, cursor pill */
+  --radius-pill: 999px; /* the CTA chip and the filter chips */
 
   --duration-fast: 150ms;
   --duration-base: 300ms;
@@ -404,7 +404,12 @@ Breakpoints — Tailwind v4 defaults are fine and match the skill's recommended 
 }
 ```
 
-Note: media containers in the mockup have **square corners**. Keep `--radius-none` as the default for media; the pill radius is reserved for the CTA chip and the cursor.
+Note: media containers in the mockup have **square corners**. Keep `--radius-none` as the default for media; the pill radius is reserved for the CTA chip and the filter chips.
+
+✅ **UPDATED 2026-08-06** — the cursor is **square-cornered, not pill-shaped**. §8.3's
+original spec described a pill; that was superseded by decision to keep the cursor
+consistent with the site's square media containers, so `--radius-pill` is no longer
+used by the cursor. See §3.8.
 
 ### 3.7 Z-index
 
@@ -415,6 +420,47 @@ Note: media containers in the mockup have **square corners**. Keep `--radius-non
 --z-lightbox: 200;
 --z-cursor: 9999; /* cursor is always on top of everything */
 ```
+
+### 3.8 Cursor
+
+✅ **ADDED 2026-08-06.** Reference values for the dynamic cursor (§8). These are
+declared here for visibility and for `/tokens` to render against — the component at
+`src/components/cursor/variants.ts` does **not** read these custom properties.
+
+```css
+@theme {
+  --cursor-size-default: 12px; /* resting square */
+  --cursor-size-cta-height: 48px; /* labelled box height (cta) */
+  --cursor-size-expand: 72px; /* expand / play / drag */
+  --cursor-size-text-width: 2px; /* text-caret bar */
+  --cursor-size-text-height: 28px;
+
+  --cursor-duration-track: 120ms; /* pointer-follow — faster than any --duration-* */
+  --cursor-duration-morph: var(--duration-fast); /* 150ms, shared literally */
+  --cursor-ease-track: cubic-bezier(
+    0.165,
+    0.84,
+    0.44,
+    1
+  ); /* ≈ power2.out, reference only */
+
+  --glass-saturate: 160%; /* saturation lift alongside the glass blur */
+}
+```
+
+**Why the duplication.** GSAP tweens `width`/`height`/`x`/`y` as raw numbers on the
+hottest path in the app — every `pointermove`, every variant change. Resolving a CSS
+custom property there is unneeded work for zero visual difference, and GSAP's colour
+interpolation has already broken once on a `var()`-resolved value in this codebase
+(see §8 implementation notes — the glass-alpha bug). So `variants.ts` keeps its own
+plain-number copies, cross-referenced in comments back to these tokens. **If you
+change a cursor size or timing, change both places.**
+
+**Why `--cursor-duration-track` isn't `--duration-fast`.** Pointer-follow needs to
+read as sharper than an ordinary UI transition or the cursor feels laggy — 120ms,
+not the shared 150ms. The shape _morph_ between variants, by contrast, deliberately
+does reuse `--duration-fast` — a shape change is closer to a UI transition than to
+raw tracking.
 
 ---
 
@@ -696,19 +742,43 @@ Position must **never** live in React state — that's a re-render per mouse pix
 
 The label pill itself uses a slightly longer duration than the dot (~0.55s vs 0.4s) for a trailing feel.
 
+✅ **UPDATED 2026-08-06** — the implemented tracking timing is `--cursor-duration-track`
+(120ms, `power2.out`), not the 0.4s/`power3` above. Sharpened by decision: a 0.4s lerp
+reads as "drifting toward" the pointer rather than tracking it. See §3.8 for the token
+and §8 implementation notes for the full reasoning.
+
 ### 8.3 Variants
 
-| `data-cursor` | Visual                                       | Label example                                       |
-| ------------- | -------------------------------------------- | --------------------------------------------------- |
-| `default`     | 12px `brand-500` dot                         | —                                                   |
-| `cta`         | Pill expands from dot, blue fill, white text | `View case study` · `Go to LinkedIn` · `Let's talk` |
-| `expand`      | Circle grows to ~72px, blue fill             | `Expand`                                            |
-| `play`        | Circle with label                            | `Play reel`                                         |
-| `drag`        | Circle with horizontal arrows                | `Drag`                                              |
-| `text`        | Thin 2px vertical bar                        | —                                                   |
-| `hidden`      | Custom cursor hides, native returns          | —                                                   |
+✅ **UPDATED 2026-08-06 — square, not pill; one element, not two.** Two changes from
+the table below, both made by decision:
 
-Transition between variants: width/height/border-radius on `--duration-base` with `--ease-out-expo`. The label cross-fades so text doesn't scramble mid-transition.
+1. **Square corners throughout**, matching the site's square media containers.
+   `--radius-pill` is no longer used by the cursor at all (§3.6).
+2. **One element morphs, rather than a pill fading in beside a shrinking dot** —
+   there is never a frame with no cursor visible. Label text is **`--color-ink` on
+   the glass surface**, not white on brand-blue: white text on a translucent
+   surface has no guaranteed contrast ratio (§3.8/glass tokens).
+
+| `data-cursor` | Visual                                                           | Label example                       |
+| ------------- | ---------------------------------------------------------------- | ----------------------------------- |
+| `default`     | 12px `brand-500` square                                          | —                                   |
+| `cta`         | Square box expands from the default square, glass fill, ink text | `View case study` · `Go to my work` |
+| `expand`      | Grows to 72px, glass fill                                        | `Expand`                            |
+| `play`        | 72px, glass fill                                                 | `Play reel`                         |
+| `drag`        | 72px, glass fill                                                 | `Drag`                              |
+| `text`        | Thin 2×28px vertical bar, ink fill                               | —                                   |
+| `hidden`      | Custom cursor hides, native returns                              | —                                   |
+
+Sizes are tokenised — see §3.8 for `--cursor-size-*`.
+
+Transition between variants: width/height on `--cursor-duration-morph` (150ms,
+`power2.out`) — **not** `--duration-base`/`--ease-out-expo` as above, to match the
+sharper tracking. Fill colour and the glass blur are applied INSTANTLY rather than
+animated — GSAP interpolating `background-color` through a `var()` silently drops
+the alpha channel (§8 implementation notes) — so only the size morph is what the eye
+reads as a transition. The label cross-fades so text doesn't scramble mid-transition,
+fading out faster (80ms) than in (150ms) so a lingering label after leaving the
+target doesn't read as lag.
 
 ### 8.4 Non-negotiable guard rails
 

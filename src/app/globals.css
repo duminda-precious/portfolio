@@ -85,18 +85,20 @@
    * and Firefox ignore. The result is a rule that silently blurs nothing in
    * every browser except Safari.
    *
-   * Using the literal length avoids the dedupe. If the blur radius changes,
-   * update --blur-glass in tokens.css AND these two rules together.
+   * Using the literal length avoids the dedupe. If the blur radius OR the
+   * saturation changes, update --blur-glass / --glass-saturate in tokens.css
+   * AND these two rules together — all three call sites (here, and
+   * variants.ts for the cursor) must move as one.
    */
   .glass {
     background-color: var(--color-glass);
-    -webkit-backdrop-filter: blur(12px) saturate(160%);
+    -webkit-backdrop-filter: blur(12px) saturate(160%); /* --blur-glass, --glass-saturate */
     backdrop-filter: blur(12px) saturate(160%);
   }
 
   .glass-strong {
     background-color: var(--color-glass-strong);
-    -webkit-backdrop-filter: blur(12px) saturate(160%);
+    -webkit-backdrop-filter: blur(12px) saturate(160%); /* --blur-glass, --glass-saturate */
     backdrop-filter: blur(12px) saturate(160%);
   }
 

@@ -8,6 +8,7 @@ import {
   DOT_DURATION,
   EASE,
   GLASS_BLUR_PX,
+  GLASS_SATURATE,
   LABEL_DURATION,
   MORPH_DURATION,
   MORPH_EASE,
@@ -143,7 +144,9 @@ export function CursorRenderer() {
      * transformed and so establishes a stacking context with nothing behind
      * it to sample.
      */
-    const filter = isGlass ? `blur(${GLASS_BLUR_PX}px) saturate(160%)` : "";
+    const filter = isGlass
+      ? `blur(${GLASS_BLUR_PX}px) saturate(${GLASS_SATURATE})`
+      : "";
     surface.style.backdropFilter = filter;
     /* setProperty rather than the camelCase form — the prefixed property is
      * not in the CSSStyleDeclaration type, and Safari still needs it. */

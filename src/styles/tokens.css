@@ -70,7 +70,7 @@
   --color-glass: rgb(255 255 255 / 0.72); /* the shared translucent fill */
   --color-glass-strong: rgb(255 255 255 / 0.88); /* scrolled header, denser */
   --color-glass-border: rgb(255 255 255 / 0.5); /* catches the panel edge */
-  --blur-glass: 12px;
+  --blur-glass: 8px;
 
   /* ---------------------------------------------------------------------
    * Typography — §3.3 · CONFIRMED against the supplied type spec
@@ -234,4 +234,44 @@
   --z-header: 100;
   --z-lightbox: 200;
   --z-cursor: 9999; /* the cursor is always on top of everything */
+
+  /* ---------------------------------------------------------------------
+   * Cursor — §8. Sizes for the dynamic cursor's variants.
+   *
+   * ⚠️ THESE ARE REFERENCE VALUES, NOT WHAT THE COMPONENT READS.
+   * src/components/cursor/variants.ts holds its own copies as plain numbers,
+   * because GSAP tweens `width`/`height` as numeric px on every pointer
+   * event and every variant change — resolving a CSS custom property on that
+   * path is unnecessary work for zero visual gain, and GSAP's tween engine
+   * wants numbers, not var() strings, to interpolate reliably (see the glass
+   * alpha bug this same file documents elsewhere: GSAP interpolating a
+   * var()-resolved value produced a wrong result once already).
+   *
+   * These tokens exist so the values are declared ONE place for humans and
+   * for /tokens to render against, and so a design review has something to
+   * point at. If you change a size, change BOTH this token and the matching
+   * entry in variants.ts — search for "Kept in sync with tokens.css" there.
+   * ------------------------------------------------------------------- */
+  --cursor-size-default: 12px; /* resting square */
+  --cursor-size-cta-height: 48px; /* labelled box height (cta) */
+  --cursor-size-expand: 72px; /* expand/play/drag — circle-equivalent square */
+  --cursor-size-text-width: 2px; /* text-caret bar */
+  --cursor-size-text-height: 28px;
+
+  /* Movement/morph timings. DOT_DURATION and MORPH_DURATION in variants.ts
+   * are the values GSAP actually reads; these are the same numbers for
+   * reference. --cursor-duration-morph intentionally equals --duration-fast
+   * (150ms) — the cursor's shape change rides the site's fast timing rather
+   * than inventing its own. --cursor-duration-track (120ms) is deliberately
+   * FASTER than any timing token in §3.6, because pointer-follow needs to
+   * read as sharper than a UI transition or it feels laggy. */
+  --cursor-duration-track: 120ms;
+  --cursor-duration-morph: var(--duration-fast); /* 150ms — literally shared */
+  --cursor-ease-track: cubic-bezier(0.165, 0.84, 0.44, 1); /* ~power2.out */
+
+  /* saturate() lift applied alongside the glass blur, on both the cursor
+   * label and the header. Without it the blur alone can look slightly flat
+   * — a touch of extra saturation keeps colour behind the glass from
+   * washing out. */
+  --glass-saturate: 160%;
 }

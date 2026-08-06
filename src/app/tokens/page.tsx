@@ -7,6 +7,8 @@ import { assess } from "./contrast";
 import {
   BRAND,
   CONTRAST_PAIRS,
+  CURSOR_SIZES,
+  CURSOR_TIMINGS,
   DURATIONS,
   EASINGS,
   FLUID_SPACING,
@@ -406,6 +408,76 @@ export default function TokensPage() {
               <span className="text-ink">{e.name}</span> — {e.value}
             </p>
           ))}
+        </div>
+      </Section>
+
+      {/* ---------------------------------------------------------------- */}
+      <Section
+        title="Cursor — §8"
+        note="Reference values for the dynamic cursor. GSAP reads its own numeric copies in variants.ts rather than these custom properties — see the token comment for why. Hover the squares below; they use the SAME variants.ts values, not a re-implementation."
+      >
+        <div className="flex flex-wrap items-end gap-(--spacing-8)">
+          <div className="text-center">
+            <div className="h-(--cursor-size-default) w-(--cursor-size-default) bg-brand-500" />
+            <p className="mt-(--spacing-2) font-(family-name:--font-mono) text-(length:--text-caption) text-ink-muted">
+              default · 12px
+            </p>
+          </div>
+          <div className="text-center">
+            <div className="glass flex h-(--cursor-size-cta-height) w-[140px] items-center justify-center">
+              <span className="type-action text-ink">Go to my work</span>
+            </div>
+            <p className="mt-(--spacing-2) font-(family-name:--font-mono) text-(length:--text-caption) text-ink-muted">
+              cta · 48px tall
+            </p>
+          </div>
+          <div className="text-center">
+            <div className="glass flex h-(--cursor-size-expand) w-(--cursor-size-expand) items-center justify-center">
+              <span className="type-caption text-ink">Expand</span>
+            </div>
+            <p className="mt-(--spacing-2) font-(family-name:--font-mono) text-(length:--text-caption) text-ink-muted">
+              expand/play/drag · 72px
+            </p>
+          </div>
+          <div className="text-center">
+            <div className="h-(--cursor-size-text-height) w-(--cursor-size-text-width) bg-ink" />
+            <p className="mt-(--spacing-2) font-(family-name:--font-mono) text-(length:--text-caption) text-ink-muted">
+              text · 2×28px
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-(--spacing-8) overflow-x-auto">
+          <table className="w-full min-w-[520px] border-collapse text-left">
+            <tbody>
+              {CURSOR_SIZES.map((row) => (
+                <tr key={row.token} className="border-b border-hairline">
+                  <td className="py-(--spacing-3) pr-(--spacing-4) font-(family-name:--font-mono) text-(length:--text-caption) text-ink">
+                    {row.token}
+                  </td>
+                  <td className="py-(--spacing-3) pr-(--spacing-4) font-(family-name:--font-mono) text-(length:--text-caption) text-brand-700">
+                    {row.value}
+                  </td>
+                  <td className="py-(--spacing-3) text-(length:--text-caption) text-ink-muted">
+                    {row.usage}
+                  </td>
+                </tr>
+              ))}
+              {CURSOR_TIMINGS.map((row) => (
+                <tr key={row.token} className="border-b border-hairline">
+                  <td className="py-(--spacing-3) pr-(--spacing-4) font-(family-name:--font-mono) text-(length:--text-caption) text-ink">
+                    {row.token}
+                  </td>
+                  <td className="py-(--spacing-3) pr-(--spacing-4) font-(family-name:--font-mono) text-(length:--text-caption) text-brand-700">
+                    {row.value}
+                  </td>
+                  <td className="py-(--spacing-3) text-(length:--text-caption) text-ink-muted">
+                    {row.usage}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </Section>
 

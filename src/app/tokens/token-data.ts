@@ -269,3 +269,53 @@ export const EASINGS = [
   { name: "ease-out-expo", value: "cubic-bezier(0.16, 1, 0.3, 1)" },
   { name: "ease-in-out-quart", value: "cubic-bezier(0.76, 0, 0.24, 1)" },
 ] as const;
+
+/**
+ * Cursor reference values (§8.3). These mirror what
+ * src/components/cursor/variants.ts actually uses — GSAP reads plain numbers
+ * there, not these custom properties, for reasons documented in tokens.css.
+ * This table exists so the values are visible and auditable in one place.
+ */
+export const CURSOR_SIZES = [
+  {
+    token: "--cursor-size-default",
+    value: "12px",
+    usage: "Resting square (default variant)",
+  },
+  {
+    token: "--cursor-size-cta-height",
+    value: "48px",
+    usage: "Labelled box height (cta, and the basis for expand/play/drag)",
+  },
+  {
+    token: "--cursor-size-expand",
+    value: "72px",
+    usage: "expand / play / drag — square, both dimensions",
+  },
+  {
+    token: "--cursor-size-text-width / -height",
+    value: "2px / 28px",
+    usage: "Text-caret bar over prose (text variant)",
+  },
+] as const;
+
+export const CURSOR_TIMINGS = [
+  {
+    token: "--cursor-duration-track",
+    value: "120ms",
+    usage:
+      "Pointer-follow (GSAP quickTo). Deliberately faster than any --duration-* — tracking needs to read sharper than a UI transition.",
+  },
+  {
+    token: "--cursor-duration-morph",
+    value: "150ms = --duration-fast",
+    usage:
+      "Shape change between variants. Literally shares the site's fast timing rather than inventing a new one.",
+  },
+  {
+    token: "--cursor-ease-track",
+    value: "≈ power2.out",
+    usage:
+      "GSAP-only easing name; the CSS token is a reference cubic-bezier, not what actually runs.",
+  },
+] as const;

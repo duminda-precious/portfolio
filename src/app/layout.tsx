@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Rethink_Sans } from "next/font/google";
 
+import { CursorProvider } from "@/components/cursor/CursorProvider";
 import { Header } from "@/components/layout/Header";
 import { getNavItems } from "@/lib/content";
 
@@ -56,9 +57,12 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         </a>
 
         {/*
-          CursorProvider and Lenis wrap this in later phases.
-          Order per §4: fonts → CursorProvider → Lenis → Header → children.
+          Single cursor instance for the whole app (§8.4.8), portalled to
+          document.body. Never rendered per-page. Lenis joins here in the
+          motion phase.
         */}
+        <CursorProvider />
+
         <Header items={navItems} />
         {children}
       </body>

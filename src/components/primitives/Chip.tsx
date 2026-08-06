@@ -40,7 +40,9 @@ export function Chip({
       /* aria-pressed communicates the toggle state to screen readers — the
        * colour change alone is not an accessible affordance. */
       aria-pressed={isActive}
-      data-cursor="cta"
+      /* Only declare a cta cursor when there is actually a label to show —
+       * otherwise the pill expands to an empty blue lozenge. */
+      data-cursor={cursorLabel ? "cta" : undefined}
       data-cursor-label={cursorLabel}
       className={cn(
         shared,

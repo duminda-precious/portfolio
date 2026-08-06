@@ -1,3 +1,4 @@
+import { CursorToggle } from "@/components/cursor/CursorToggle";
 import { Container } from "@/components/primitives/Container";
 import { getSite, getSocialLinks } from "@/lib/content";
 
@@ -38,6 +39,11 @@ export async function Footer() {
           </li>
         ))}
       </ul>
+
+      {/* Escape hatch (§8.4.9). Self-hides where no custom cursor runs. */}
+      <div className="mt-(--spacing-8)">
+        <CursorToggle />
+      </div>
     </Container>
   );
 }

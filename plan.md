@@ -688,6 +688,22 @@ A custom cursor that requires `cursor: none` is an accessibility liability if do
 8. **Single instance.** Rendered once in `layout.tsx`, portalled to `document.body` at `--z-cursor`. Not per-page.
 9. **Escape hatch.** Consider a "use system cursor" toggle in the footer, persisted to `localStorage`. Low cost, and it's the kind of detail that signals craft to a design-literate audience.
 
+✅ **IMPLEMENTED.** All nine guard rails are in `src/components/cursor/`. Notes on
+what the implementation added beyond the spec:
+
+- **`pointerType !== "mouse"` is checked per event**, not just at mount. The
+  media-query gate catches touch devices, but a hybrid laptop with a
+  touchscreen matches `pointer: fine` and would otherwise park the dot
+  mid-screen on a finger tap.
+- **GSAP is dynamically imported** behind the mount gate, so it never enters the
+  first-load bundle for touch, reduced-motion, or opted-out users.
+- **The dot morphs INTO the pill** rather than hiding while a separate pill
+  fades in — there is never a frame with no cursor on screen. The pill width is
+  measured from the label's `scrollWidth` once per hover boundary.
+- **Native cursor exceptions live in CSS** at higher specificity than
+  `.cursor-none-active`, covering inputs, textareas, `contenteditable`, range
+  sliders, and anything marked `data-cursor="hidden"`.
+
 ### 8.5 Label copy (in voice)
 
 | Context               | Label             |

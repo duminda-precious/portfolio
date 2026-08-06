@@ -207,6 +207,22 @@
     cursor: none;
   }
 
+  /* §8.4.4 — real controls always get the native cursor back.
+   *
+   * Never make someone select text, drag a slider, or scrub a video without a
+   * system cursor: the custom dot gives no indication of a text caret or a
+   * grab handle, and precision suffers. This is a hard exception to the rule
+   * above, so it must win — hence the higher specificity. */
+  .cursor-none-active :is(input, textarea, select, [contenteditable="true"]),
+  .cursor-none-active [data-cursor="hidden"],
+  .cursor-none-active [data-cursor="hidden"] * {
+    cursor: auto;
+  }
+
+  .cursor-none-active :is(input[type="range"], video::-webkit-media-controls) {
+    cursor: pointer;
+  }
+
   /* Visually hidden but available to screen readers. Used by the skip link
    * before it receives focus. */
   .sr-only-focusable:not(:focus):not(:active) {

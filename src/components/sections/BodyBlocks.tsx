@@ -20,7 +20,14 @@ export function BodyBlocks({ blocks }: { blocks: BodyBlock[] }) {
         switch (block.kind) {
           case "lead":
             return (
-              <p key={index} className="type-title max-w-[55ch] text-ink">
+              /* data-cursor="text" shrinks the dot to a caret-like bar over
+               * readable prose (§8.3), signalling that this is selectable
+               * text rather than something to click. */
+              <p
+                key={index}
+                data-cursor="text"
+                className="type-title max-w-[55ch] text-ink"
+              >
                 {block.text}
               </p>
             );
@@ -31,7 +38,10 @@ export function BodyBlocks({ blocks }: { blocks: BodyBlock[] }) {
                 {/* h3 — the case study title is the h1 and the block heading
                  * sits under it. Levels must never skip (§11). */}
                 <SectionHeading as="h3">{block.heading}</SectionHeading>
-                <div className="mt-(--spacing-6) space-y-(--spacing-6)">
+                <div
+                  data-cursor="text"
+                  className="mt-(--spacing-6) space-y-(--spacing-6)"
+                >
                   {block.paragraphs.map((paragraph, i) => (
                     <p key={i} className="type-body-sm max-w-[65ch] text-ink">
                       {paragraph}

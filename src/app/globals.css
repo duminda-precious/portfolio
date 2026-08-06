@@ -21,19 +21,26 @@
     background-color: var(--color-page);
     color: var(--color-ink);
     font-family: var(--font-body);
-    font-size: var(--text-body);
+    /* Body is 24px/140% per the type spec — larger than a typical default.
+     * Uses the fluid token so it doesn't overwhelm a small viewport. */
+    font-size: var(--text-body-fluid);
+    font-weight: var(--font-weight-regular);
     line-height: var(--leading-body);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
+  /* Headings are Bold with tight leading, per the spec. Sizes are NOT set
+   * here — each level sets its own, because an <h2> in a card is not the
+   * same size as an <h2> opening a section. */
   h1,
   h2,
   h3,
   h4 {
     font-family: var(--font-display);
-    line-height: var(--leading-tight);
-    letter-spacing: var(--tracking-tight);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--leading-h3);
+    letter-spacing: var(--tracking-normal);
     text-wrap: balance;
   }
 
@@ -53,6 +60,115 @@
   ::selection {
     background-color: var(--color-brand-500);
     color: var(--color-paper);
+  }
+}
+
+@layer components {
+  /**
+   * Named type styles, straight from the spec. Each bundles size + weight +
+   * leading + tracking so a component asks for `type-h1`, not four tokens it
+   * has to keep in sync by hand.
+   *
+   * Every style has a `-fixed` sibling that uses the exact px-derived value
+   * instead of the fluid clamp. Use the fluid version by default; reach for
+   * `-fixed` only where the design genuinely requires the literal size.
+   */
+  .type-h1 {
+    font-family: var(--font-display);
+    font-size: var(--text-h1-fluid);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--leading-h1);
+    letter-spacing: var(--tracking-h1);
+  }
+  .type-h1-fixed {
+    font-size: var(--text-h1);
+  }
+
+  .type-h2 {
+    font-family: var(--font-display);
+    font-size: var(--text-h2-fluid);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--leading-h2);
+    letter-spacing: var(--tracking-normal);
+  }
+  .type-h2-fixed {
+    font-size: var(--text-h2);
+  }
+
+  .type-h3 {
+    font-family: var(--font-display);
+    font-size: var(--text-h3-fluid);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--leading-h3);
+    letter-spacing: var(--tracking-normal);
+  }
+  .type-h3-fixed {
+    font-size: var(--text-h3);
+  }
+
+  .type-h4 {
+    font-family: var(--font-display);
+    font-size: var(--text-h4-fluid);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--leading-h4);
+    letter-spacing: var(--tracking-normal);
+  }
+  .type-h4-fixed {
+    font-size: var(--text-h4);
+  }
+
+  /* Title — 28px SemiBold. Project card titles, sub-headings. */
+  .type-title {
+    font-family: var(--font-display);
+    font-size: var(--text-title-fluid);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--leading-title);
+    letter-spacing: var(--tracking-normal);
+  }
+
+  /* Body — 24px Regular. The default paragraph. */
+  .type-body {
+    font-family: var(--font-body);
+    font-size: var(--text-body-fluid);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--leading-body);
+    letter-spacing: var(--tracking-normal);
+  }
+
+  /* Action — 20px SemiBold, tightened. Buttons, nav, the scroll chip. */
+  .type-action {
+    font-family: var(--font-body);
+    font-size: var(--text-action);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--leading-action);
+    letter-spacing: var(--tracking-action);
+  }
+
+  /* Body Small — 18px Regular. Secondary copy. */
+  .type-body-sm {
+    font-family: var(--font-body);
+    font-size: var(--text-body-sm);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--leading-body-sm);
+    letter-spacing: var(--tracking-normal);
+  }
+
+  /* Label — 16px Bold. Eyebrow tags, form labels, metadata. */
+  .type-label {
+    font-family: var(--font-body);
+    font-size: var(--text-label);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--leading-label);
+    letter-spacing: var(--tracking-normal);
+  }
+
+  /* Caption — 14px Regular, opened up slightly. Gallery captions. */
+  .type-caption {
+    font-family: var(--font-body);
+    font-size: var(--text-caption);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--leading-caption);
+    letter-spacing: var(--tracking-caption);
   }
 }
 

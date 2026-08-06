@@ -137,56 +137,86 @@ export const CONTRAST_PAIRS = [
   },
 ] as const;
 
+/**
+ * The type spec, as data. `className` is the .type-* component class defined
+ * in globals.css — the /tokens page renders each sample through the real class
+ * rather than restating its properties, so what you see is what ships.
+ */
 export const TYPE_SCALE = [
   {
-    name: "text-hero",
-    token: "--text-hero",
+    name: "H1",
+    className: "type-h1",
+    spec: "Bold · 90px / 5.625rem · 85% · -1%",
     sample: "Hey! I'm Duminda.",
-    leading: "--leading-hero",
-    tracking: "--tracking-hero",
   },
   {
-    name: "text-display",
-    token: "--text-display",
+    name: "H2",
+    className: "type-h2",
+    spec: "Bold · 64px / 4rem · 90% · 0",
     sample: "Things That Kept Me Up",
-    leading: "--leading-tight",
-    tracking: "--tracking-tight",
   },
   {
-    name: "text-h2",
-    token: "--text-h2",
+    name: "H3",
+    className: "type-h3",
+    spec: "Bold · 56px / 3.5rem · 90% · 0",
     sample: "Section heading",
-    leading: "--leading-tight",
-    tracking: "--tracking-tight",
   },
   {
-    name: "text-h3",
-    token: "--text-h3",
+    name: "H4",
+    className: "type-h4",
+    spec: "Bold · 48px / 3rem · 100% · 0",
     sample: "Subsection heading",
-    leading: "--leading-tight",
-    tracking: "--tracking-tight",
   },
   {
-    name: "text-lead",
-    token: "--text-lead",
+    name: "Title",
+    className: "type-title",
+    spec: "SemiBold · 28px / 1.75rem · 110% · 0",
     sample: "Upgrading iTrvl responsive webapp design system.",
-    leading: "--leading-body",
-    tracking: "normal",
   },
   {
-    name: "text-body",
-    token: "--text-body",
+    name: "Body",
+    className: "type-body",
+    spec: "Regular · 24px / 1.5rem · 140% · 0",
     sample: "Body copy sets the baseline rhythm of the page.",
-    leading: "--leading-body",
-    tracking: "normal",
   },
   {
-    name: "text-caption",
-    token: "--text-caption",
-    sample: "Design System · Web · Mobile",
-    leading: "--leading-body",
-    tracking: "normal",
+    name: "Action",
+    className: "type-action",
+    spec: "SemiBold · 20px / 1.25rem · 100% · -2%",
+    sample: "Scroll For My Work",
   },
+  {
+    name: "Body Small",
+    className: "type-body-sm",
+    spec: "Regular · 18px / 1.125rem · 150% · 0",
+    sample: "Secondary copy sits one step down from body.",
+  },
+  {
+    name: "Label",
+    className: "type-label",
+    spec: "Bold · 16px / 1rem · 100% · 0",
+    sample: "Design System · Web · Mobile",
+  },
+  {
+    name: "Captions",
+    className: "type-caption",
+    spec: "Regular · 14px / 0.875rem · 150% · +1%",
+    sample: "Untitled 3D experiment",
+  },
+] as const;
+
+/** px → rem conversion table at a 16px root, for the /tokens reference. */
+export const REM_CONVERSIONS = [
+  { px: 90, rem: "5.625rem", use: "H1" },
+  { px: 64, rem: "4rem", use: "H2" },
+  { px: 56, rem: "3.5rem", use: "H3" },
+  { px: 48, rem: "3rem", use: "H4" },
+  { px: 28, rem: "1.75rem", use: "Title" },
+  { px: 24, rem: "1.5rem", use: "Body" },
+  { px: 20, rem: "1.25rem", use: "Action" },
+  { px: 18, rem: "1.125rem", use: "Body Small" },
+  { px: 16, rem: "1rem", use: "Label" },
+  { px: 14, rem: "0.875rem", use: "Captions" },
 ] as const;
 
 export const SPACING_STEPS = [

@@ -43,38 +43,84 @@
   --color-hairline: #e4e4e4;
 
   /* ---------------------------------------------------------------------
-   * Typography — §3.3
-   * Display face is CONFIRM. General Sans / Satoshi are the licence-safe
-   * fallbacks (Fontshare, free for commercial use) and what we self-host now.
+   * Typography — §3.3 · CONFIRMED against the supplied type spec
+   *
+   * ONE family across every level: Rethink Sans (Google Fonts, OFL, variable
+   * 400–800). Loaded via next/font/google in layout.tsx, which self-hosts and
+   * subsets it — there is no runtime request to Google.
+   *
+   * The plan originally assumed a display/body split. The spec doesn't have
+   * one, so --font-display and --font-body both resolve to the same stack.
+   * They stay as separate tokens so a future display face is a one-line change.
    * ------------------------------------------------------------------- */
-  --font-display: "General Sans", system-ui, -apple-system, sans-serif;
-  --font-body: "Satoshi", system-ui, -apple-system, sans-serif;
+  --font-rethink-fallback: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: var(--font-rethink-sans), var(--font-rethink-fallback);
+  --font-body: var(--font-rethink-sans), var(--font-rethink-fallback);
   --font-mono: "Fira Code", ui-monospace, "SF Mono", monospace;
 
-  /* Fluid scale — 1.25 ratio at desktop, compressed at mobile */
-  --text-hero: clamp(2.5rem, 1.2rem + 5.4vw, 5.5rem); /* homepage h1 */
-  --text-display: clamp(
-    2rem,
-    1.2rem + 3.4vw,
-    3.75rem
-  ); /* section titles, footer */
-  --text-h2: clamp(1.5rem, 1.1rem + 1.8vw, 2.25rem);
-  --text-h3: clamp(1.25rem, 1.05rem + 0.9vw, 1.5rem);
-  --text-lead: clamp(
-    1.125rem,
-    1rem + 0.6vw,
-    1.375rem
-  ); /* project card titles */
-  --text-body: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
-  --text-caption: 0.8125rem; /* gallery captions, eyebrow tags */
+  /* Weights, per the spec's three named values */
+  --font-weight-regular: 400;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
 
-  /* Line height + tracking. The hero is set very tight — that tightness is
-   * part of the identity, don't loosen it. */
-  --leading-hero: 0.95;
-  --leading-tight: 1.05;
-  --leading-body: 1.55;
-  --tracking-hero: -0.03em;
-  --tracking-tight: -0.015em;
+  /* -----------------------------------------------------------------
+   * Type scale — px from the spec, expressed in rem at a 16px root.
+   *
+   *   H1  90px  Bold      85%  -1%      H4    48px  Bold      100%  0
+   *   H2  64px  Bold      90%   0       Title 28px  SemiBold  110%  0
+   *   H3  56px  Bold      90%   0       Body  24px  Regular   140%  0
+   *   Action 20px SemiBold 100% -2%     Small 18px  Regular   150%  0
+   *   Label  16px Bold     100%  0      Caption 14px Regular  150%  1%
+   *
+   * These are the DESKTOP values. Fluid clamping lives in the paired
+   * --text-*-fluid tokens below — 90px is 5.6rem and would overflow a
+   * 375px viewport, so headings must not use the raw value responsively.
+   * ----------------------------------------------------------------- */
+  --text-h1: 5.625rem; /* 90px */
+  --text-h2: 4rem; /* 64px */
+  --text-h3: 3.5rem; /* 56px */
+  --text-h4: 3rem; /* 48px */
+  --text-title: 1.75rem; /* 28px */
+  --text-body: 1.5rem; /* 24px */
+  --text-action: 1.25rem; /* 20px */
+  --text-body-sm: 1.125rem; /* 18px */
+  --text-label: 1rem; /* 16px */
+  --text-caption: 0.875rem; /* 14px */
+
+  /* Fluid equivalents — min is the mobile floor, max is the spec value.
+   * Use these for anything that must survive a 375px viewport. */
+  --text-h1-fluid: clamp(2.75rem, 1.35rem + 5.98vw, 5.625rem);
+  --text-h2-fluid: clamp(2.25rem, 1.4rem + 3.63vw, 4rem);
+  --text-h3-fluid: clamp(2rem, 1.27rem + 3.11vw, 3.5rem);
+  --text-h4-fluid: clamp(1.75rem, 1.14rem + 2.6vw, 3rem);
+  --text-title-fluid: clamp(1.375rem, 1.19rem + 0.78vw, 1.75rem);
+  --text-body-fluid: clamp(1.125rem, 0.94rem + 0.78vw, 1.5rem);
+
+  /* -----------------------------------------------------------------
+   * Line heights — the spec's percentages as unitless multipliers.
+   * Unitless is deliberate: percentage line-height resolves against the
+   * parent's font-size, which breaks on nested inline elements.
+   * ----------------------------------------------------------------- */
+  --leading-h1: 0.85; /* 85% — very tight, part of the identity */
+  --leading-h2: 0.9; /* 90% */
+  --leading-h3: 0.9; /* 90% */
+  --leading-h4: 1; /* 100% */
+  --leading-title: 1.1; /* 110% */
+  --leading-body: 1.4; /* 140% */
+  --leading-action: 1; /* 100% */
+  --leading-body-sm: 1.5; /* 150% */
+  --leading-label: 1; /* 100% */
+  --leading-caption: 1.5; /* 150% */
+
+  /* -----------------------------------------------------------------
+   * Letter spacing — the spec's percentages as em.
+   * 1% of the font size == 0.01em, and em tracks the type size
+   * automatically, which percentage does not.
+   * ----------------------------------------------------------------- */
+  --tracking-h1: -0.01em; /* -1% */
+  --tracking-normal: 0;
+  --tracking-action: -0.02em; /* -2% */
+  --tracking-caption: 0.01em; /* +1% */
 
   /* ---------------------------------------------------------------------
    * Spacing — §3.4 · 8pt grid

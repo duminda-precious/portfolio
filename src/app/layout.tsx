@@ -1,7 +1,24 @@
 import type { Metadata } from "next";
+import { Rethink_Sans } from "next/font/google";
 
 import "./globals.css";
-import "../styles/fonts.css";
+
+/**
+ * Rethink Sans — the brand face, used across every level (§3.3).
+ *
+ * Served through next/font/google, which self-hosts the files at build time,
+ * subsets them, and emits the preload links. No network request to Google at
+ * runtime and no layout shift, so this beats hand-rolling @font-face.
+ *
+ * Variable axis 400–800 covers every weight the type spec calls for:
+ * Regular 400 · SemiBold 600 · Bold 700.
+ */
+const rethinkSans = Rethink_Sans({
+  subsets: ["latin"],
+  variable: "--font-rethink-sans",
+  display: "swap",
+  weight: ["400", "500", "600", "700", "800"],
+});
 
 export const metadata: Metadata = {
   title: {
@@ -20,7 +37,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className="h-full">
+    <html lang="en" className={`${rethinkSans.variable} h-full`}>
       <body className="flex min-h-full flex-col">
         {/*
           Skip link — must be the first focusable element (§11).

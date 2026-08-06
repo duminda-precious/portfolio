@@ -24,7 +24,7 @@ export default function HomePage() {
 
       <Container as="main" paper overlap className="pb-(--space-section)">
         <div id="main" className="pt-(--space-section)">
-          <h1 className="font-(family-name:--font-display) text-(length:--text-hero) leading-(--leading-hero) tracking-(--tracking-hero) text-ink">
+          <h1 className="type-h1 text-ink">
             Hey! I&apos;m Duminda. Crafting Experiences That Move{" "}
             <span className="text-brand-500">Literally.</span>
           </h1>
@@ -36,12 +36,10 @@ export default function HomePage() {
           */}
           <div className="mt-(--spacing-8) inline-flex items-center gap-(--spacing-2) rounded-(--radius-pill) bg-chip px-(--spacing-4) py-(--spacing-2)">
             <span className="h-(--spacing-2) w-(--spacing-2) rounded-(--radius-pill) border border-ink" />
-            <span className="text-(length:--text-caption) text-ink">
-              Scroll For My Work
-            </span>
+            <span className="type-action text-ink">Scroll For My Work</span>
           </div>
 
-          <p className="mt-(--space-section) max-w-[65ch] text-(length:--text-body) text-ink-muted">
+          <p className="type-body-sm mt-(--space-section) max-w-[65ch] text-ink-muted">
             Phase 0 scaffold. The design system is live at{" "}
             {/* brand-700, not 500 — the deep blue is the link colour (§3.2). */}
             <Link
@@ -58,10 +56,11 @@ export default function HomePage() {
             {[0, 1, 2].map((i) => (
               <div key={i}>
                 <div className="aspect-video w-full bg-brand-500" />
-                <p className="mt-(--spacing-3) text-(length:--text-caption) text-brand-500">
+                {/* Eyebrow = Label (16px Bold). Sits on paper, so brand-500. */}
+                <p className="type-label mt-(--spacing-3) text-brand-500">
                   Design System · Web · Mobile
                 </p>
-                <p className="mt-(--spacing-1) text-(length:--text-lead) text-ink">
+                <p className="type-title mt-(--spacing-2) text-ink">
                   Placeholder — real projects come from getProjects() in Phase
                   1.
                 </p>
@@ -73,7 +72,7 @@ export default function HomePage() {
 
       {/* Footer sits on the grey page, OUTSIDE the white container (§9.7). */}
       <Container as="footer" className="py-(--space-section)">
-        <p className="font-(family-name:--font-display) text-(length:--text-display) leading-(--leading-tight) tracking-(--tracking-tight) text-ink">
+        <p className="type-h4 text-ink">
           Site Content © Duminda M · All Rights Reserved ·{" "}
           {new Date().getFullYear()} · Made With Love &amp; Caffeine
         </p>

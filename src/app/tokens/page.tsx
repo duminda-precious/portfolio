@@ -11,6 +11,7 @@ import {
   EASINGS,
   FLUID_SPACING,
   NEUTRALS,
+  REM_CONVERSIONS,
   SPACING_STEPS,
   TYPE_SCALE,
 } from "./token-data";
@@ -38,9 +39,9 @@ function Section({
 }) {
   return (
     <section className="border-t border-hairline py-(--space-section)">
-      <h2 className="text-(length:--text-h2) text-ink">{title}</h2>
+      <h2 className="type-h4 text-ink">{title}</h2>
       {note ? (
-        <p className="mt-(--spacing-2) max-w-[65ch] text-(length:--text-body) text-ink-muted">
+        <p className="type-body-sm mt-(--spacing-2) max-w-[65ch] text-ink-muted">
           {note}
         </p>
       ) : null}
@@ -78,10 +79,8 @@ export default function TokensPage() {
         <p className="font-(family-name:--font-mono) text-(length:--text-caption) text-brand-500">
           Dev only · not indexed · 404s in production
         </p>
-        <h1 className="mt-(--spacing-4) text-(length:--text-display) leading-(--leading-tight) tracking-(--tracking-tight) text-ink">
-          Design Tokens
-        </h1>
-        <p className="mt-(--spacing-4) max-w-[65ch] text-(length:--text-body) text-ink-muted">
+        <h1 className="type-h2 mt-(--spacing-4) text-ink">Design Tokens</h1>
+        <p className="type-body-sm mt-(--spacing-4) max-w-[65ch] text-ink-muted">
           Every colour, type size, and spacing step in the system, plus a live
           WCAG contrast audit. Values marked{" "}
           <code className="font-(family-name:--font-mono)">CONFIRM</code> in
@@ -171,26 +170,16 @@ export default function TokensPage() {
 
       {/* ---------------------------------------------------------------- */}
       <Section
-        title="Typography"
-        note="Fluid scale via clamp(). Resize the window to check the compression at mobile. Font files are pending — see src/styles/fonts.css."
+        title="Typography — Rethink Sans"
+        note="Each sample is rendered through its real .type-* class, so this page shows what actually ships rather than a restatement of it. Sizes are fluid — resize the window to check the compression at mobile."
       >
         <div className="space-y-(--spacing-8)">
           {TYPE_SCALE.map((step) => (
             <div key={step.name}>
               <p className="font-(family-name:--font-mono) text-(length:--text-caption) text-ink-muted">
-                {step.name} · {step.leading} · {step.tracking}
+                {step.name} · {step.spec}
               </p>
-              <p
-                className="mt-(--spacing-2) font-(family-name:--font-display) text-ink"
-                style={{
-                  fontSize: `var(${step.token})`,
-                  lineHeight: `var(${step.leading})`,
-                  letterSpacing:
-                    step.tracking === "normal"
-                      ? "normal"
-                      : `var(${step.tracking})`,
-                }}
-              >
+              <p className={`mt-(--spacing-2) text-ink ${step.className}`}>
                 {step.sample}
               </p>
             </div>
@@ -199,12 +188,54 @@ export default function TokensPage() {
 
         <div className="mt-(--space-section)">
           <p className="font-(family-name:--font-mono) text-(length:--text-caption) text-ink-muted">
+            px → rem at a 16px root
+          </p>
+          <div className="mt-(--spacing-4) flex flex-wrap gap-(--spacing-4)">
+            {REM_CONVERSIONS.map((c) => (
+              <div
+                key={c.px}
+                className="border border-hairline px-(--spacing-3) py-(--spacing-2)"
+              >
+                <p className="font-(family-name:--font-mono) text-(length:--text-caption) text-ink">
+                  {c.px}px = {c.rem}
+                </p>
+                <p className="font-(family-name:--font-mono) text-(length:--text-caption) text-ink-muted">
+                  {c.use}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-(--space-section)">
+          <p className="font-(family-name:--font-mono) text-(length:--text-caption) text-ink-muted">
             Hero treatment — &apos;Literally.&apos; in brand-500, one h1
           </p>
-          <p className="mt-(--spacing-4) font-(family-name:--font-display) text-(length:--text-hero) leading-(--leading-hero) tracking-(--tracking-hero) text-ink">
+          <p className="type-h1 mt-(--spacing-4) text-ink">
             Hey! I&apos;m Duminda. Crafting Experiences That Move{" "}
             <span className="text-brand-500">Literally.</span>
           </p>
+        </div>
+
+        <div className="mt-(--space-section)">
+          <p className="font-(family-name:--font-mono) text-(length:--text-caption) text-ink-muted">
+            Weights — 400 Regular · 600 SemiBold · 700 Bold
+          </p>
+          <div className="mt-(--spacing-4) space-y-(--spacing-2)">
+            {[
+              { w: "var(--font-weight-regular)", label: "Regular 400" },
+              { w: "var(--font-weight-semibold)", label: "SemiBold 600" },
+              { w: "var(--font-weight-bold)", label: "Bold 700" },
+            ].map((item) => (
+              <p
+                key={item.label}
+                className="text-(length:--text-title) text-ink"
+                style={{ fontWeight: item.w }}
+              >
+                {item.label} — Rethink Sans
+              </p>
+            ))}
+          </div>
         </div>
       </Section>
 

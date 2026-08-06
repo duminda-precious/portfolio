@@ -226,50 +226,56 @@ runs live at `/tokens` so this table can be verified rather than trusted.
 
 ### 3.3 Typography
 
-**`CONFIRM` the display face.** The mockup shows a geometric grotesque with a single-storey-feeling `a`, tight apertures, and a distinctive `g` — consistent with **Aeonik**, **General Sans**, or **Cabinet Grotesk**. Do not guess: pull the family name from the Figma text layer.
+✅ **CONFIRMED 2026-08-06 — Rethink Sans**, used across every level. There is **no
+display/body split**: the spec is a single family. `--font-display` and `--font-body`
+are kept as separate tokens anyway, so introducing a second face later is a one-line
+change rather than a find-and-replace.
 
-Fallback recommendation if the licence is a problem: **General Sans** (Fontshare, free for commercial use) for display, **Satoshi** for body/UI. Both are geometric grotesques that hold the same personality at scale.
+Rethink Sans is on Google Fonts under the OFL — no licence question. It is loaded via
+`next/font/google` in `layout.tsx`, which self-hosts and subsets the files at build
+time and emits the preload links. **No runtime request to Google, and no layout shift.**
+This supersedes the plan's original hand-rolled `@font-face` approach.
 
-```css
-@theme {
-  --font-display: "CONFIRM", "General Sans", system-ui, sans-serif;
-  --font-body: "CONFIRM", "Satoshi", system-ui, sans-serif;
-  --font-mono:
-    "Fira Code", ui-monospace, monospace; /* code in AI Workflow page */
-}
-```
+#### The scale
 
-Fluid scale (`clamp()`, 1.25 ratio at desktop, compressed at mobile):
+Sizes are given in px by the spec; rem values are at a 16px root. Line-height
+percentages become **unitless** multipliers — percentage line-height resolves against
+the _parent's_ font-size, which breaks on nested inline elements. Letter-spacing
+percentages become `em`, which tracks the type size automatically.
 
-```css
-@theme {
-  --text-hero: clamp(2.5rem, 1.2rem + 5.4vw, 5.5rem); /* homepage h1 */
-  --text-display: clamp(
-    2rem,
-    1.2rem + 3.4vw,
-    3.75rem
-  ); /* section titles, footer */
-  --text-h2: clamp(1.5rem, 1.1rem + 1.8vw, 2.25rem);
-  --text-h3: clamp(1.25rem, 1.05rem + 0.9vw, 1.5rem);
-  --text-lead: clamp(
-    1.125rem,
-    1rem + 0.6vw,
-    1.375rem
-  ); /* project card titles */
-  --text-body: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
-  --text-caption: 0.8125rem; /* gallery captions, eyebrow tags */
-}
-```
+| Style      | Weight       | Size            | Line height  | Tracking        | Class           |
+| ---------- | ------------ | --------------- | ------------ | --------------- | --------------- |
+| H1         | Bold 700     | 90px `5.625rem` | 85% → `0.85` | -1% → `-0.01em` | `.type-h1`      |
+| H2         | Bold 700     | 64px `4rem`     | 90% → `0.9`  | 0               | `.type-h2`      |
+| H3         | Bold 700     | 56px `3.5rem`   | 90% → `0.9`  | 0               | `.type-h3`      |
+| H4         | Bold 700     | 48px `3rem`     | 100% → `1`   | 0               | `.type-h4`      |
+| Title      | SemiBold 600 | 28px `1.75rem`  | 110% → `1.1` | 0               | `.type-title`   |
+| Body       | Regular 400  | 24px `1.5rem`   | 140% → `1.4` | 0               | `.type-body`    |
+| Action     | SemiBold 600 | 20px `1.25rem`  | 100% → `1`   | -2% → `-0.02em` | `.type-action`  |
+| Body Small | Regular 400  | 18px `1.125rem` | 150% → `1.5` | 0               | `.type-body-sm` |
+| Label      | Bold 700     | 16px `1rem`     | 100% → `1`   | 0               | `.type-label`   |
+| Captions   | Regular 400  | 14px `0.875rem` | 150% → `1.5` | +1% → `0.01em`  | `.type-caption` |
 
-Line heights and tracking — the hero in the mockup is set **very tight**, and that tightness is part of the identity:
+**Use the `.type-*` classes, not the raw tokens.** Each bundles size, weight, leading,
+and tracking, so a component asks for one thing instead of keeping four values in sync
+by hand. They are defined in `src/app/globals.css`.
 
-```css
---leading-hero: 0.95;
---leading-tight: 1.05;
---leading-body: 1.55;
---tracking-hero: -0.03em;
---tracking-tight: -0.015em;
-```
+#### Fluid sizing
+
+H1 at 90px is `5.625rem` — it would overflow a 375px viewport. Every heading style
+therefore uses a `clamp()` between a mobile floor and the spec value, exposed as
+`--text-h1-fluid` etc. **The `.type-*` classes use the fluid values by default.** Where
+the design genuinely needs the literal px size, append the `-fixed` sibling class
+(`.type-h1-fixed`), which restores the exact value.
+
+#### Mapping to the mockup
+
+- Hero `h1` → `.type-h1` (the 85% leading is what produces the mockup's very tight hero)
+- Section titles like "Things That Kept Me Up" → `.type-h4`
+- Featured card titles → `.type-title`
+- Blue eyebrow tags (`Design System · Web · Mobile`) → `.type-label`
+- Scroll chip and nav → `.type-action`
+- Gallery captions → `.type-caption`
 
 ### 3.4 Spacing (8pt grid)
 
@@ -905,9 +911,9 @@ Resolve these before or during Phase 0. Marked `CONFIRM` throughout the document
    `#1035BF` (deep). The PNG-read guess of `#2F51E8` was close but slightly off.
 2. ~~Exact page-background grey~~ — ✅ **RESOLVED 2026-08-06.** `#CFCFCF`. Also
    confirmed: ink `#1F1F1F`, ink-muted `#747474`, surface `#F8F8F8`.
-3. Display and body typeface names and licence status. **← still open, blocks
-   final type rendering.** Scaffold currently falls through to `system-ui`;
-   see `src/styles/fonts.css` for the activation steps.
+3. ~~Display and body typeface names and licence status~~ — ✅ **RESOLVED
+   2026-08-06.** Rethink Sans across every level, OFL via Google Fonts, loaded
+   through `next/font/google`. No licence issue and no second face.
 4. Video hero band height, and the exact container overlap distance. **← still
    open.** Currently `min(60vh, 720px)` and `56px`, both tokenised so changing
    them is a one-line edit in `tokens.css`.

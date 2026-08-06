@@ -27,7 +27,7 @@ src/components/   primitives · media · cursor · layout · sections
 src/hooks/        usePrefersReducedMotion, useIsTouch, useMediaQuery
 src/lib/content/  ⚠️ THE CMS SEAM — see plan.md §5
 src/lib/utils/    cn()
-src/styles/       tokens.css (the design system) · fonts.css
+src/styles/       tokens.css — the design system
 ```
 
 **Two architectural rules**, both from `plan.md`:
@@ -38,6 +38,29 @@ src/styles/       tokens.css (the design system) · fonts.css
 2. **No hardcoded colour, size, or spacing in any component.** Tokens are
    defined once in `src/styles/tokens.css` and become both CSS custom
    properties and Tailwind utilities.
+
+## Typography
+
+**Rethink Sans**, one family across every level, loaded via `next/font/google`
+— self-hosted and subset at build time, so there is no runtime request to
+Google and no layout shift.
+
+**Use the `.type-*` classes, not raw tokens.** Each bundles size + weight +
+leading + tracking so a component asks for one thing instead of keeping four
+values in sync by hand:
+
+```
+.type-h1  .type-h2  .type-h3  .type-h4     headings, Bold
+.type-title                                28px SemiBold — card titles
+.type-body  .type-body-sm                  24px / 18px Regular
+.type-action                               20px SemiBold — buttons, nav
+.type-label                                16px Bold — eyebrow tags
+.type-caption                              14px Regular — gallery captions
+```
+
+Headings clamp between a mobile floor and the spec size (H1 at 90px would
+overflow a 375px viewport). Append `-fixed` (`.type-h1-fixed`) where the design
+genuinely needs the literal px value.
 
 ## `/tokens`
 
@@ -64,9 +87,10 @@ Next: Phase 1 (content layer — zod schemas + `lib/content/local.ts`). See
 
 ### Known gaps
 
-- **Fonts are not installed.** The display/body faces are still an open question
-  (`plan.md` §13.3). The stack falls through to `system-ui` until the real family
-  is confirmed. Activation steps are in `src/styles/fonts.css`.
 - **Hero band height and container overlap are estimates** — `min(60vh, 720px)`
-  and `56px`. Both tokenised, so confirming them is a one-line edit.
+  and `56px` (`plan.md` §13.4). Both tokenised, so confirming them is a one-line
+  edit in `tokens.css`.
+- **The brand ramp is partly interpolated.** `brand-500` and `brand-700` are the
+  supplied values; steps 50–400, 600, and 800–900 were derived from those two
+  anchors. Replace them if the brand has real values.
 - `metadataBase` in `src/app/layout.tsx` is a placeholder domain.

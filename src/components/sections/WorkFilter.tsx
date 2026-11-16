@@ -188,7 +188,7 @@ export function WorkFilter({
       </p>
 
       {visible.length > 0 ? (
-        <div className="mt-(--spacing-8) grid grid-cols-1 gap-(--space-section) md:grid-cols-2">
+        <div className="mt-(--spacing-8) grid grid-cols-1 gap-x-(--spacing-4) gap-y-(--spacing-12) md:grid-cols-2">
           {visible.map((project) => {
             const card = (
               <>

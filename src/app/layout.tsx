@@ -26,11 +26,11 @@ const rethinkSans = Rethink_Sans({
 
 export const metadata: Metadata = {
   title: {
-    default: "Duminda M · Crafting experiences that move. Literally.",
+    default: "Duminda M · I design things, then I make them move. Literally.",
     template: "%s · Duminda M",
   },
   description:
-    "Head of Motion working across product design, motion and 3D. Making things that move. Literally.",
+    "Head of Motion at Precious Studio. Product design, motion and 3D, by someone who started out drawing comics in the corner of a classroom.",
   metadataBase: new URL(SITE_URL),
   openGraph: {
     type: "website",

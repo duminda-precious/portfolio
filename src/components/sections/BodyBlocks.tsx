@@ -54,13 +54,15 @@ function groupBlocks(blocks: BodyBlock[]): Group[] {
 
 function SectionText({ block }: { block: SectionBlock }) {
   return (
-    <section>
-      {/* h3 — the case study title is the h1 and the block heading sits
+    /* Heading left, copy right from lg: the headings line up down the
+     * page, so the story can be skimmed by reading that one column. */
+    <section className="grid grid-cols-1 gap-(--spacing-6) lg:grid-cols-12 lg:gap-(--spacing-8)">
+      {/* h2: the case study title is the h1 and the block heading sits
        * under it. Levels must never skip (§11). */}
-      <SectionHeading as="h3">{block.heading}</SectionHeading>
+      <SectionHeading className="lg:col-span-5">{block.heading}</SectionHeading>
       <div
         data-cursor="text"
-        className="mt-(--spacing-6) space-y-(--spacing-6)"
+        className="space-y-(--spacing-6) lg:col-span-7"
       >
         {block.paragraphs.map((paragraph, i) => (
           <p key={i} className="type-body-sm max-w-[65ch] text-ink">
@@ -213,6 +215,106 @@ export function BodyBlocks({ blocks }: { blocks: BodyBlock[] }) {
                   </figcaption>
                 ) : null}
               </figure>
+            );
+
+          case "brief":
+            return (
+              <section
+                key={index}
+                aria-label="At a glance"
+                className="grid grid-cols-1 gap-px overflow-hidden rounded-(--radius-sm) border border-hairline bg-hairline md:grid-cols-(--cols)"
+                style={
+                  {
+                    "--cols": `repeat(${Math.min(block.items.length, 3)}, minmax(0, 1fr))`,
+                  } as React.CSSProperties
+                }
+              >
+                {block.items.map((item) => (
+                  <div
+                    key={item.label}
+                    data-cursor="text"
+                    className="bg-surface p-(--spacing-6) md:p-(--spacing-8)"
+                  >
+                    <h2 className="type-label text-brand-700">{item.label}</h2>
+                    <p className="type-body-sm mt-(--spacing-3) text-ink">
+                      {item.text}
+                    </p>
+                  </div>
+                ))}
+              </section>
+            );
+
+          case "compare":
+            return (
+              <section
+                key={index}
+                aria-label="Before and after"
+                className="grid grid-cols-1 gap-(--spacing-4) md:grid-cols-2"
+              >
+                {[
+                  { side: block.before, isAfter: false },
+                  { side: block.after, isAfter: true },
+                ].map(({ side, isAfter }) => (
+                  <div
+                    key={side.label}
+                    data-cursor="text"
+                    className={
+                      isAfter
+                        ? "rounded-(--radius-sm) bg-brand-700 p-(--spacing-6) text-paper md:p-(--spacing-8)"
+                        : "rounded-(--radius-sm) border border-hairline bg-surface p-(--spacing-6) text-ink md:p-(--spacing-8)"
+                    }
+                  >
+                    <h2 className="type-title">{side.label}</h2>
+                    <ul className="type-body-sm mt-(--spacing-6) space-y-(--spacing-3)">
+                      {side.points.map((point) => (
+                        <li
+                          key={point}
+                          className={
+                            isAfter
+                              ? "border-t border-paper/25 pt-(--spacing-3)"
+                              : "border-t border-hairline pt-(--spacing-3)"
+                          }
+                        >
+                          {point}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </section>
+            );
+
+          case "takeaways":
+            return (
+              <section
+                key={index}
+                className="grid grid-cols-1 gap-(--spacing-6) lg:grid-cols-12 lg:gap-(--spacing-8)"
+              >
+                <SectionHeading className="lg:col-span-5">
+                  {block.heading}
+                </SectionHeading>
+                <ol data-cursor="text" className="lg:col-span-7">
+                  {block.items.map((item, i) => (
+                    <li
+                      key={item.title}
+                      className="flex gap-(--spacing-6) border-t border-hairline py-(--spacing-6)"
+                    >
+                      <span
+                        aria-hidden="true"
+                        className="type-label w-(--spacing-6) shrink-0 pt-[0.35em] text-brand-700"
+                      >
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <div>
+                        <h3 className="type-title text-ink">{item.title}</h3>
+                        <p className="type-body-sm mt-(--spacing-2) max-w-[55ch] text-ink-muted">
+                          {item.text}
+                        </p>
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+              </section>
             );
 
           case "stats":

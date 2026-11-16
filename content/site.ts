@@ -83,3 +83,73 @@ export const SITE = {
     "AI System Design",
   ],
 } as const;
+
+export type CvRole = {
+  title: string;
+  company: string;
+  place: string;
+  dates: string;
+  /** One line from the CV. Roles the CV lists without detail have none. */
+  highlight?: string;
+};
+
+/**
+ * The CV, as read on Work with me. Every line is from
+ * public/cv/duminda-madushan-cv.pdf: update the two together.
+ */
+export const CV = {
+  name: "Duminda Madushan",
+  title: "Visual designer",
+  summary:
+    "10+ years across interaction design, motion graphics and 3D animation. I lead teams, and I can take a project from concept to delivery.",
+  pdf: "/cv/duminda-madushan-cv.pdf",
+  docx: "/cv/duminda-madushan-cv.docx",
+  docxName: "Duminda Madushan - CV.docx",
+  roles: [
+    {
+      title: "Head of Motion Design",
+      company: "Precious Studio",
+      place: "Austin, TX",
+      dates: "2023 – now",
+      highlight:
+        "Streamlined client discovery so deliveries close in 2 rounds of revisions. I also mentor the design team.",
+    },
+    {
+      title: "Senior Consultant",
+      company: "Precious Studio",
+      place: "Austin, TX",
+      dates: "2023 – now",
+      highlight:
+        "Advising clients on motion, product and interface direction, and turning a business goal into a scope.",
+    },
+    {
+      title: "Senior Creative Director",
+      company: "Precious Studio",
+      place: "Austin, TX",
+      dates: "2021 – 2023",
+      highlight:
+        "Part of the core team that ranked the studio among Clutch's Top B2B Companies in Texas, 2022, within a year of opening.",
+    },
+    {
+      title: "Motion Designer",
+      company: "Thiken",
+      place: "Austin, TX",
+      dates: "2018 – 2021",
+      highlight: "Lottie, 2D and 3D animation, storyboards and animatics.",
+    },
+    {
+      title: "Experience Designer",
+      company: "Xcendant",
+      place: "Nugegoda, Sri Lanka",
+      dates: "2016 – 2017",
+    },
+    {
+      title: "Senior User Interface Designer",
+      company: "Arimac Lanka",
+      place: "Colombo, Sri Lanka",
+      dates: "2015 – 2016",
+    },
+  ] satisfies CvRole[],
+  education: "BA (Hons.) Graphic Design, Northumbria University",
+  languages: "English (fluent), Sinhala (native)",
+} as const;

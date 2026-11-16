@@ -13,6 +13,7 @@
 import { EXPERIMENTS } from "../../../content/experiments";
 import { PROJECTS } from "../../../content/projects";
 import {
+  CV,
   NAV_ITEMS,
   SITE,
   SITE_URL,
@@ -73,6 +74,10 @@ export async function getSocialLinks(): Promise<SocialLink[]> {
 
 export async function getSite(): Promise<typeof SITE> {
   return SITE;
+}
+
+export async function getCv(): Promise<typeof CV> {
+  return CV;
 }
 
 /** Gallery tiles, sorted by their authored order. */

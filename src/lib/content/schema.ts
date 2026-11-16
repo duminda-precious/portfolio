@@ -73,6 +73,26 @@ export const BodyBlockSchema = z.discriminatedUnion("kind", [
     kind: z.literal("stats"),
     items: z.array(z.object({ label: z.string(), value: z.string() })).min(1),
   }),
+  /**
+   * The scan-in-seconds panel: problem, opportunity, result. Sits right
+   * under the header so a client gets the whole project before scrolling.
+   */
+  z.object({
+    kind: z.literal("brief"),
+    items: z.array(z.object({ label: z.string(), text: z.string() })).min(2),
+  }),
+  /** How it was, beside how it is. */
+  z.object({
+    kind: z.literal("compare"),
+    before: z.object({ label: z.string(), points: z.array(z.string()).min(1) }),
+    after: z.object({ label: z.string(), points: z.array(z.string()).min(1) }),
+  }),
+  /** Learnings: a short title and one line each, numbered. */
+  z.object({
+    kind: z.literal("takeaways"),
+    heading: z.string(),
+    items: z.array(z.object({ title: z.string(), text: z.string() })).min(1),
+  }),
 ]);
 
 export type BodyBlock = z.infer<typeof BodyBlockSchema>;

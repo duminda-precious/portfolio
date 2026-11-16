@@ -2,10 +2,9 @@ import type { Metadata } from "next";
 
 import { Footer } from "@/components/layout/Footer";
 import { ButtonLink } from "@/components/primitives/ButtonLink";
-import { CopyEmail } from "@/components/primitives/CopyEmail";
 import { Container } from "@/components/primitives/Container";
 import { SectionHeading } from "@/components/primitives/SectionHeading";
-import { getCv, getSocialLinks } from "@/lib/content";
+import { getCv, getSite, getSocialLinks } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Work with me",
@@ -17,7 +16,7 @@ export const metadata: Metadata = {
  * Work with me (§2.2). Rebuilt 2026-11-16 around ONE action: email me.
  *
  * Kept deliberately short (2026-11-16): one blue section up top with the
- * pitch, the button and the address, then how it goes, then the CV. The
+ * pitch, the email and WhatsApp buttons, then how it goes, then the CV. The
  * offers grid and the numbers row were cut as clutter.
  *
  * No contact form: a mailto link needs no backend, no spam handling, and no
@@ -43,7 +42,11 @@ const STEPS = [
 ] as const;
 
 export default async function WorkWithMePage() {
-  const [socials, cv] = await Promise.all([getSocialLinks(), getCv()]);
+  const [socials, cv, site] = await Promise.all([
+    getSocialLinks(),
+    getCv(),
+    getSite(),
+  ]);
   const email = socials
     .find((s) => s.label === "Email")
     ?.href.replace("mailto:", "");
@@ -56,7 +59,7 @@ export default async function WorkWithMePage() {
       <Container as="main" paper className="pb-(--container-pad)">
         <div id="main">
           {/* One blue section: the pitch, the one button and
-           * the address. It used to be a white hero plus a blue ask at the
+           * WhatsApp. It used to be a white hero plus a blue ask at the
            * bottom; they said the same thing twice. */}
           <header
             className="mt-(--hero-content-gap) rounded-(--radius-sm) bg-brand-500 p-(--spacing-4) text-cream [&_:focus-visible]:outline-(--color-cream)"
@@ -84,7 +87,9 @@ export default async function WorkWithMePage() {
                     Email me your idea <span aria-hidden="true">→</span>
                   </ButtonLink>
                 ) : null}
-                {email ? <CopyEmail email={email} /> : null}
+                <ButtonLink href={site.whatsapp} newTab variant="glass">
+                  Or just WhatsApp me
+                </ButtonLink>
               </div>
               <ButtonLink href="#cv" variant="ghost" className="shrink-0">
                 Read my resume first

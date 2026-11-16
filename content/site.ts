@@ -57,6 +57,9 @@ export const SITE_URL = process.env.VERCEL_PROJECT_PRODUCTION_URL
 export const SITE = {
   name: "Duminda M",
   role: "Head of Motion",
+  /** WhatsApp chat link. wa.me wants the number without "+" or the
+   * leading 0 after the country code: +94 (0)70 214 0827. */
+  whatsapp: "https://wa.me/94702140827",
   /** Footer statement. Year is injected at render, not hardcoded (§9.7). */
   copyright: (year: number) =>
     `Site content © Duminda M · All rights reserved · ${year} · Made with love & caffeine`,

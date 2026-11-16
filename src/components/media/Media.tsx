@@ -1,5 +1,6 @@
 import Image from "next/image";
 
+import { LazyVideo } from "@/components/media/LazyVideo";
 import type { Media as MediaType } from "@/lib/content";
 import { cn } from "@/lib/utils/cn";
 
@@ -36,13 +37,8 @@ type MediaProps = {
 /**
  * The media workhorse (§6.4). Every blue box in the mockup renders through it.
  *
- * ⚠️ VIDEO PLAYBACK BELOW IS A VISUAL-TEST STUB, NOT PHASE 2. Added
- * 2026-08-06 to preview a real local-loop file in the featured cards and
- * experiments grid. It plays UNCONDITIONALLY (no IntersectionObserver
- * gating, no 3-video concurrency cap, §6.4 requirements 3–4) — fine for
- * eyeballing a handful of tiles, wrong for a real page with 8+ grid tiles
- * autoplaying at once. Do not treat this as Phase 2 done; the real
- * implementation still needs the gating/cap before shipping.
+ * Video loops render through LazyVideo: nothing downloads until a video
+ * is near the viewport, and it pauses when scrolled away.
  *
  * Two invariants that must survive any future edit:
  *
@@ -91,24 +87,17 @@ export function Media({
           aria-hidden={isDecorative || undefined}
         />
       ) : isVideo && media.src ? (
-        /* muted+playsInline+loop+autoPlay per §6.4.6 — missing playsInline is
-         * what causes the iOS fullscreen-takeover bug. aria-hidden because
-         * decorative background loops are excluded from the a11y tree
-         * (§6.4.8); a real accessible name would come from `alt` if this
-         * video ever needs to convey information beyond decoration. */
-        <video
+        /* Loads and plays only while near the screen; the poster (or the
+         * blue box) shows until then. See LazyVideo. */
+        <LazyVideo
           src={media.src}
-          muted
-          playsInline
-          loop
-          autoPlay
-          preload="metadata"
+          poster={media.poster}
+          eager={priority}
           className={cn(
             "absolute inset-0 h-full w-full object-cover",
             zoomed && "origin-center",
           )}
           style={zoomStyle}
-          aria-hidden="true"
         />
       ) : media.kind === "youtube" && media.src ? (
         /* Thumbnail only — the player itself loads in the lightbox. */

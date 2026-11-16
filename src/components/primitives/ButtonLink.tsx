@@ -17,8 +17,8 @@ import { cn } from "@/lib/utils/cn";
 type ButtonVariant = "primary" | "quiet" | "onBrand" | "glass" | "ghost";
 
 /**
- * The pill's classes, shared with CopyEmail's <button> so a real button and
- * a link in the same row look identical.
+ * The pill's classes, shared with the mobile menu's link so a pill built
+ * outside ButtonLink looks identical.
  */
 export function buttonClasses(variant: ButtonVariant, className?: string) {
   return cn(

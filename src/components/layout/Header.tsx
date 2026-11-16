@@ -21,6 +21,8 @@ export function Header({ items }: { items: NavItem[] }) {
   const pathname = usePathname();
   /** About is a solid blue field, so the links are white. */
   const onBlue = pathname === "/about";
+  /** Case studies open with a cover that runs to the top of the viewport. */
+  const onCover = pathname.startsWith("/work/") && pathname !== "/work/";
 
   return (
     <>
@@ -32,6 +34,7 @@ export function Header({ items }: { items: NavItem[] }) {
           onBlue
             ? "text-paper [&_:focus-visible]:outline-(--color-paper)"
             : "text-ink",
+          onCover && "text-on-media",
         )}
       >
         <div

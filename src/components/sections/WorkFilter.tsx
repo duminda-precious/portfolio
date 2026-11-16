@@ -120,7 +120,7 @@ export function WorkFilter({
                 disabled={isDisabled}
                 aria-pressed={isActive}
                 className={cn(
-                  "type-label min-h-[44px] shrink-0 whitespace-nowrap rounded-t-(--radius-sm) px-(--spacing-6) py-(--spacing-3)",
+                  "type-label min-h-[44px] shrink-0 whitespace-nowrap rounded-t-(--radius-sm) px-(--spacing-6) py-(--spacing-3) text-[1rem]",
                   "border border-b-0 transition-colors duration-(--duration-fast)",
                   isActive
                     ? "relative z-10 border-hairline bg-paper text-brand-700 shadow-[0_-2px_5px_rgb(0_0_0/0.08)]"

@@ -107,7 +107,7 @@ export default async function WorkWithMePage() {
             <div className="mt-(--spacing-8) border border-hairline bg-surface px-(--spacing-6) py-(--spacing-6)">
               <Eyebrow tags={["One page"]} />
               <p className="type-title mt-(--spacing-3) text-ink">
-                Duminda Hettiarachchi
+                Duminda Madushan
               </p>
               <p className="type-body-sm mt-(--spacing-3) max-w-[48ch] text-ink">
                 Visual designer. The roles, the tools, and where I&apos;ve
@@ -115,7 +115,7 @@ export default async function WorkWithMePage() {
               </p>
               <div className="mt-(--spacing-6) flex flex-wrap gap-x-(--spacing-6) gap-y-(--spacing-2)">
                 <a
-                  href="/cv/duminda-hettiarachchi-cv.pdf"
+                  href="/cv/duminda-madushan-cv.pdf"
                   target="_blank"
                   rel="noopener"
                   className="type-action inline-flex min-h-[44px] items-center text-brand-700 underline underline-offset-4"
@@ -123,8 +123,8 @@ export default async function WorkWithMePage() {
                   Read the PDF
                 </a>
                 <a
-                  href="/cv/duminda-hettiarachchi-cv.docx"
-                  download="Duminda Hettiarachchi - CV.docx"
+                  href="/cv/duminda-madushan-cv.docx"
+                  download="Duminda Madushan - CV.docx"
                   className="type-action inline-flex min-h-[44px] items-center text-ink underline underline-offset-4"
                 >
                   Download the Word file

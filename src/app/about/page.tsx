@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 
 import { Footer } from "@/components/layout/Footer";
 import { Container } from "@/components/primitives/Container";
@@ -28,11 +29,23 @@ export default async function AboutPage() {
       <main className="min-h-dvh bg-brand-500 text-cream [&_:focus-visible]:outline-(--color-cream)">
         <Container className="pt-(--spacing-24) pb-(--space-section)">
           <div id="main">
-            <h1 className="type-h1 text-cream">
-              It all started with
-              <br />
-              a comic book.
-            </h1>
+            <div className="flex flex-col items-start gap-(--spacing-6) sm:flex-row sm:items-center sm:justify-between sm:gap-(--spacing-8)">
+              <h1 className="type-h1 text-cream">
+                It all started with
+                <br />
+                a comic book.
+              </h1>
+              <div className="shrink-0 rotate-2 self-end bg-cream p-3 pb-10 shadow-[0_14px_28px_rgb(0_0_0/0.22)] sm:self-center">
+                <Image
+                  src="/images/about/duminda.png"
+                  alt="Portrait of Duminda M"
+                  width={256}
+                  height={256}
+                  priority
+                  className="size-40 object-cover sm:size-48"
+                />
+              </div>
+            </div>
 
             <div className="mt-(--spacing-8)">
               <StoryPlayer

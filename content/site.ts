@@ -70,6 +70,8 @@ export const SITE = {
     "HF Prototyping",
     "Design System",
     "Branding",
+    "Storytelling",
+    "Design Strategy",
     "Motion Design",
     "3D Modeling",
     "2D Animation",
@@ -77,5 +79,7 @@ export const SITE = {
     "Ai Augmentation",
     "Ai+Coding",
     "Ai+Design Audit",
+    "AI Design Direction",
+    "AI System Design",
   ],
 } as const;

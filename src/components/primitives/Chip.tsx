@@ -33,9 +33,11 @@ export function Chip({
 }) {
   const shared = cn(
     "type-label inline-flex items-center gap-(--spacing-2) rounded-(--radius-pill)",
+    /* Original chip sizes, held here so the 15% scale cut doesn't reach them.
+       Default is 16px. The compact chip is 14px. */
     size === "sm"
-      ? "min-h-[32px] px-(--spacing-3) py-(--spacing-1) text-(length:--text-caption)"
-      : "min-h-[44px] px-(--spacing-4) py-(--spacing-2)",
+      ? "min-h-[32px] px-(--spacing-3) py-(--spacing-1) text-[0.875rem]"
+      : "min-h-[44px] px-(--spacing-4) py-(--spacing-2) text-[1rem]",
     "transition-colors duration-(--duration-fast)",
     className,
   );

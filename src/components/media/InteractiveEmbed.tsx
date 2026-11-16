@@ -69,7 +69,7 @@ export function InteractiveEmbed({
         )}
       >
         {/* .glass, so the label is ink — never white on a translucent fill. */}
-        <span className="glass type-label rounded-(--radius-pill) border border-(--color-glass-border) px-(--spacing-6) py-(--spacing-3) text-ink">
+        <span className="glass type-label rounded-(--radius-pill) border border-(--color-glass-border) px-(--spacing-6) py-(--spacing-3) text-[1rem] text-ink">
           Drag to play with
         </span>
       </div>

@@ -78,9 +78,9 @@ export default async function CaseStudyPage({
     <>
       <Container as="main" paper className="pb-(--space-section)">
         <div id="main">
-          <div className="pt-(--hero-content-gap)">
-            {/* Cover is the LCP candidate on this route, and the first thing
-             * on every case study. */}
+          <div>
+            {/* Cover is the LCP candidate on this route. It starts at the
+             * top edge of the viewport; the fixed header sits over it. */}
             {project.cover.kind === "embed" ? (
               <InteractiveEmbed media={project.cover} priority />
             ) : (

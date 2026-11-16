@@ -152,7 +152,7 @@ export default async function WorkWithMePage() {
                     Proof:{" "}
                     <Link
                       href={offer.href}
-                      className="inline-flex min-h-[44px] items-center text-brand-700 underline underline-offset-4"
+                      className="py-(--spacing-3) text-brand-700 underline underline-offset-4"
                     >
                       {offer.proof}
                     </Link>

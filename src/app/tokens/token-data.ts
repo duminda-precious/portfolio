@@ -166,77 +166,77 @@ export const TYPE_SCALE = [
   {
     name: "H1",
     className: "type-h1",
-    spec: "Bold · 90px / 5.625rem · 85% · -1%",
+    spec: "Bold · 80px · hero, unchanged",
     sample: "Hey! I'm Duminda.",
   },
   {
     name: "H2",
     className: "type-h2",
-    spec: "Bold · 64px / 4rem · 90% · 0",
+    spec: "Bold · 54.4px · 30.6px on mobile",
     sample: "Things That Kept Me Up",
   },
   {
     name: "H3",
     className: "type-h3",
-    spec: "Bold · 56px / 3.5rem · 90% · 0",
+    spec: "Bold · 47.6px · 27.2px on mobile",
     sample: "Section heading",
   },
   {
     name: "H4",
     className: "type-h4",
-    spec: "Bold · 48px / 3rem · 100% · 0",
+    spec: "Bold · 40.8px · 23.8px on mobile",
     sample: "Subsection heading",
   },
   {
     name: "Title",
     className: "type-title",
-    spec: "SemiBold · 28px / 1.75rem · 110% · 0",
+    spec: "SemiBold · 23.8px · 18.7px on mobile",
     sample: "Upgrading iTrvl responsive webapp design system.",
   },
   {
     name: "Body",
     className: "type-body",
-    spec: "Regular · 24px / 1.5rem · 140% · 0",
+    spec: "Regular · 20.4px · 15.3px on mobile",
     sample: "Body copy sets the baseline rhythm of the page.",
   },
   {
     name: "Action",
     className: "type-action",
-    spec: "SemiBold · 20px / 1.25rem · 100% · -2%",
+    spec: "SemiBold · 17px",
     sample: "Scroll For My Work",
   },
   {
     name: "Body Small",
     className: "type-body-sm",
-    spec: "Regular · 18px / 1.125rem · 150% · 0",
+    spec: "Regular · 15.3px",
     sample: "Secondary copy sits one step down from body.",
   },
   {
     name: "Label",
     className: "type-label",
-    spec: "Bold · 16px / 1rem · 100% · 0",
+    spec: "Bold · 13.6px",
     sample: "Design System · Web · Mobile",
   },
   {
     name: "Captions",
     className: "type-caption",
-    spec: "Regular · 14px / 0.875rem · 150% · +1%",
+    spec: "Regular · 11.9px",
     sample: "Untitled 3D experiment",
   },
 ] as const;
 
 /** px → rem conversion table at a 16px root, for the /tokens reference. */
 export const REM_CONVERSIONS = [
-  { px: 90, rem: "5.625rem", use: "H1" },
-  { px: 64, rem: "4rem", use: "H2" },
-  { px: 56, rem: "3.5rem", use: "H3" },
-  { px: 48, rem: "3rem", use: "H4" },
-  { px: 28, rem: "1.75rem", use: "Title" },
-  { px: 24, rem: "1.5rem", use: "Body" },
-  { px: 20, rem: "1.25rem", use: "Action" },
-  { px: 18, rem: "1.125rem", use: "Body Small" },
-  { px: 16, rem: "1rem", use: "Label" },
-  { px: 14, rem: "0.875rem", use: "Captions" },
+  { px: 80, rem: "5rem", use: "Hero" },
+  { px: 54.4, rem: "3.4rem", use: "H2" },
+  { px: 47.6, rem: "2.975rem", use: "H3" },
+  { px: 40.8, rem: "2.55rem", use: "H4" },
+  { px: 23.8, rem: "1.488rem", use: "Title" },
+  { px: 20.4, rem: "1.275rem", use: "Body" },
+  { px: 17, rem: "1.063rem", use: "Action" },
+  { px: 15.3, rem: "0.956rem", use: "Body Small" },
+  { px: 13.6, rem: "0.85rem", use: "Label" },
+  { px: 11.9, rem: "0.744rem", use: "Captions" },
 ] as const;
 
 export const SPACING_STEPS = [
@@ -285,12 +285,12 @@ export const CURSOR_SIZES = [
   {
     token: "--cursor-size-cta-height",
     value: "48px",
-    usage: "Labelled box height (cta, and the basis for expand/play/drag)",
+    usage: "The one labelled pill (cta, expand, play, drag). Ends use --radius-pill.",
   },
   {
     token: "--cursor-size-expand",
     value: "72px",
-    usage: "expand / play / drag — square, both dimensions",
+    usage: "Reserved for a future icon-only cursor. Labelled cursors use the pill.",
   },
   {
     token: "--cursor-size-text-width / -height",

@@ -23,49 +23,50 @@ export type VariantSpec = {
   /**
    * Surface treatment.
    *
-   * `brand` — solid blue, for the small resting square.
+   * `invert` — the resting square. No fill of its own; the renderer applies
+   *   backdrop-filter: invert(1), so the square is the inverse of whatever
+   *   sits under it. A flat color disappears on the page gray and on the
+   *   blue About field.
    * `glass` — translucent blurred panel, for anything carrying a LABEL. The
    *   label text is --color-ink on glass; white would have no guaranteed
    *   contrast, since the effective background is whatever is behind it.
+   *   Labels stay glass: inverting them would recolor the words per pixel.
    * `ink`   — solid dark, for the text caret.
    * `none`  — transparent; the variant is hidden.
    */
-  fill: "brand" | "glass" | "ink" | "none";
+  fill: "invert" | "glass" | "ink" | "none";
 };
 
 /**
- * Square-cornered throughout — this matches the media containers, which the
- * design keeps at --radius-none. The pill radius stays reserved for the
- * scroll chip and the filter chips.
+ * One pill for every labelled cursor. "View case study", "Expand", "Play"
+ * and "Drag" are the same component — only the words change. Width grows to
+ * the label; the ends stay fully round (--radius-pill, 999px) and the height
+ * stays --cursor-size-cta-height. The resting dot stays a square.
  */
+const PILL: VariantSpec = {
+  width: 0,
+  height: 48,
+  radius: 999,
+  showsLabel: true,
+  fill: "glass",
+};
+
 export const VARIANTS: Record<CursorVariant, VariantSpec> = {
-  /** 12px square — the resting state. Token: --cursor-size-default. */
+  /** 12px square — the resting state. Inverted, not a flat fill.
+   * Token: --cursor-size-default. */
   default: {
     width: 12,
     height: 12,
     radius: 0,
     showsLabel: false,
-    fill: "brand",
+    fill: "invert",
   },
 
-  /**
-   * Square label box, expands from the square. Glass fill, ink text.
-   * Token: --cursor-size-cta-height.
-   */
-  cta: { width: 0, height: 48, radius: 0, showsLabel: true, fill: "glass" },
-
-  /** Grows to ~72px. Token: --cursor-size-expand. */
-  expand: {
-    width: 72,
-    height: 72,
-    radius: 0,
-    showsLabel: true,
-    fill: "glass",
-  },
-
-  play: { width: 72, height: 72, radius: 0, showsLabel: true, fill: "glass" },
-
-  drag: { width: 72, height: 72, radius: 0, showsLabel: true, fill: "glass" },
+  /** Labelled pill. See PILL. */
+  cta: PILL,
+  expand: PILL,
+  play: PILL,
+  drag: PILL,
 
   /** Thin vertical bar, caret-like, over body text.
    * Tokens: --cursor-size-text-width, --cursor-size-text-height. */

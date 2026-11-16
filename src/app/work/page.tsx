@@ -7,9 +7,9 @@ import { WorkFilter } from "@/components/sections/WorkFilter";
 import { getAllTags, getProjects } from "@/lib/content";
 
 export const metadata: Metadata = {
-  title: "My Work",
+  title: "My work",
   description:
-    "Design systems, motion, and 3D work. Placeholder description — real copy pending.",
+    "Design systems, motion, 3D and video. Case studies and the stuff in between.",
 };
 
 /**
@@ -27,8 +27,8 @@ export default async function WorkPage() {
       <Container as="main" paper className="pb-(--space-section)">
         <div id="main">
           <PageHeader
-            title="My Work"
-            standfirst="Placeholder standfirst for the work index. Real copy pending — this runs to roughly the length the final introduction will occupy."
+            title="My work"
+            standfirst="Case studies, videos and the odd experiment. Filter by what you're into, or just scroll."
           />
 
           <WorkFilter projects={projects} allTags={allTags} />

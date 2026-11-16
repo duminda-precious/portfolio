@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { Footer } from "@/components/layout/Footer";
+import { InteractiveEmbed } from "@/components/media/InteractiveEmbed";
 import { Media } from "@/components/media/Media";
 import { Container } from "@/components/primitives/Container";
 import { Eyebrow } from "@/components/primitives/Eyebrow";
@@ -11,12 +12,12 @@ import {
   DISCIPLINE_LABELS,
   getAdjacentProjects,
   getProject,
-  getProjects,
+  getCaseStudies,
 } from "@/lib/content";
 
 /** Prerender every case study at build time — they are fully static. */
 export async function generateStaticParams() {
-  const projects = await getProjects();
+  const projects = await getCaseStudies();
   return projects.map((project) => ({ slug: project.slug }));
 }
 
@@ -34,13 +35,21 @@ export async function generateMetadata({
     openGraph: {
       title: project.title,
       description: project.summary,
-      images: project.cover.src ? [{ url: project.cover.src }] : undefined,
+      // Only a still works as a share image — not a video file or an embed.
+      images:
+        project.cover.kind === "image" && project.cover.src
+          ? [{ url: project.cover.src }]
+          : undefined,
     },
   };
 }
 
 /**
  * Case study template (§2.2).
+ *
+ * Every study opens with its header — the cover video or image — then the
+ * title, summary and body. The one glass surface is the facts row (client,
+ * discipline, year, tools).
  *
  * Tier 1 projects get the full narrative; Tier 2 renders the same template
  * with a shorter body. The tier drives content volume, not a separate
@@ -56,11 +65,30 @@ export default async function CaseStudyPage({
 
   const { previous, next } = await getAdjacentProjects(slug);
 
+  const facts = [
+    project.client ? { label: "Client", value: project.client } : null,
+    { label: "Discipline", value: DISCIPLINE_LABELS[project.discipline] },
+    project.year ? { label: "Year", value: String(project.year) } : null,
+    project.tools.length > 0
+      ? { label: "Tools", value: project.tools.join(", ") }
+      : null,
+  ].filter((fact) => fact !== null);
+
   return (
     <>
       <Container as="main" paper className="pb-(--space-section)">
         <div id="main">
-          <header className="pt-(--hero-content-gap)">
+          <div className="pt-(--hero-content-gap)">
+            {/* Cover is the LCP candidate on this route, and the first thing
+             * on every case study. */}
+            {project.cover.kind === "embed" ? (
+              <InteractiveEmbed media={project.cover} priority />
+            ) : (
+              <Media media={project.cover} priority />
+            )}
+          </div>
+
+          <header className="mt-(--space-section)">
             <Eyebrow tags={project.tags} />
             <h1 className="type-h2 mt-(--spacing-4) text-ink">
               {project.title}
@@ -69,42 +97,17 @@ export default async function CaseStudyPage({
               {project.summary}
             </p>
 
-            <dl className="mt-(--spacing-8) flex flex-wrap gap-(--spacing-8)">
-              {project.client ? (
-                <div>
-                  <dt className="type-caption text-ink-muted">Client</dt>
-                  <dd className="type-label mt-(--spacing-1) text-ink">
-                    {project.client}
+            <dl className="glass-tint mt-(--spacing-8) grid grid-cols-[repeat(auto-fit,minmax(10rem,1fr))] gap-x-(--spacing-8) gap-y-(--spacing-6) rounded-(--radius-sm) p-(--spacing-8)">
+              {facts.map((fact) => (
+                <div key={fact.label}>
+                  <dt className="type-label text-brand-700">{fact.label}</dt>
+                  <dd className="type-body mt-(--spacing-1) text-ink">
+                    {fact.value}
                   </dd>
                 </div>
-              ) : null}
-              <div>
-                <dt className="type-caption text-ink-muted">Discipline</dt>
-                <dd className="type-label mt-(--spacing-1) text-ink">
-                  {DISCIPLINE_LABELS[project.discipline]}
-                </dd>
-              </div>
-              <div>
-                <dt className="type-caption text-ink-muted">Year</dt>
-                <dd className="type-label mt-(--spacing-1) text-ink">
-                  {project.year}
-                </dd>
-              </div>
-              {project.tools.length > 0 ? (
-                <div>
-                  <dt className="type-caption text-ink-muted">Tools</dt>
-                  <dd className="type-label mt-(--spacing-1) text-ink">
-                    {project.tools.join(", ")}
-                  </dd>
-                </div>
-              ) : null}
+              ))}
             </dl>
           </header>
-
-          <div className="mt-(--space-section)">
-            {/* Cover is the LCP candidate on this route. */}
-            <Media media={project.cover} priority />
-          </div>
 
           <div className="mt-(--space-section)">
             <BodyBlocks blocks={project.body} />

@@ -9,8 +9,13 @@ import { z } from "zod";
  */
 
 export const MediaSchema = z.object({
-  kind: z.enum(["gumlet-video", "local-loop", "image"]),
-  /** Gumlet asset ID, /public path, or remote image URL. */
+  /**
+   * "embed" is a live page in an iframe (e.g. a WebGL demo).
+   * "youtube" shows the video's thumbnail; the player only loads in the
+   * lightbox, and never autoplays.
+   */
+  kind: z.enum(["gumlet-video", "local-loop", "image", "embed", "youtube"]),
+  /** Gumlet asset ID, /public path, remote image URL, embed page URL, or YouTube video ID. */
   src: z.string(),
   /** Required for video — first frame, prevents the flash. */
   poster: z.string().optional(),
@@ -27,7 +32,7 @@ export const DISCIPLINES = ["ui-ux", "motion", "3d-code"] as const;
 /** User-facing discipline labels (§2.4). */
 export const DISCIPLINE_LABELS: Record<(typeof DISCIPLINES)[number], string> = {
   "ui-ux": "UI/UX & Design Systems",
-  motion: "Motion Design",
+  motion: "Motion Design & Video editing",
   "3d-code": "3D & Creative Coding",
 };
 
@@ -40,6 +45,11 @@ export const DISCIPLINE_LABELS: Record<(typeof DISCIPLINES)[number], string> = {
  */
 export const BodyBlockSchema = z.discriminatedUnion("kind", [
   z.object({ kind: z.literal("lead"), text: z.string() }),
+  /** Plain body paragraphs with no heading. */
+  z.object({
+    kind: z.literal("prose"),
+    paragraphs: z.array(z.string()).min(1),
+  }),
   z.object({
     kind: z.literal("section"),
     heading: z.string(),
@@ -49,6 +59,10 @@ export const BodyBlockSchema = z.discriminatedUnion("kind", [
     kind: z.literal("media"),
     media: MediaSchema,
     caption: z.string().optional(),
+    /** Gallery row spans the full container instead of the height cap. */
+    fullWidth: z.boolean().optional(),
+    /** Always gets a row of its own; never paired with neighbouring media. */
+    solo: z.boolean().optional(),
   }),
   z.object({
     kind: z.literal("pullquote"),
@@ -68,7 +82,8 @@ export const ProjectSchema = z.object({
   /** Homepage card title — a full sentence, per the mockup. */
   title: z.string(),
   client: z.string().optional(),
-  year: z.number(),
+  /** Optional: some videos are undated. */
+  year: z.number().optional(),
   /** Internal only. Drives template choice + homepage eligibility (§2.4). */
   tier: z.union([z.literal(1), z.literal(2), z.literal(3)]),
   discipline: z.enum(DISCIPLINES),
@@ -87,11 +102,31 @@ export const ProjectSchema = z.object({
 
 export type Project = z.infer<typeof ProjectSchema>;
 
+/**
+ * A project is a case study (has its own /work/[slug] page) unless its cover
+ * is a YouTube video: those cards open the video in the lightbox instead.
+ * Lives here, not in local.ts, so client components can import it without
+ * pulling the content data into the bundle.
+ */
+export const isCaseStudy = (p: Project) => p.cover.kind !== "youtube";
+
 export const ExperimentSchema = z.object({
   id: z.string(),
   caption: z.string(),
   media: MediaSchema,
-  gridSpan: z.union([z.literal(1), z.literal(2)]).default(1),
+  /** Column span on the 6-column experiments grid. A row's spans add up to 6. */
+  gridSpan: z.union([
+    z.literal(1),
+    z.literal(2),
+    z.literal(3),
+    z.literal(4),
+    z.literal(6),
+  ]).default(1),
+  /**
+   * Zooms the media inside its tile. The tile box stays the same size;
+   * overflow is clipped. Use when the subject sits small in the frame.
+   */
+  scale: z.number().positive().optional(),
   order: z.number(),
 });
 

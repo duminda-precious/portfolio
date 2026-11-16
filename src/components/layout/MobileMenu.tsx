@@ -1,8 +1,12 @@
 "use client";
 
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 import type { NavItem } from "@/lib/content";
+import { cn } from "@/lib/utils/cn";
 
 import { Nav } from "./Nav";
 
@@ -17,9 +21,18 @@ import { Nav } from "./Nav";
  * Esc closes, body scroll locked, and focus returns to the trigger on close.
  */
 export function MobileMenu({ items }: { items: NavItem[] }) {
+  const pathname = usePathname();
+  const onBlue = pathname === "/about";
   const [isOpen, setIsOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+
+  // The sheet portals to the body so a transform on an ancestor can never
+  // trap its position: fixed inside the header.
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const close = useCallback(() => {
     setIsOpen(false);
@@ -96,34 +109,59 @@ export function MobileMenu({ items }: { items: NavItem[] }) {
         onClick={() => setIsOpen(true)}
         aria-expanded={isOpen}
         aria-haspopup="dialog"
-        className="type-action min-h-[44px] px-(--spacing-2) text-ink md:hidden"
+        className={cn(
+          "type-action min-h-[44px] rounded-(--radius-pill) px-(--spacing-4) transition-colors duration-(--duration-fast) md:hidden",
+          /* On the blue bar the trigger is white, like the other items.
+           * On the grey page it stays the tinted glass pill. */
+          onBlue
+            ? "text-paper/60 hover:text-paper focus-visible:text-paper"
+            : "glass-tint text-ink/60 hover:text-brand-700 focus-visible:text-brand-700",
+        )}
       >
         Menu
       </button>
 
-      {isOpen ? (
+      {isOpen && isMounted
+        ? createPortal(
         <div
           ref={panelRef}
           role="dialog"
           aria-modal="true"
           aria-label="Main navigation"
-          className="fixed inset-0 z-(--z-lightbox) flex flex-col bg-paper px-(--container-pad) py-(--spacing-6) md:hidden"
+          className="glass fixed inset-0 z-(--z-lightbox) flex flex-col px-(--container-pad) pt-(--spacing-6) pb-(--spacing-8) md:hidden"
         >
           <div className="flex justify-end">
             <button
               type="button"
               onClick={close}
-              className="type-action min-h-[44px] px-(--spacing-2) text-ink"
+              className="glass-tint type-action min-h-[44px] rounded-(--radius-pill) px-(--spacing-4) text-ink"
             >
               Close
             </button>
           </div>
 
-          <nav aria-label="Main" className="mt-(--spacing-12)">
-            <Nav items={items} variant="overlay" onNavigate={close} />
+          <nav aria-label="Main" className="mt-(--spacing-8)">
+            <Nav
+              items={items.filter((item) => item.href !== "/work-with-me")}
+              variant="overlay"
+              onNavigate={close}
+            />
           </nav>
-        </div>
-      ) : null}
+
+          {/* Pinned to the bottom of the sheet, the way the menu frame is. */}
+          <Link
+            href="/work-with-me"
+            onClick={close}
+            aria-current={pathname === "/work-with-me" ? "page" : undefined}
+            className="type-h4 type-h4-fixed mt-auto flex items-center justify-between pt-(--spacing-8) text-ink/60 no-underline hover:text-brand-700 focus-visible:text-brand-700 active:text-brand-700 aria-[current=page]:text-brand-700"
+          >
+            Work with me
+            <span aria-hidden="true">+</span>
+          </Link>
+        </div>,
+            document.body,
+          )
+        : null}
     </>
   );
 }

@@ -3,7 +3,7 @@ import { Rethink_Sans } from "next/font/google";
 
 import { CursorProvider } from "@/components/cursor/CursorProvider";
 import { Header } from "@/components/layout/Header";
-import { getNavItems } from "@/lib/content";
+import { getNavItems, SITE_URL } from "@/lib/content";
 
 import "./globals.css";
 
@@ -26,12 +26,12 @@ const rethinkSans = Rethink_Sans({
 
 export const metadata: Metadata = {
   title: {
-    default: "Duminda M — Crafting Experiences That Move. Literally.",
-    template: "%s — Duminda M",
+    default: "Duminda M · Crafting experiences that move. Literally.",
+    template: "%s · Duminda M",
   },
   description:
-    "Senior Creative Director working across design systems, motion, and 3D. Currently making interfaces that move — literally.",
-  metadataBase: new URL("https://example.com"), // TODO: real domain before launch
+    "Head of Motion working across product design, motion and 3D. Making things that move. Literally.",
+  metadataBase: new URL(SITE_URL),
   openGraph: {
     type: "website",
     locale: "en_GB",

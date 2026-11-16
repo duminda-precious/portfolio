@@ -39,8 +39,11 @@
   --color-paper: #ffffff; /* the 1280px content container */
   --color-surface: #f8f8f8; /* subtle off-white fill, inset panels */
   --color-page: #cfcfcf; /* page background behind the container */
+  /* Cream is type on the solid blue About field only. Glass stays ink. */
+  --color-cream: #f5f1eb;
   --color-chip: #cfcfcf; /* "Scroll For My Work" pill background */
   --color-hairline: #e4e4e4;
+  --color-danger: #c4291c; /* destructive/reset actions — 5.6:1 on paper, AA */
 
   /* ---------------------------------------------------------------------
    * Glass — the shared translucent surface.
@@ -67,10 +70,10 @@
    * The blur is not decorative — it destroys the high-frequency detail behind
    * the panel, which is what stops busy video from reading through as noise.
    * ------------------------------------------------------------------- */
-  --color-glass: rgb(255 255 255 / 0.72); /* the shared translucent fill */
-  --color-glass-strong: rgb(255 255 255 / 0.88); /* scrolled header, denser */
+  --color-glass: rgb(255 255 255 / 0.8); /* the shared translucent fill */
+  --color-glass-strong: rgb(255 255 255 / 0.9); /* scrolled header, denser */
   --color-glass-border: rgb(255 255 255 / 0.5); /* catches the panel edge */
-  --blur-glass: 8px;
+  --blur-glass: 16px;
 
   /* ---------------------------------------------------------------------
    * Typography — §3.3 · CONFIRMED against the supplied type spec
@@ -94,37 +97,34 @@
   --font-weight-bold: 700;
 
   /* -----------------------------------------------------------------
-   * Type scale — px from the spec, expressed in rem at a 16px root.
+   * Type scale. One family. Hero (H1) stays at its current size.
+   * Every other step is 15% smaller, rounded to one decimal px.
+   * The fluid clamp's floor is the mobile size, also −15%.
    *
-   *   H1  90px  Bold      85%  -1%      H4    48px  Bold      100%  0
-   *   H2  64px  Bold      90%   0       Title 28px  SemiBold  110%  0
-   *   H3  56px  Bold      90%   0       Body  24px  Regular   140%  0
-   *   Action 20px SemiBold 100% -2%     Small 18px  Regular   150%  0
-   *   Label  16px Bold     100%  0      Caption 14px Regular  150%  1%
-   *
-   * These are the DESKTOP values. Fluid clamping lives in the paired
-   * --text-*-fluid tokens below — 90px is 5.6rem and would overflow a
-   * 375px viewport, so headings must not use the raw value responsively.
+   *   Hero 80px   Bold      85%  -1%     H4    40.8px Bold     100%  0
+   *   H2   54.4px Bold      90%   0      Title 23.8px SemiBold 110%  0
+   *   H3   47.6px Bold      90%   0      Body  20.4px Regular  140%  0
+   *   Action 17px SemiBold 100%  -2%     Small 15.3px Regular  150%  0
+   *   Label  13.6px Bold    100%   0     Caption 11.9px Regular 150% 1%
    * ----------------------------------------------------------------- */
-  --text-h1: 5.625rem; /* 90px */
-  --text-h2: 4rem; /* 64px */
-  --text-h3: 3.5rem; /* 56px */
-  --text-h4: 3rem; /* 48px */
-  --text-title: 1.75rem; /* 28px */
-  --text-body: 1.5rem; /* 24px */
-  --text-action: 1.25rem; /* 20px */
-  --text-body-sm: 1.125rem; /* 18px */
-  --text-label: 1rem; /* 16px */
-  --text-caption: 0.875rem; /* 14px */
+  --text-h1: 5rem; /* 80px — hero, unchanged */
+  --text-h2: 3.4rem; /* 54.4px */
+  --text-h3: 2.975rem; /* 47.6px */
+  --text-h4: 2.55rem; /* 40.8px */
+  --text-title: 1.488rem; /* 23.8px */
+  --text-body: 1.275rem; /* 20.4px */
+  --text-action: 1.063rem; /* 17px */
+  --text-body-sm: 0.956rem; /* 15.3px */
+  --text-label: 0.85rem; /* 13.6px */
+  --text-caption: 0.744rem; /* 11.9px */
 
-  /* Fluid equivalents — min is the mobile floor, max is the spec value.
-   * Use these for anything that must survive a 375px viewport. */
-  --text-h1-fluid: clamp(2.75rem, 1.35rem + 5.98vw, 5.625rem);
-  --text-h2-fluid: clamp(2.25rem, 1.4rem + 3.63vw, 4rem);
-  --text-h3-fluid: clamp(2rem, 1.27rem + 3.11vw, 3.5rem);
-  --text-h4-fluid: clamp(1.75rem, 1.14rem + 2.6vw, 3rem);
-  --text-title-fluid: clamp(1.375rem, 1.19rem + 0.78vw, 1.75rem);
-  --text-body-fluid: clamp(1.125rem, 0.94rem + 0.78vw, 1.5rem);
+  /* Mobile floor → desktop size. Hero is unchanged at both ends. */
+  --text-h1-fluid: clamp(2.75rem, 1.35rem + 5.98vw, 5rem); /* 44px → 80px */
+  --text-h2-fluid: clamp(1.913rem, 1.19rem + 3.086vw, 3.4rem); /* 30.6px → 54.4px */
+  --text-h3-fluid: clamp(1.7rem, 1.08rem + 2.644vw, 2.975rem); /* 27.2px → 47.6px */
+  --text-h4-fluid: clamp(1.488rem, 0.969rem + 2.21vw, 2.55rem); /* 23.8px → 40.8px */
+  --text-title-fluid: clamp(1.169rem, 1.012rem + 0.663vw, 1.488rem); /* 18.7px → 23.8px */
+  --text-body-fluid: clamp(0.956rem, 0.799rem + 0.663vw, 1.275rem); /* 15.3px → 20.4px */
 
   /* -----------------------------------------------------------------
    * Line heights — the spec's percentages as unitless multipliers.
@@ -175,21 +175,26 @@
    * Layout — §3.5 · measured from the 1920px redlined artboard
    * ------------------------------------------------------------------- */
   --container-max: 1280px; /* ✅ confirmed — the white content container */
-  --container-pad: var(--space-gutter);
+  --container-pad: 16px; /* ✅ fixed by decision — tight edge-to-edge, not fluid */
   --grid-gallery: 3; /* columns in the experiments grid at desktop */
 
   /* -----------------------------------------------------------------
-   * Hero band — ✅ measured 2026-08-06
+   * Hero band — ✅ NO CEILING, by decision (2026-08-06).
    *
-   * 800px at the 1920×1080 artboard ≈ 74vh, and it scales with the
-   * viewport rather than staying fixed: at 800px fixed, a 1366×768
-   * laptop would push the h1 entirely below the fold.
+   * The band must keep the hero text + CTA visible in the first screen on
+   * EVERY monitor, not just typical ones. A clamp() ceiling breaks that: once
+   * viewport height pushes Xvh past the cap, the band stops growing while the
+   * hero text below it (fixed pixel height) does not — so on a tall/narrow
+   * monitor the white container starts too early, and extra dead space
+   * appears between the chip and the next section, still inside the first
+   * screen. Confirmed against two real monitors of different heights.
    *
-   * The floor (420px) keeps the band present on short/landscape screens;
-   * the ceiling (800px) is the artboard value, so 1080p renders the
-   * design exactly.
+   * max(), not clamp(): a floor for short/landscape screens, but otherwise
+   * scales with vh UNBOUNDED, so the band-to-remaining-viewport ratio stays
+   * consistent regardless of screen height. Do not reintroduce a ceiling
+   * without re-testing on a tall monitor.
    * ----------------------------------------------------------------- */
-  --hero-band-height: clamp(420px, 74vh, 800px);
+  --hero-band-height: 50vh;
 
   /* Gap between the bottom of the video band and the hero content.
    * Constant at every viewport — this rhythm is deliberate, so it does
@@ -198,16 +203,16 @@
 
   /* Optical compensation for the h1's leading.
    *
-   * Figma measures the 64px top gap to the CAP HEIGHT of the type, but CSS
-   * padding applies to the layout BOX. At 90px/0.85 the box sits above the
-   * caps by roughly half the negative leading — (1 − 0.85) ÷ 2 × 90 ≈ 6.75px
-   * — plus the font's internal ascent gap above the cap line (~7px for
-   * Rethink Sans at this size). Padding must therefore exceed 64px for the
-   * VISIBLE gap to read as 64px.
+   * CSS padding applies to the type's layout BOX, which sits above the visual
+   * cap height by roughly half the negative leading — (1 − 0.85) ÷ 2 × font-size
+   * — plus the font's internal ascent gap above the cap line (~7px for Rethink
+   * Sans at this size). This nudges the hero text down slightly beyond the
+   * .hero-optical-top vh-based offset so the h1's cap height, not its layout
+   * box, is what visually lands at that position.
    *
    * Applied via the .hero-optical-top utility in globals.css, which uses
    * a cap-height-relative unit where supported and falls back to this. */
-  --hero-cap-offset: 14px;
+  --hero-cap-offset: 16px;
 
   /* ---------------------------------------------------------------------
    * Motion & radius — §3.6
@@ -253,8 +258,8 @@
    * entry in variants.ts — search for "Kept in sync with tokens.css" there.
    * ------------------------------------------------------------------- */
   --cursor-size-default: 12px; /* resting square */
-  --cursor-size-cta-height: 48px; /* labelled box height (cta) */
-  --cursor-size-expand: 72px; /* expand/play/drag — circle-equivalent square */
+  --cursor-size-cta-height: 48px; /* the one labelled pill: cta, expand, play, drag */
+  --cursor-size-expand: 72px; /* reserved for a future icon-only cursor; labelled cursors use the pill */
   --cursor-size-text-width: 2px; /* text-caret bar */
   --cursor-size-text-height: 28px;
 

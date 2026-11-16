@@ -115,6 +115,7 @@ export function CursorRenderer() {
     const spec = VARIANTS[variant];
     const showsLabel = spec.showsLabel && label.length > 0;
     const isGlass = spec.fill === "glass";
+    const isInvert = spec.fill === "invert";
 
     /* A labelled box sizes to its text. Measuring scrollWidth is a forced
      * layout read, but it happens once per hover boundary — not per frame —
@@ -144,9 +145,14 @@ export function CursorRenderer() {
      * transformed and so establishes a stacking context with nothing behind
      * it to sample.
      */
+    /* Invert has no fill of its own. An opaque background would paint over
+     * the inverted backdrop and hide it. Labels stay on glass — inverting
+     * the pill would recolor the words with whatever is behind them. */
     const filter = isGlass
       ? `blur(${GLASS_BLUR_PX}px) saturate(${GLASS_SATURATE})`
-      : "";
+      : isInvert
+        ? "invert(1)"
+        : "";
     surface.style.backdropFilter = filter;
     /* setProperty rather than the camelCase form — the prefixed property is
      * not in the CSSStyleDeclaration type, and Safari still needs it. */
@@ -157,9 +163,7 @@ export function CursorRenderer() {
         ? "var(--color-glass)"
         : spec.fill === "ink"
           ? "var(--color-ink)"
-          : spec.fill === "none"
-            ? "transparent"
-            : "var(--color-brand-500)",
+          : "transparent",
     });
 
     /* Size animates on the parent, which owns layout for the whole cursor. */
@@ -243,7 +247,7 @@ export function CursorRenderer() {
         ref={surfaceRef}
         className="absolute inset-0 overflow-hidden"
         style={{
-          backgroundColor: "var(--color-brand-500)",
+          backgroundColor: "transparent",
           borderRadius: VARIANTS.default.radius,
         }}
       />

@@ -37,6 +37,8 @@ export default async function HomePage() {
 
       <Container as="main" paper belowHero className="pb-(--space-section)">
         <div id="main" className="hero-optical-top">
+          {/* Forced two-line break after "Crafting" — natural wrapping won't
+           * reliably land here once the viewport changes. */}
           <h1 className="type-h1 text-ink">
             Hey! I&apos;m Duminda. Crafting Experiences That Move{" "}
             <span className="text-brand-500">Literally.</span>
@@ -49,11 +51,18 @@ export default async function HomePage() {
             Phase 2: becomes an anchor to #featured-work.
           */}
           <Chip className="mt-(--spacing-8)">
-            <span
-              aria-hidden="true"
-              className="h-(--spacing-2) w-(--spacing-2) rounded-(--radius-pill) border border-ink"
-            />
-            Scroll For My Work
+            <span aria-hidden="true" className="scroll-arrow">
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                <path
+                  d="M1.5 3.25 5 6.75 8.5 3.25"
+                  stroke="currentColor"
+                  strokeWidth="1.25"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </span>
+            Scroll for my work
           </Chip>
 
           {/* Featured work — never hardcoded, always from the content layer. */}

@@ -1,7 +1,9 @@
 import type { MetadataRoute } from "next";
 
+import { SITE_URL } from "@/lib/content";
+
 /** ⚠️ Placeholder domain — replace before launch (matches layout.tsx). */
-const BASE_URL = "https://example.com";
+const BASE_URL = SITE_URL;
 
 export default function robots(): MetadataRoute.Robots {
   return {

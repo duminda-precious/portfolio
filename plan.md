@@ -345,7 +345,7 @@ the design genuinely needs the literal px size, append the `-fixed` sibling clas
   --container-pad: var(--space-gutter);
   --grid-gallery: 3; /* columns in the experiments grid at desktop */
 
-  --hero-band-height: clamp(420px, 74vh, 800px); /* ✅ 800px @ 1920×1080 */
+  --hero-band-height: max(300px, 48vh); /* ✅ NO CEILING, see below */
   --hero-content-gap: 120px; /* ✅ band bottom → hero content, constant */
   --hero-cap-offset: 14px; /* optical compensation, see below */
 }
@@ -357,9 +357,24 @@ centred**, giving a true 320px margin at 1920. The 120px redline is measuring th
 band's inner padding, not the container edge. Confirmed by decision; do not
 "correct" `--container-max` to 1680 later.
 
-**The band scales, it does not sit fixed.** 800px is the value at 1920×1080
-(≈74vh). Held fixed, a 1366×768 laptop would push the h1 entirely below the fold,
-so the token clamps: floor 420px, ceiling the artboard's 800px.
+**⚠️ The band was resized down from the artboard measurement, by decision
+(2026-08-06).** The originally measured value was `clamp(420px, 74vh, 800px)` — 800px
+at 1920×1080. Combined with the 120px content gap and the header, that consumed
+almost an entire typical viewport, pushing the hero h1 + CTA below the fold on load.
+
+**⚠️ Then the clamp() CEILING was removed entirely, same day, after testing on two
+real monitors of different heights.** An earlier version of this token —
+`clamp(320px, 45vh, 480px)` — worked on a short/wide monitor but failed on a
+tall/narrow one: once viewport height pushed `vh` past the 480px cap, the band
+stopped growing while the hero text below it (fixed pixel height) did not, so the
+white container started too early and left visible dead space between the chip and
+the next section, still inside the first screen.
+
+The token is now `max(300px, 48vh)` — a floor for short/landscape screens, but
+**unbounded** growth above that, so the ratio between band height and remaining
+viewport for the hero text stays consistent at every screen height. **Do not
+reintroduce a clamp() ceiling without re-testing on a tall monitor** — that is
+exactly the regression this fixes.
 
 **The hero video anchors bottom-centre.** As the viewport resizes the band crops
 from the top, never the bottom — `object-fit: cover` + `object-position: bottom
@@ -905,9 +920,11 @@ Reading the layout top to bottom. The defining structural move: a **full-bleed v
 
 ### 9.3 Video hero band
 
-- Full-bleed, `--hero-band-height` = `clamp(420px, 74vh, 800px)`. ✅ Measured: 800px
-  at the 1920×1080 artboard. Clamped rather than fixed so the h1 stays above the
-  fold on shorter laptops.
+- Full-bleed, `--hero-band-height` = `max(300px, 48vh)`. ⚠️ Resized down from the
+  original 800px/74vh artboard measurement, then had its clamp() ceiling removed
+  entirely — both by decision (§3.5). **No ceiling** is deliberate: it keeps the
+  band-to-remaining-viewport ratio consistent on tall monitors, where a capped value
+  left dead space between the chip and the next section on load.
 - Single Gumlet-hosted loop: `muted playsInline loop autoPlay preload="auto"`, `aria-hidden="true"`, `object-fit: cover`.
 - **`object-position: bottom center`.** ✅ Confirmed behaviour: the band crops from
   the top as the viewport resizes, never from the bottom. The subject sits low in
@@ -1095,9 +1112,13 @@ Resolve these before or during Phase 0. Marked `CONFIRM` throughout the document
    2026-08-06.** Rethink Sans across every level, OFL via Google Fonts, loaded
    through `next/font/google`. No licence issue and no second face.
 4. ~~Video hero band height, and the exact container overlap distance~~ — ✅
-   **RESOLVED 2026-08-06** from the redlined artboard. Band is
-   `clamp(420px, 74vh, 800px)`; there is **no overlap** — a constant 120px gap
-   instead. Video anchors bottom-centre on resize. See §3.5.
+   **RESOLVED 2026-08-06** from the redlined artboard, then **revised twice more
+   same day**: first shrunk after the artboard value (800px/74vh) proved too tall
+   and pushed the hero text below the fold, then had its clamp() ceiling removed
+   entirely after cross-monitor testing showed a capped band left dead space below
+   the chip on tall screens. Band is now `max(300px, 48vh)` — no ceiling; there is
+   **no overlap** — a constant 120px gap instead. Video anchors bottom-centre on
+   resize. See §3.5.
 
 **Content** 5. Real captions for the eight experiments grid tiles. All currently `Untitled 3D experiments`. 6. Real footer social destinations — the mockup has `LinkedIn` three times. Is Behance/Dribbble current? 7. Which projects have `isPublic: false` and need anonymisation? The precious.studio pieces are presumably fine, but confirm per project. 8. The three featured card titles all read `Upgrading iTrvl responsive webapp…` — confirm the actual three hero projects map to Three.js Fractal Viewer / Endeavor / Lumin as planned.
 

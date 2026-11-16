@@ -1,17 +1,17 @@
 import type { MetadataRoute } from "next";
 
-import { getProjects } from "@/lib/content";
+import { getCaseStudies, SITE_URL } from "@/lib/content";
 
 /** ⚠️ Placeholder domain — replace before launch (matches layout.tsx). */
-const BASE_URL = "https://example.com";
+const BASE_URL = SITE_URL;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const projects = await getProjects();
+  const projects = await getCaseStudies();
 
   /* Only routes that actually exist. /about and /ai-workflow are in the
    * sitemap plan (§2.2) but are not built yet — listing them would advertise
    * 404s to crawlers. */
-  const staticRoutes = ["", "/work", "/work-with-me"].map((path) => ({
+  const staticRoutes = ["", "/work", "/about", "/work-with-me"].map((path) => ({
     url: `${BASE_URL}${path}`,
     lastModified: new Date(),
     changeFrequency: "monthly" as const,

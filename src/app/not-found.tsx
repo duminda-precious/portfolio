@@ -19,27 +19,23 @@ export default function NotFound() {
         <p className="type-label text-brand-500">404</p>
 
         <h1 className="type-h2 mt-(--spacing-4) max-w-[20ch] text-ink">
-          Placeholder 404 headline — real copy pending.
+          This page wandered off.
         </h1>
 
         <p className="type-body mt-(--spacing-6) max-w-[55ch] text-ink-muted">
-          Placeholder 404 body copy. This page does not exist, which is the one
-          thing we know for certain. Real wording pending (§13.16).
+          Maybe it moved, maybe it never existed. Either way, there's plenty to
+          look at back home.
         </p>
 
         <div className="mt-(--spacing-12) flex flex-wrap gap-(--spacing-8)">
           <Link
             href="/"
-            data-cursor="cta"
-            data-cursor-label="Back home"
             className="type-action inline-flex min-h-[44px] items-center text-brand-700 underline underline-offset-4"
           >
             Back to the homepage
           </Link>
           <Link
             href="/work"
-            data-cursor="cta"
-            data-cursor-label="Go to my work"
             className="type-action inline-flex min-h-[44px] items-center text-brand-700 underline underline-offset-4"
           >
             See the work instead

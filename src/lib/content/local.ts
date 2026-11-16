@@ -15,6 +15,7 @@ import { PROJECTS } from "../../../content/projects";
 import {
   NAV_ITEMS,
   SITE,
+  SITE_URL,
   SOCIAL_LINKS,
   type NavItem,
   type SocialLink,
@@ -24,10 +25,12 @@ import {
   ExperimentSchema,
   ProjectSchema,
   type Experiment,
+  isCaseStudy,
   type Project,
 } from "./schema";
 
 export type { Experiment, NavItem, Project, SocialLink };
+export { SITE_URL };
 
 /**
  * Validate once at module load. A schema violation throws here, which fails
@@ -85,9 +88,15 @@ export async function getExperiments(): Promise<Experiment[]> {
  * listing because someone forgot to check.
  */
 export async function getProjects(): Promise<Project[]> {
+  // Undated items (some videos) sort after dated ones.
   return VALIDATED_PROJECTS.filter((p) => p.isPublic).sort(
-    (a, b) => b.year - a.year,
+    (a, b) => (b.year ?? 0) - (a.year ?? 0),
   );
+}
+
+/** Projects that have a /work/[slug] page. */
+export async function getCaseStudies(): Promise<Project[]> {
+  return (await getProjects()).filter(isCaseStudy);
 }
 
 /** Homepage featured slots — eligible projects, in authored order. */
@@ -103,7 +112,7 @@ export async function getFeaturedProjects(limit = 3): Promise<Project[]> {
 }
 
 export async function getProject(slug: string): Promise<Project | undefined> {
-  const projects = await getProjects();
+  const projects = await getCaseStudies();
   return projects.find((p) => p.slug === slug);
 }
 
@@ -116,7 +125,7 @@ export async function getProject(slug: string): Promise<Project | undefined> {
 export async function getAdjacentProjects(
   slug: string,
 ): Promise<{ previous: Project | null; next: Project | null }> {
-  const projects = await getProjects();
+  const projects = await getCaseStudies();
   const index = projects.findIndex((p) => p.slug === slug);
 
   if (index === -1 || projects.length < 2) {

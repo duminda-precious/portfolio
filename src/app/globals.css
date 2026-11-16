@@ -102,6 +102,109 @@
     backdrop-filter: blur(12px) saturate(160%);
   }
 
+  /**
+   * Glass on the solid brand field (the About page).
+   *
+   * .glass is 80% white so ink stays readable over video. On a flat blue that
+   * reads as a pale solid card — there is no footage for the blur to frost.
+   * This one lets the field through, and uses the same lit edge as .glass-tint:
+   * a border, a top highlight, and a lift. The blur is stronger than .glass
+   * on purpose; it is not the shared 12px and does not have to move with it.
+   *
+   * The top of the sheen stays light enough for ink. Do not put ink-muted
+   * type on it — the field shows through the lower part of the gradient.
+   */
+  .glass-on-brand {
+    /* Sheen, not a flat tint: the field is one solid colour, so a single
+       alpha looks like a pale card. Light catches the top edge. */
+    background-color: rgb(255 255 255 / 0.42);
+    background-image: linear-gradient(
+      180deg,
+      rgb(255 255 255 / 0.78) 0%,
+      rgb(255 255 255 / 0.42) 22%,
+      rgb(255 255 255 / 0.42) 100%
+    );
+    border: 1px solid rgb(255 255 255 / 0.82);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 1),
+      inset 0 0 28px rgb(255 255 255 / 0.28);
+    /* drop-shadow follows the panel, including the story's bottom fade.
+       A box-shadow is clipped by overflow:hidden on that panel. */
+    filter: drop-shadow(0 16px 28px rgb(8 27 96 / 0.32));
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    backdrop-filter: blur(24px) saturate(180%);
+  }
+
+  /**
+   * Dark glass for the About player. The field is already brand blue, so the
+   * shift is only a few steps darker, top to bottom. A light rim keeps the
+   * edge. Cream type and the play control sit on it.
+   */
+  .glass-dark {
+    background-color: rgb(39 80 228);
+    background-image: linear-gradient(
+      180deg,
+      rgb(32 70 214) 0%,
+      rgb(39 80 228) 55%,
+      rgb(43 84 233) 100%
+    );
+    border: 1px solid rgb(255 255 255 / 0.2);
+    box-shadow: inset 0 1px 0 rgb(150 185 250 / 0.55);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    backdrop-filter: blur(16px) saturate(140%);
+  }
+
+  /**
+   * Tinted glass for every control on the WHITE container: chips, filter
+   * tabs, icon buttons. .glass is white-on-video and would vanish on paper, so this
+   * one is a faint ink tint with a lit top edge. Same blur as above.
+   */
+  .glass-tint {
+    background-color: rgb(31 31 31 / 0.06);
+    border: 1px solid rgb(31 31 31 / 0.08);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.9),
+      0 1px 2px rgb(0 0 0 / 0.06);
+    -webkit-backdrop-filter: blur(12px) saturate(160%); /* --blur-glass, --glass-saturate */
+    backdrop-filter: blur(12px) saturate(160%);
+  }
+
+  :is(button, a).glass-tint:hover:not(:disabled) {
+    background-color: rgb(46 87 239 / 0.14); /* brand-500 tint */
+  }
+
+  /**
+   * Brand glass — the SELECTED state of a glass control. brand-700 at 85%,
+   * so white text keeps AA contrast whatever sits behind it.
+   */
+  .glass-brand {
+    background-color: rgb(16 53 191 / 0.85);
+    border: 1px solid rgb(255 255 255 / 0.25);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.35),
+      0 1px 2px rgb(0 0 0 / 0.12);
+    -webkit-backdrop-filter: blur(12px) saturate(160%); /* --blur-glass, --glass-saturate */
+    backdrop-filter: blur(12px) saturate(160%);
+  }
+
+  /** Red glass: destructive or reset actions (e.g. Clear filters). Same
+   * recipe as .glass-brand (border, highlight, shadow, blur); only the fill
+   * colour differs. Keep the two in step. */
+  .glass-danger {
+    color: var(--color-paper);
+    background-color: rgb(196 41 28 / 0.85);
+    border: 1px solid rgb(255 255 255 / 0.25);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.35),
+      0 1px 2px rgb(0 0 0 / 0.12);
+    -webkit-backdrop-filter: blur(12px) saturate(160%); /* --blur-glass, --glass-saturate */
+    backdrop-filter: blur(12px) saturate(160%);
+  }
+
+  .glass-danger:hover:not(:disabled) {
+    background-color: rgb(196 41 28);
+  }
+
   @supports not (backdrop-filter: blur(1px)) {
     .glass,
     .glass-strong {
@@ -240,26 +343,27 @@
   /**
    * Optical top spacing for the hero h1.
    *
-   * Figma's 64px is measured to the cap height; CSS padding applies to the
-   * layout box, which sits higher by the half-leading plus the font's internal
-   * ascent gap. Padding it literally would render ~14px tighter than the design.
-   *
-   * Baseline: pad by 64px + --hero-cap-offset so the VISIBLE gap reads as 64px.
+   * CSS padding applies to the type's layout box, which sits above the visual
+   * cap height by roughly half the negative leading plus the font's internal
+   * ascent gap. --hero-cap-offset (tokens.css) is that small nudge, so the
+   * h1's CAP HEIGHT — not its layout box — is what visually sits at the top
+   * of the white container. No large top offset here by decision: the hero
+   * text + CTA must be visible on load without scrolling, so this is only
+   * ever a few px of optical correction, not page-level positioning.
    *
    * Progressive enhancement: where text-box-trim is supported (Chrome 133+,
-   * Safari 18.2+) we trim the box to the cap edge and use the literal 64px,
-   * which is exact rather than approximated. Browsers without it keep the
-   * fallback, which is close enough that no one will measure the difference.
+   * Safari 18.2+) we trim the box to the cap edge directly and skip the
+   * offset — exact rather than approximated.
    */
   .hero-optical-top {
-    padding-top: calc(64px + var(--hero-cap-offset));
+    padding-top: var(--hero-cap-offset);
   }
 
   @supports (text-box-trim: trim-start) {
     .hero-optical-top {
       text-box-trim: trim-start;
       text-box-edge: cap alphabetic;
-      padding-top: 64px;
+      padding-top: 48px;
     }
   }
 
@@ -309,6 +413,38 @@
  * JS, because GSAP writes inline styles that CSS cannot always override. This
  * block is the safety net, not the strategy.
  */
+/* Scroll cue on the homepage chip. The arrow travels down inside a fixed
+ * window so the pill doesn't grow. */
+.scroll-arrow {
+  display: grid;
+  width: 12px;
+  height: 16px;
+  overflow: hidden;
+  place-items: center;
+}
+
+.scroll-arrow svg {
+  animation: scroll-arrow 1.2s ease-in-out infinite;
+}
+
+@keyframes scroll-arrow {
+  0% {
+    transform: translateY(-6px);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  70% {
+    transform: translateY(4px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(8px);
+    opacity: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -321,5 +457,12 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  /* The loop ends faded out. Hold a still arrow instead. */
+  .scroll-arrow svg {
+    animation: none;
+    opacity: 1;
+    transform: none;
   }
 }

@@ -14,6 +14,18 @@ const nextConfig: NextConfig = {
         hostname: "images.unsplash.com",
         pathname: "/**",
       },
+      /** YouTube thumbnails for the experiments grid's video tiles. */
+      {
+        protocol: "https",
+        hostname: "i.ytimg.com",
+        pathname: "/vi/**",
+      },
+      /** Lumin case study stills, hot-linked until local copies land. */
+      {
+        protocol: "https",
+        hostname: "precious.studio",
+        pathname: "/media/portfolio/**",
+      },
     ],
     /** AVIF first, WebP fallback — both well under the JPEG weight. */
     formats: ["image/avif", "image/webp"],

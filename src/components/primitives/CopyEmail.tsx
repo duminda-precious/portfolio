@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+import { cn } from "@/lib/utils/cn";
+
 /**
  * The big contact email: a mailto link, plus a copy-to-clipboard button that
  * appears on hover.
@@ -10,7 +12,16 @@ import { useState } from "react";
  * order — keyboard focus reveals it, and touch devices (no hover) always show
  * it. Otherwise the copy action would exist for mouse users only.
  */
-export function CopyEmail({ email }: { email: string }) {
+export function CopyEmail({
+  email,
+  onBrand = false,
+  className,
+}: {
+  email: string;
+  /** Sits on the solid blue band: cream type, glass made for blue. */
+  onBrand?: boolean;
+  className?: string;
+}) {
   const [copied, setCopied] = useState(false);
 
   const copy = async () => {
@@ -25,11 +36,19 @@ export function CopyEmail({ email }: { email: string }) {
   };
 
   return (
-    <div className="group mt-(--spacing-8) flex flex-wrap items-center gap-(--spacing-4)">
+    <div
+      className={cn(
+        "group mt-(--spacing-8) flex flex-wrap items-center gap-(--spacing-4)",
+        className,
+      )}
+    >
       {/* No data-cursor — a large underlined link is its own CTA. */}
       <a
         href={`mailto:${email}`}
-        className="type-h4 inline-flex min-h-[44px] items-center text-brand-700 underline underline-offset-8"
+        className={cn(
+          "type-h4 inline-flex min-h-[44px] items-center underline underline-offset-8 [overflow-wrap:anywhere]",
+          onBrand ? "text-cream" : "text-brand-700",
+        )}
       >
         {email}
       </a>
@@ -38,7 +57,10 @@ export function CopyEmail({ email }: { email: string }) {
         type="button"
         onClick={copy}
         aria-label={copied ? "Email copied" : "Copy email address"}
-        className="glass-tint flex h-[44px] w-[44px] items-center justify-center rounded-(--radius-pill) text-ink opacity-0 transition-opacity duration-(--duration-fast) group-hover:opacity-100 focus-visible:opacity-100 [@media(hover:none)]:opacity-100"
+        className={cn(
+          "flex h-[44px] w-[44px] items-center justify-center rounded-(--radius-pill) opacity-0 transition-opacity duration-(--duration-fast) group-hover:opacity-100 focus-visible:opacity-100 [@media(hover:none)]:opacity-100",
+          onBrand ? "glass-on-brand text-ink" : "glass-tint text-ink",
+        )}
       >
         <svg
           aria-hidden="true"

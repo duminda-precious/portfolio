@@ -37,10 +37,8 @@ export default async function HomePage() {
 
       <Container as="main" paper belowHero className="pb-(--space-section)">
         <div id="main" className="hero-optical-top">
-          {/* Forced two-line break after "Crafting" — natural wrapping won't
-           * reliably land here once the viewport changes. */}
           <h1 className="type-h1 text-ink">
-            Hey! I&apos;m Duminda. Crafting Experiences That Move{" "}
+            Hey, I&apos;m Duminda. I design things, then I make them move.{" "}
             <span className="text-brand-500">Literally.</span>
           </h1>
 
@@ -62,7 +60,7 @@ export default async function HomePage() {
                 />
               </svg>
             </span>
-            Scroll for my work
+            The work&apos;s down here
           </Chip>
 
           {/* Featured work — never hardcoded, always from the content layer. */}

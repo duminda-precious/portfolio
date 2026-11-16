@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { Footer } from "@/components/layout/Footer";
 import { InteractiveEmbed } from "@/components/media/InteractiveEmbed";
 import { Media } from "@/components/media/Media";
+import { ButtonLink } from "@/components/primitives/ButtonLink";
 import { Container } from "@/components/primitives/Container";
 import { Eyebrow } from "@/components/primitives/Eyebrow";
 import { BodyBlocks } from "@/components/sections/BodyBlocks";
@@ -113,6 +114,16 @@ export default async function CaseStudyPage({
             <BodyBlocks blocks={project.body} />
           </div>
 
+          {/* Every study ends on the same ask the footer makes, said louder. */}
+          <aside className="mt-(--space-section) flex flex-col items-start gap-(--spacing-6) rounded-(--radius-sm) bg-surface p-(--spacing-8) md:flex-row md:items-center md:justify-between md:p-(--spacing-12)">
+            <p className="type-h4 max-w-[20ch] text-ink">
+              Got something like this on your plate?
+            </p>
+            <ButtonLink href="/work-with-me" className="shrink-0">
+              Work with me <span aria-hidden="true">→</span>
+            </ButtonLink>
+          </aside>
+
           {/* Next/prev wraps at both ends, so the reader is never dead-ended. */}
           {previous || next ? (
             <nav
@@ -129,7 +140,7 @@ export default async function CaseStudyPage({
                       className="group block"
                     >
                       <span className="type-caption text-ink-muted">
-                        Previous
+                        The one before
                       </span>
                       <span className="type-title mt-(--spacing-1) block max-w-[40ch] text-ink group-hover:text-brand-700">
                         {previous.title}
@@ -145,7 +156,9 @@ export default async function CaseStudyPage({
                       data-cursor-label="View case study"
                       className="group block"
                     >
-                      <span className="type-caption text-ink-muted">Next</span>
+                      <span className="type-caption text-ink-muted">
+                        Up next
+                      </span>
                       <span className="type-title mt-(--spacing-1) block max-w-[40ch] text-ink group-hover:text-brand-700">
                         {next.title}
                       </span>

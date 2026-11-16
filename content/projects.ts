@@ -23,7 +23,8 @@ export const PROJECTS: Project[] = [
   // ---------------------------------------------------------------------
   {
     // Real copy (2026-11-15) from the "Fractal Viewer case study draft" doc.
-    // Copy is final as written there: do not add to or reword it.
+    // The prose is final as written there: do not reword it. The brief
+    // (2026-11-16) is a restatement of that prose, with no new facts.
     // ⚠️ Credited to Precious Studio only. Never name the end client.
     slug: "threejs-fractal-viewer",
     title:
@@ -50,6 +51,25 @@ export const PROJECTS: Project[] = [
     tools: ["Three.js", "GLSL", "lil-gui", "Vite", "Claude Code", "Antigravity"],
     isPublic: true,
     body: [
+      // Short on purpose: the viewer is the case study. The brief only says
+      // what it is and how it got built, in words already in the copy below.
+      {
+        kind: "brief",
+        items: [
+          {
+            label: "What it is",
+            text: "A proof of concept. Real-time 3D fractals, drawn in the browser, smooth enough to build on.",
+          },
+          {
+            label: "How it got built",
+            text: "One week. I did the research and the directing. Claude Code and Antigravity wrote every line of code.",
+          },
+          {
+            label: "Where it landed",
+            text: "Four shapes you can spin, zoom and pull apart. Sent for approval, and got an immediate yes.",
+          },
+        ],
+      },
       {
         kind: "prose",
         paragraphs: [
@@ -71,8 +91,9 @@ export const PROJECTS: Project[] = [
     ],
   },
   {
-    // Real copy (2026-11-15) from the "Endeavor case study draft" doc. Copy is
-    // final as written there: do not add to or reword it.
+    // Real copy (2026-11-15) from the "Endeavor case study draft" doc. The prose
+    // is final as written there: do not reword it. The brief, compare and
+    // takeaways blocks (2026-11-16) restate that prose and add no new facts.
     slug: "endeavor-design-system",
     title: "90+ brands, one design system, and a CMS that made the rules.",
     client: "Endeavor Business Media",
@@ -98,6 +119,23 @@ export const PROJECTS: Project[] = [
     tools: ["Figma", "Figma variables"],
     isPublic: true,
     body: [
+      {
+        kind: "brief",
+        items: [
+          {
+            label: "The problem",
+            text: "One CMS carrying 100+ components that had nothing to do with each other, and three teams who all wanted the same page space.",
+          },
+          {
+            label: "The opportunity",
+            text: "One system every brand builds from, shaped around the spots where the CMS can actually bend.",
+          },
+          {
+            label: "The result",
+            text: "About 40% less design debt. All 90+ brands build from the same set now, and they're still adding to it.",
+          },
+        ],
+      },
       {
         kind: "lead",
         text: "Endeavor Business Media has 90+ brands, and no two of their sites quite matched. My job was to fix that without breaking the CMS they all run on.",
@@ -192,17 +230,55 @@ export const PROJECTS: Project[] = [
         },
       },
       {
+        kind: "compare",
+        before: {
+          label: "How it was",
+          points: [
+            "100+ components that had nothing to do with each other",
+            "No two brand sites quite matched",
+            "Three teams pulling at the same page space",
+          ],
+        },
+        after: {
+          label: "How it is",
+          points: [
+            "One atomic system, small pieces first",
+            "All 90+ brands build from the same set",
+            "Change the foundation and it updates everywhere",
+          ],
+        },
+      },
+      {
         kind: "section",
         heading: "How it landed",
         paragraphs: [
           "About 40% less design debt. That came from cutting components and variations, simplifying the tokens and combining states into fewer blocks. All 90+ brands build from the same set now. The client is happy, I'm happy, and they're still adding to it.",
         ],
       },
+      {
+        kind: "takeaways",
+        heading: "What I'm keeping",
+        items: [
+          {
+            title: "Agree the method before you draw.",
+            text: "Atomic design was settled before a single screen. That early call is why the system scaled.",
+          },
+          {
+            title: "Find the person who knows where it bends.",
+            text: "The PM's developer background told us exactly where the CMS had room. We built around those spots.",
+          },
+          {
+            title: "Fewer pieces beat cleverer pieces.",
+            text: "The debt came down by cutting components, simplifying tokens and combining states. Nothing fancy.",
+          },
+        ],
+      },
     ],
   },
   {
-    // Real copy (2026-11-15) from the "Lumin case study draft" doc. Copy is
-    // final as written there: do not add to or reword it. Media is hot-linked
+    // Real copy (2026-11-15) from the "Lumin case study draft" doc. The prose is
+    // final as written there: do not reword it. The brief, compare and
+    // takeaways blocks (2026-11-16) restate it and add no new facts. Media is hot-linked
     // from the Precious Studio Lumin page until local copies land.
     slug: "lumin-fitness-motion",
     title: "Making a fitness app feel like the studio it belongs to.",
@@ -227,6 +303,23 @@ export const PROJECTS: Project[] = [
     tools: ["Rive", "Blender", "Figma"],
     isPublic: true,
     body: [
+      {
+        kind: "brief",
+        items: [
+          {
+            label: "The problem",
+            text: "The studio has wall-sized interactive screens, AI coaching and motion tracking. The app gave you nothing back when you tapped.",
+          },
+          {
+            label: "The opportunity",
+            text: "Make the phone move the way the studio does, without anyone on Lumin's side writing animation code.",
+          },
+          {
+            label: "The result",
+            text: "Assets about 10x smaller, zero animation code from Lumin's developers, and rewards that feel like rewards.",
+          },
+        ],
+      },
       {
         kind: "lead",
         text: "Lumin's studios are the fun part: a big interactive screen in front of every machine, AI coaching, motion tracking. Then you opened the app and it just sat there. My job was to make the phone feel like the same place.",
@@ -387,10 +480,47 @@ export const PROJECTS: Project[] = [
         },
       },
       {
+        kind: "compare",
+        before: {
+          label: "How it was",
+          points: [
+            "Tap something, get nothing back",
+            "An app a tier behind the studio it belongs to",
+            "A 60 KB Lottie bundle",
+          ],
+        },
+        after: {
+          label: "How it is",
+          points: [
+            "Motion confirms what you did and shows what changed",
+            "Every transition judged against the studio screens",
+            "One 5 KB Rive file. Trigger a state and it plays",
+          ],
+        },
+      },
+      {
         kind: "section",
         heading: "How it landed",
         paragraphs: [
           "Assets came out about 10x smaller: a 60 KB Lottie bundle became one 5 KB Rive file. Lumin's developers wrote zero animation code. Their designers owned the UI decisions, we went back and forth on them, and the motion was ours end to end.",
+        ],
+      },
+      {
+        kind: "takeaways",
+        heading: "What I'm keeping",
+        items: [
+          {
+            title: "Design for the room, not the device.",
+            text: "People walk from a wall-sized screen to a pocket-sized one. The phone had to be judged against the wall.",
+          },
+          {
+            title: "Put the logic inside the file.",
+            text: "State machines in Rive meant developers trigger a state and it plays. No animation code to maintain.",
+          },
+          {
+            title: "A reward has to feel like one.",
+            text: "Gamification only works if the payoff feels good. That's why the unlocks got liquid and reflections in Blender.",
+          },
         ],
       },
     ],
@@ -437,6 +567,23 @@ export const PROJECTS: Project[] = [
         },
         fullWidth: true,
         solo: true,
+      },
+      {
+        kind: "brief",
+        items: [
+          {
+            label: "The problem",
+            text: "Sales, operations and guest services know the guests best, and none of them open Figma. A deck would have left everyone imagining the app.",
+          },
+          {
+            label: "The opportunity",
+            text: "We already knew how it should look and behave. So build it first, and let a week of real testing decide what stays.",
+          },
+          {
+            label: "The result",
+            text: "A working prototype on day one, tested and settled in seven, and a design system made only from what survived.",
+          },
+        ],
       },
       {
         kind: "lead",
@@ -603,6 +750,24 @@ export const PROJECTS: Project[] = [
         },
         fullWidth: true,
         solo: true,
+      },
+      {
+        kind: "takeaways",
+        heading: "What I'm keeping",
+        items: [
+          {
+            title: "A real thing makes every conversation shorter.",
+            text: "Nobody had to imagine the app any more. They just used it and told us what was wrong.",
+          },
+          {
+            title: "Send a link, not a deck.",
+            text: "Everyone tested on their own phone like a real trip. Their notes became the backlog.",
+          },
+          {
+            title: "Systemise last.",
+            text: "Only what survived testing became a component, so nothing in the system is there on a hunch.",
+          },
+        ],
       },
     ],
   },

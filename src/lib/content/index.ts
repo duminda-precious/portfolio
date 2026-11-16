@@ -9,6 +9,7 @@ export {
   getAdjacentProjects,
   getAllTags,
   getCaseStudies,
+  getCv,
   SITE_URL,
   getExperiments,
   getFeaturedProjects,

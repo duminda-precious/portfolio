@@ -27,8 +27,8 @@ export default async function WorkPage() {
       <Container as="main" paper className="pb-(--space-section)">
         <div id="main">
           <PageHeader
-            title="My work"
-            standfirst="Case studies, videos and the odd experiment. Filter by what you're into, or just scroll."
+            title="Things I made on purpose."
+            standfirst="Case studies, videos and the odd proof of concept. Filter by what you're into, or just scroll."
           />
 
           <WorkFilter projects={projects} allTags={allTags} />

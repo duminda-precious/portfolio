@@ -44,7 +44,12 @@ export const DISCIPLINE_LABELS: Record<(typeof DISCIPLINES)[number], string> = {
  * if MDX arrives later (§5).
  */
 export const BodyBlockSchema = z.discriminatedUnion("kind", [
-  z.object({ kind: z.literal("lead"), text: z.string() }),
+  /** Special text: an optional small label over a large statement. */
+  z.object({
+    kind: z.literal("lead"),
+    label: z.string().optional(),
+    text: z.string(),
+  }),
   /** Plain body paragraphs with no heading. */
   z.object({
     kind: z.literal("prose"),

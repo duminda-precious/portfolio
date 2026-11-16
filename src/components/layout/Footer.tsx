@@ -1,6 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars -- kept for the disabled CursorToggle block below, see the comment there
 import { CursorToggle } from "@/components/cursor/CursorToggle";
-import Link from "next/link";
 
 import { Container } from "@/components/primitives/Container";
 import { getSite, getSocialLinks } from "@/lib/content";
@@ -24,15 +23,7 @@ export async function Footer() {
      * comes from Container's --container-pad, already 16px. */
     <Container as="footer" className="pt-(--spacing-16) pb-(--spacing-4)">
       <p className="type-h4 text-ink">
-        {site.copyright(new Date().getFullYear())}{" "}
-        {/* Inline CTA closing the statement. brand-700, not brand-500 — see
-         * the AA note above (700 is the AA-safe blue on grey). Arrow is decorative; the link text says it all. */}
-        <Link
-          href="/work-with-me"
-          className="glass inline-block whitespace-nowrap rounded-(--radius-pill) border border-(--color-glass-border) px-[0.5em] text-brand-700 shadow-[inset_0_1px_0_rgb(255_255_255/0.9),0_1px_2px_rgb(0_0_0/0.06)] transition-colors duration-(--duration-fast) hover:bg-paper"
-        >
-          Work with me <span aria-hidden="true">→</span>
-        </Link>
+        {site.copyright(new Date().getFullYear())}
       </p>
 
       {/* 32px to the social row, per redline. */}

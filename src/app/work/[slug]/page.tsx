@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { Footer } from "@/components/layout/Footer";
@@ -8,7 +7,9 @@ import { Media } from "@/components/media/Media";
 import { ButtonLink } from "@/components/primitives/ButtonLink";
 import { Container } from "@/components/primitives/Container";
 import { Eyebrow } from "@/components/primitives/Eyebrow";
+import { SectionHeading } from "@/components/primitives/SectionHeading";
 import { BodyBlocks } from "@/components/sections/BodyBlocks";
+import { FeaturedCard } from "@/components/sections/FeaturedCard";
 import {
   DISCIPLINE_LABELS,
   getAdjacentProjects,
@@ -65,6 +66,11 @@ export default async function CaseStudyPage({
   if (!project) notFound();
 
   const { previous, next } = await getAdjacentProjects(slug);
+  // Deduped: with only two studies, previous and next are the same one.
+  const others = [previous, next].filter(
+    (p, i, all): p is NonNullable<typeof p> =>
+      p !== null && all.findIndex((q) => q?.slug === p.slug) === i,
+  );
 
   const facts = [
     project.client ? { label: "Client", value: project.client } : null,
@@ -77,7 +83,7 @@ export default async function CaseStudyPage({
 
   return (
     <>
-      <Container as="main" paper className="pb-(--space-section)">
+      <Container as="main" paper className="pb-(--container-pad)">
         <div id="main">
           <div>
             {/* Cover is the LCP candidate on this route. It starts at the
@@ -91,10 +97,10 @@ export default async function CaseStudyPage({
 
           <header className="mt-(--space-section)">
             <Eyebrow tags={project.tags} />
-            <h1 className="type-h2 mt-(--spacing-4) text-ink">
+            <h1 className="type-h2 mt-(--spacing-4) text-pretty text-ink">
               {project.title}
             </h1>
-            <p className="type-body mt-(--spacing-6) max-w-[55ch] text-ink-muted">
+            <p className="type-body mt-(--spacing-6) text-pretty text-ink-muted">
               {project.summary}
             </p>
 
@@ -115,58 +121,40 @@ export default async function CaseStudyPage({
           </div>
 
           {/* Every study ends on the same ask the footer makes, said louder. */}
-          <aside className="mt-(--space-section) flex flex-col items-start gap-(--spacing-6) rounded-(--radius-sm) bg-surface p-(--spacing-8) md:flex-row md:items-center md:justify-between md:p-(--spacing-12)">
-            <p className="type-h4 max-w-[20ch] text-ink">
+          <aside
+            className="mt-(--space-section) flex flex-col items-start gap-(--spacing-6) rounded-(--radius-sm) bg-brand-500 p-(--spacing-4) text-cream md:flex-row md:items-center md:justify-between [&_:focus-visible]:outline-(--color-cream)"
+          >
+            <p className="type-h4 max-w-[20ch]">
               Got something like this on your plate?
             </p>
-            <ButtonLink href="/work-with-me" className="shrink-0">
+            <ButtonLink
+              href="/work-with-me"
+              variant="glass"
+              className="shrink-0"
+            >
               Work with me <span aria-hidden="true">→</span>
             </ButtonLink>
           </aside>
 
-          {/* Next/prev wraps at both ends, so the reader is never dead-ended. */}
-          {previous || next ? (
-            <nav
-              aria-label="More work"
-              className="mt-(--space-section) border-t border-hairline pt-(--spacing-8)"
+          {/* Two more studies, last on the page. Same card as the homepage.
+           * previous/next wrap at both ends, so the reader is never
+           * dead-ended. */}
+          {others.length > 0 ? (
+            <section
+              className="mt-(--space-section)"
+              aria-labelledby="other-studies-heading"
             >
-              <ul className="flex flex-col gap-(--spacing-8) sm:flex-row sm:justify-between">
-                {previous ? (
-                  <li>
-                    <Link
-                      href={`/work/${previous.slug}`}
-                      data-cursor="cta"
-                      data-cursor-label="View case study"
-                      className="group block"
-                    >
-                      <span className="type-caption text-ink-muted">
-                        The one before
-                      </span>
-                      <span className="type-title mt-(--spacing-1) block max-w-[40ch] text-ink group-hover:text-brand-700">
-                        {previous.title}
-                      </span>
-                    </Link>
+              <SectionHeading id="other-studies-heading">
+                Other case studies
+              </SectionHeading>
+              <ul className="mt-(--spacing-8) grid grid-cols-1 gap-(--spacing-8) md:grid-cols-2 md:gap-(--spacing-4)">
+                {others.map((other) => (
+                  <li key={other.slug}>
+                    <FeaturedCard project={other} />
                   </li>
-                ) : null}
-                {next ? (
-                  <li className="sm:text-right">
-                    <Link
-                      href={`/work/${next.slug}`}
-                      data-cursor="cta"
-                      data-cursor-label="View case study"
-                      className="group block"
-                    >
-                      <span className="type-caption text-ink-muted">
-                        Up next
-                      </span>
-                      <span className="type-title mt-(--spacing-1) block max-w-[40ch] text-ink group-hover:text-brand-700">
-                        {next.title}
-                      </span>
-                    </Link>
-                  </li>
-                ) : null}
+                ))}
               </ul>
-            </nav>
+            </section>
           ) : null}
         </div>
       </Container>

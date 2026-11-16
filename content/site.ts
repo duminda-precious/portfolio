@@ -95,16 +95,14 @@ export type CvRole = {
 
 /**
  * The CV, as read on Work with me. Every line is from
- * public/cv/duminda-madushan-cv.pdf: update the two together.
+ * public/cv/duminda-madushan-resume.pdf: update the two together.
  */
 export const CV = {
   name: "Duminda Madushan",
   title: "Visual designer",
   summary:
     "10+ years across interaction design, motion graphics and 3D animation. I lead teams, and I can take a project from concept to delivery.",
-  pdf: "/cv/duminda-madushan-cv.pdf",
-  docx: "/cv/duminda-madushan-cv.docx",
-  docxName: "Duminda Madushan - CV.docx",
+  pdf: "/cv/duminda-madushan-resume.pdf",
   roles: [
     {
       title: "Head of Motion Design",

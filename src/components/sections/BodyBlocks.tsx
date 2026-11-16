@@ -1,7 +1,6 @@
 import { InteractiveEmbed } from "@/components/media/InteractiveEmbed";
 import { Media } from "@/components/media/Media";
 import { Caption } from "@/components/primitives/Caption";
-import { SectionHeading } from "@/components/primitives/SectionHeading";
 import type { BodyBlock } from "@/lib/content";
 
 /**
@@ -52,25 +51,58 @@ function groupBlocks(blocks: BodyBlock[]): Group[] {
   return groups;
 }
 
+/** Stacked paragraphs in the ~20px case study text style. */
+function Paragraphs({ paragraphs }: { paragraphs: string[] }) {
+  return (
+    <div data-cursor="text" className="space-y-(--spacing-6)">
+      {paragraphs.map((paragraph, i) => (
+        <p key={i} className="type-section-text text-pretty text-ink">
+          {paragraph}
+        </p>
+      ))}
+    </div>
+  );
+}
+
 function SectionText({ block }: { block: SectionBlock }) {
   return (
-    /* Heading left, copy right from lg: the headings line up down the
-     * page, so the story can be skimmed by reading that one column. */
-    <section className="grid grid-cols-1 gap-(--spacing-6) lg:grid-cols-12 lg:gap-(--spacing-8)">
-      {/* h2: the case study title is the h1 and the block heading sits
-       * under it. Levels must never skip (§11). */}
-      <SectionHeading className="lg:col-span-5">{block.heading}</SectionHeading>
-      <div
-        data-cursor="text"
-        className="space-y-(--spacing-6) lg:col-span-7"
-      >
-        {block.paragraphs.map((paragraph, i) => (
-          <p key={i} className="type-body-sm max-w-[65ch] text-ink">
-            {paragraph}
-          </p>
-        ))}
+    /* Title on top, text underneath. No separators: the size step and the
+     * gap carry the hierarchy. h2: the case study title is the h1 and the
+     * block heading sits under it. Levels must never skip (§11). */
+    <section>
+      <h2 className="type-section-title text-ink">{block.heading}</h2>
+      <div className="mt-(--spacing-4)">
+        <Paragraphs paragraphs={block.paragraphs} />
       </div>
     </section>
+  );
+}
+
+/**
+ * A filled card: blue title on top, text underneath. Brief items and
+ * takeaways stack these vertically, like a project plan.
+ */
+function Card({
+  title,
+  text,
+  as: Heading = "h3",
+}: {
+  title: string;
+  text: string;
+  as?: "h2" | "h3";
+}) {
+  return (
+    <div
+      data-cursor="text"
+      className="rounded-(--radius-sm) bg-surface p-(--spacing-6) md:p-(--spacing-8)"
+    >
+      <Heading className="type-section-title text-pretty text-brand-700">
+        {title}
+      </Heading>
+      <p className="type-section-text mt-(--spacing-4) text-pretty text-ink">
+        {text}
+      </p>
+    </div>
   );
 }
 
@@ -164,35 +196,26 @@ export function BodyBlocks({ blocks }: { blocks: BodyBlock[] }) {
         switch (block.kind) {
           case "lead":
             return (
-              /* data-cursor="text" shrinks the dot to a caret-like bar over
-               * readable prose (§8.3), signalling that this is selectable
-               * text rather than something to click. */
-              <p
-                key={index}
-                data-cursor="text"
-                className="type-title max-w-[55ch] text-ink"
-              >
-                {block.text}
-              </p>
+              /* Special text: an optional ~20px label over a ~40px statement.
+               * data-cursor="text" shrinks the dot to a caret-like bar over
+               * readable prose (§8.3). */
+              <div key={index} data-cursor="text">
+                {block.label ? (
+                  <p className="type-section-text mb-(--spacing-3) text-ink">
+                    {block.label}
+                  </p>
+                ) : null}
+                <p className="type-statement text-pretty text-ink">
+                  {block.text}
+                </p>
+              </div>
             );
 
           case "section":
             return <SectionText key={index} block={block} />;
 
           case "prose":
-            return (
-              <div
-                key={index}
-                data-cursor="text"
-                className="space-y-(--spacing-6)"
-              >
-                {block.paragraphs.map((paragraph, i) => (
-                  <p key={i} className="type-body-sm max-w-[65ch] text-ink">
-                    {paragraph}
-                  </p>
-                ))}
-              </div>
-            );
+            return <Paragraphs key={index} paragraphs={block.paragraphs} />;
 
           case "gallery":
             return <Gallery key={index} items={block.items} />;
@@ -203,8 +226,8 @@ export function BodyBlocks({ blocks }: { blocks: BodyBlock[] }) {
 
           case "pullquote":
             return (
-              <figure key={index} className="max-w-[45ch]">
-                <blockquote className="type-h4 text-brand-700">
+              <figure key={index} data-cursor="text">
+                <blockquote className="type-statement text-pretty text-brand-700">
                   {block.text}
                 </blockquote>
                 {block.attribution ? (
@@ -222,24 +245,15 @@ export function BodyBlocks({ blocks }: { blocks: BodyBlock[] }) {
               <section
                 key={index}
                 aria-label="At a glance"
-                className="grid grid-cols-1 gap-px overflow-hidden rounded-(--radius-sm) border border-hairline bg-hairline md:grid-cols-(--cols)"
-                style={
-                  {
-                    "--cols": `repeat(${Math.min(block.items.length, 3)}, minmax(0, 1fr))`,
-                  } as React.CSSProperties
-                }
+                className="space-y-(--spacing-4)"
               >
                 {block.items.map((item) => (
-                  <div
+                  <Card
                     key={item.label}
-                    data-cursor="text"
-                    className="bg-surface p-(--spacing-6) md:p-(--spacing-8)"
-                  >
-                    <h2 className="type-label text-brand-700">{item.label}</h2>
-                    <p className="type-body-sm mt-(--spacing-3) text-ink">
-                      {item.text}
-                    </p>
-                  </div>
+                    as="h2"
+                    title={item.label}
+                    text={item.text}
+                  />
                 ))}
               </section>
             );
@@ -261,22 +275,13 @@ export function BodyBlocks({ blocks }: { blocks: BodyBlock[] }) {
                     className={
                       isAfter
                         ? "rounded-(--radius-sm) bg-brand-700 p-(--spacing-6) text-paper md:p-(--spacing-8)"
-                        : "rounded-(--radius-sm) border border-hairline bg-surface p-(--spacing-6) text-ink md:p-(--spacing-8)"
+                        : "rounded-(--radius-sm) bg-surface p-(--spacing-6) text-ink md:p-(--spacing-8)"
                     }
                   >
-                    <h2 className="type-title">{side.label}</h2>
-                    <ul className="type-body-sm mt-(--spacing-6) space-y-(--spacing-3)">
+                    <h2 className="type-section-title">{side.label}</h2>
+                    <ul className="type-section-text mt-(--spacing-4) space-y-(--spacing-3)">
                       {side.points.map((point) => (
-                        <li
-                          key={point}
-                          className={
-                            isAfter
-                              ? "border-t border-paper/25 pt-(--spacing-3)"
-                              : "border-t border-hairline pt-(--spacing-3)"
-                          }
-                        >
-                          {point}
-                        </li>
+                        <li key={point}>{point}</li>
                       ))}
                     </ul>
                   </div>
@@ -286,31 +291,12 @@ export function BodyBlocks({ blocks }: { blocks: BodyBlock[] }) {
 
           case "takeaways":
             return (
-              <section
-                key={index}
-                className="grid grid-cols-1 gap-(--spacing-6) lg:grid-cols-12 lg:gap-(--spacing-8)"
-              >
-                <SectionHeading className="lg:col-span-5">
-                  {block.heading}
-                </SectionHeading>
-                <ol data-cursor="text" className="lg:col-span-7">
+              <section key={index}>
+                <h2 className="type-section-title text-ink">{block.heading}</h2>
+                <ol className="mt-(--spacing-4) space-y-(--spacing-4)">
                   {block.items.map((item, i) => (
-                    <li
-                      key={item.title}
-                      className="flex gap-(--spacing-6) border-t border-hairline py-(--spacing-6)"
-                    >
-                      <span
-                        aria-hidden="true"
-                        className="type-label w-(--spacing-6) shrink-0 pt-[0.35em] text-brand-700"
-                      >
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                      <div>
-                        <h3 className="type-title text-ink">{item.title}</h3>
-                        <p className="type-body-sm mt-(--spacing-2) max-w-[55ch] text-ink-muted">
-                          {item.text}
-                        </p>
-                      </div>
+                    <li key={item.title}>
+                      <Card title={`${i + 1}. ${item.title}`} text={item.text} />
                     </li>
                   ))}
                 </ol>
@@ -319,18 +305,17 @@ export function BodyBlocks({ blocks }: { blocks: BodyBlock[] }) {
 
           case "stats":
             return (
+              /* Same label-over-value shape as special text, smaller. */
               <dl
                 key={index}
-                className="grid grid-cols-1 gap-(--spacing-8) border-t border-hairline pt-(--spacing-8) sm:grid-cols-3"
+                className="grid grid-cols-1 gap-(--spacing-8) sm:grid-cols-3"
               >
                 {block.items.map((item) => (
-                  <div key={item.label}>
-                    <dt className="type-caption text-ink-muted">
+                  <div key={item.label} className="flex flex-col-reverse">
+                    <dd className="type-statement text-ink">{item.value}</dd>
+                    <dt className="type-section-text mb-(--spacing-2) text-ink-muted">
                       {item.label}
                     </dt>
-                    <dd className="type-title mt-(--spacing-2) text-ink">
-                      {item.value}
-                    </dd>
                   </div>
                 ))}
               </dl>

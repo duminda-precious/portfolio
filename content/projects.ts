@@ -51,8 +51,15 @@ export const PROJECTS: Project[] = [
     tools: ["Three.js", "GLSL", "lil-gui", "Vite", "Claude Code", "Antigravity"],
     isPublic: true,
     body: [
+      {
+        kind: "prose",
+        paragraphs: [
+          "It started with a simple question: can a browser draw 3D fractals smoothly enough to be worth building on? I had a week. Most of it went on homework, because before anything could be built I had to understand how fractals actually get made: the different types, how they grow out of a few rules, and how to get Three.js to draw them so they look right.",
+          "Then I handed the building to AI. Every line of code and every bit of the interface came out of Claude Code and Antigravity. I pointed and they typed. By the end of the week there were four shapes you could spin, zoom and pull apart, and it stayed smooth by dropping detail while you move and sharpening when you stop. I sent it off for approval and got an immediate yes. The real models are proprietary, so this one is the concept test. Go on, play with it.",
+        ],
+      },
       // Short on purpose: the viewer is the case study. The brief only says
-      // what it is and how it got built, in words already in the copy below.
+      // what it is and how it got built, in words already in the copy above.
       {
         kind: "brief",
         items: [
@@ -68,13 +75,6 @@ export const PROJECTS: Project[] = [
             label: "Where it landed",
             text: "Four shapes you can spin, zoom and pull apart. Sent for approval, and got an immediate yes.",
           },
-        ],
-      },
-      {
-        kind: "prose",
-        paragraphs: [
-          "It started with a simple question: can a browser draw 3D fractals smoothly enough to be worth building on? I had a week. Most of it went on homework, because before anything could be built I had to understand how fractals actually get made: the different types, how they grow out of a few rules, and how to get Three.js to draw them so they look right.",
-          "Then I handed the building to AI. Every line of code and every bit of the interface came out of Claude Code and Antigravity. I pointed and they typed. By the end of the week there were four shapes you could spin, zoom and pull apart, and it stayed smooth by dropping detail while you move and sharpening when you stop. I sent it off for approval and got an immediate yes. The real models are proprietary, so this one is the concept test. Go on, play with it.",
         ],
       },
       {
@@ -95,7 +95,8 @@ export const PROJECTS: Project[] = [
     // is final as written there: do not reword it. The brief, compare and
     // takeaways blocks (2026-11-16) restate that prose and add no new facts.
     slug: "endeavor-design-system",
-    title: "90+ brands, one design system, and a CMS that made the rules.",
+    title:
+      "90+ brands, 100+ mismatched components, and one design system built around the CMS.",
     client: "Endeavor Business Media",
     year: 2024,
     tier: 1,
@@ -120,6 +121,10 @@ export const PROJECTS: Project[] = [
     isPublic: true,
     body: [
       {
+        kind: "lead",
+        text: "Endeavor Business Media has 90+ brands, and no two of their sites quite matched. My job was to fix that without breaking the CMS they all run on.",
+      },
+      {
         kind: "brief",
         items: [
           {
@@ -135,10 +140,6 @@ export const PROJECTS: Project[] = [
             text: "About 40% less design debt. All 90+ brands build from the same set now, and they're still adding to it.",
           },
         ],
-      },
-      {
-        kind: "lead",
-        text: "Endeavor Business Media has 90+ brands, and no two of their sites quite matched. My job was to fix that without breaking the CMS they all run on.",
       },
       {
         kind: "stats",
@@ -281,7 +282,8 @@ export const PROJECTS: Project[] = [
     // takeaways blocks (2026-11-16) restate it and add no new facts. Media is hot-linked
     // from the Precious Studio Lumin page until local copies land.
     slug: "lumin-fitness-motion",
-    title: "Making a fitness app feel like the studio it belongs to.",
+    title:
+      "Making a fitness app feel like the studio it belongs to, with motion built in Rive.",
     client: "Lumin Fitness",
     year: 2025,
     tier: 1,
@@ -304,6 +306,10 @@ export const PROJECTS: Project[] = [
     isPublic: true,
     body: [
       {
+        kind: "lead",
+        text: "In a Lumin studio, every machine faces a big interactive screen, with AI coaching and motion tracking built in. The app had none of that. It just sat there. My job was to make the phone feel like part of the studio.",
+      },
+      {
         kind: "brief",
         items: [
           {
@@ -318,18 +324,6 @@ export const PROJECTS: Project[] = [
             label: "The result",
             text: "Assets about 10x smaller, zero animation code from Lumin's developers, and rewards that feel like rewards.",
           },
-        ],
-      },
-      {
-        kind: "lead",
-        text: "Lumin's studios are the fun part: a big interactive screen in front of every machine, AI coaching, motion tracking. Then you opened the app and it just sat there. My job was to make the phone feel like the same place.",
-      },
-      {
-        kind: "stats",
-        items: [
-          { label: "Role", value: "Motion design, UI polish" },
-          { label: "Timeline", value: "Over a year" },
-          { label: "Platform", value: "Mobile app" },
         ],
       },
       {
@@ -480,25 +474,6 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        kind: "compare",
-        before: {
-          label: "How it was",
-          points: [
-            "Tap something, get nothing back",
-            "An app a tier behind the studio it belongs to",
-            "A 60 KB Lottie bundle",
-          ],
-        },
-        after: {
-          label: "How it is",
-          points: [
-            "Motion confirms what you did and shows what changed",
-            "Every transition judged against the studio screens",
-            "One 5 KB Rive file. Trigger a state and it plays",
-          ],
-        },
-      },
-      {
         kind: "section",
         heading: "How it landed",
         paragraphs: [
@@ -533,7 +508,8 @@ export const PROJECTS: Project[] = [
     // done. Compositions were rendered from HTML (scratchpad/rec/comp) using
     // screens captured from the live prototype.
     slug: "safari-guest-app",
-    title: "We built the app first and designed it second. It took seven days.",
+    title:
+      "We built the safari guest app first and designed it second. It took seven days.",
     client: "Luxury travel platform (NDA)",
     year: 2026,
     tier: 1,
@@ -569,6 +545,10 @@ export const PROJECTS: Project[] = [
         solo: true,
       },
       {
+        kind: "lead",
+        text: "Normally a prototype comes last. We already knew how this app should look and behave, so we built it first, and let a week of testing decide what stayed.",
+      },
+      {
         kind: "brief",
         items: [
           {
@@ -584,10 +564,6 @@ export const PROJECTS: Project[] = [
             text: "A working prototype on day one, tested and settled in seven, and a design system made only from what survived.",
           },
         ],
-      },
-      {
-        kind: "lead",
-        text: "Normally a prototype comes last. We already knew how this app should look and behave, so we built it first, and let a week of testing decide what stayed.",
       },
       {
         kind: "stats",

@@ -329,6 +329,36 @@
     letter-spacing: var(--tracking-normal);
   }
 
+  /**
+   * Case study text system. Title on top, text underneath, hierarchy from
+   * size and spacing alone (no separators):
+   *   section-title  ~24px SemiBold  block headings, container titles
+   *   section-text   ~20px Regular   every paragraph in a case study body
+   *   statement      ~40px Bold      special text, under a section-text label
+   * Built on the shared tokens so the scale stays one system.
+   */
+  .type-section-title {
+    font-family: var(--font-display);
+    font-size: var(--text-title-fluid);
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.25;
+    letter-spacing: var(--tracking-normal);
+  }
+  .type-section-text {
+    font-family: var(--font-body);
+    font-size: var(--text-body-fluid);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--leading-body);
+    letter-spacing: var(--tracking-normal);
+  }
+  .type-statement {
+    font-family: var(--font-display);
+    font-size: var(--text-h4-fluid);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.1;
+    letter-spacing: var(--tracking-normal);
+  }
+
   /* Caption — 14px Regular, opened up slightly. Gallery captions. */
   .type-caption {
     font-family: var(--font-body);

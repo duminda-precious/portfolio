@@ -1,6 +1,7 @@
 import { Footer } from "@/components/layout/Footer";
 import { Chip } from "@/components/primitives/Chip";
 import { Container } from "@/components/primitives/Container";
+import { CtaCard } from "@/components/sections/CtaCard";
 import { ExperimentsGrid } from "@/components/sections/ExperimentsGrid";
 import { FeaturedCard } from "@/components/sections/FeaturedCard";
 import { getExperiments, getFeaturedProjects } from "@/lib/content";
@@ -35,7 +36,7 @@ export default async function HomePage() {
         {/* <video className="h-full w-full object-cover object-bottom" … /> */}
       </div>
 
-      <Container as="main" paper belowHero className="pb-(--space-section)">
+      <Container as="main" paper belowHero className="pb-(--container-pad)">
         <div id="main" className="hero-optical-top">
           <h1 className="type-h1 text-ink">
             Hey, I&apos;m Duminda. I design things, then I make them move.{" "}
@@ -84,6 +85,9 @@ export default async function HomePage() {
           <div className="mt-(--space-section)">
             <ExperimentsGrid experiments={experiments} />
           </div>
+
+          {/* Same ask as every case study, right after the grid. */}
+          <CtaCard className="mt-(--space-section)" />
         </div>
       </Container>
 

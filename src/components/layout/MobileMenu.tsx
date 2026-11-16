@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
+import { buttonClasses } from "@/components/primitives/ButtonLink";
 import type { NavItem } from "@/lib/content";
 import { cn } from "@/lib/utils/cn";
 
@@ -128,7 +129,7 @@ export function MobileMenu({ items }: { items: NavItem[] }) {
           role="dialog"
           aria-modal="true"
           aria-label="Main navigation"
-          className="glass fixed inset-0 z-(--z-lightbox) flex flex-col px-(--container-pad) pt-(--spacing-6) pb-(--spacing-8) md:hidden"
+          className="glass fixed inset-0 z-(--z-lightbox) flex flex-col px-(--container-pad) pt-(--spacing-6) pb-(--container-pad) md:hidden"
         >
           <div className="flex justify-end">
             <button
@@ -141,23 +142,35 @@ export function MobileMenu({ items }: { items: NavItem[] }) {
           </div>
 
           <nav aria-label="Main" className="mt-(--spacing-8)">
+            {/* Home only appears here: on desktop the logo does that job,
+             * but inside the full-screen sheet the logo is covered. */}
             <Nav
-              items={items.filter((item) => item.href !== "/work-with-me")}
+              items={[
+                { label: "Home", href: "/" },
+                ...items.filter((item) => item.href !== "/work-with-me"),
+              ]}
               variant="overlay"
               onNavigate={close}
             />
           </nav>
 
-          {/* Pinned to the bottom of the sheet, the way the menu frame is. */}
-          <Link
-            href="/work-with-me"
-            onClick={close}
-            aria-current={pathname === "/work-with-me" ? "page" : undefined}
-            className="type-h4 type-h4-fixed mt-auto flex items-center justify-between pt-(--spacing-8) text-ink/60 no-underline hover:text-brand-700 focus-visible:text-brand-700 active:text-brand-700 aria-[current=page]:text-brand-700"
-          >
-            Work with me
-            <span aria-hidden="true">+</span>
-          </Link>
+          {/* The ask, pinned to the bottom of the sheet: the same blue card
+           * and white glass pill as the case-study CTA, 16px all round. */}
+          <div className="mt-auto flex flex-col gap-(--spacing-24) rounded-(--radius-sm) bg-brand-500 p-(--spacing-4) text-cream [&_:focus-visible]:outline-(--color-cream)">
+            <p className="type-h2 type-h2-fixed">
+              Got cool
+              <br />
+              ideas?
+            </p>
+            <Link
+              href="/work-with-me"
+              onClick={close}
+              aria-current={pathname === "/work-with-me" ? "page" : undefined}
+              className={buttonClasses("glass", "self-start")}
+            >
+              Work with me <span aria-hidden="true">→</span>
+            </Link>
+          </div>
         </div>,
             document.body,
           )

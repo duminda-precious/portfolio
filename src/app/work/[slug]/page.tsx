@@ -4,11 +4,11 @@ import { notFound } from "next/navigation";
 import { Footer } from "@/components/layout/Footer";
 import { InteractiveEmbed } from "@/components/media/InteractiveEmbed";
 import { Media } from "@/components/media/Media";
-import { ButtonLink } from "@/components/primitives/ButtonLink";
 import { Container } from "@/components/primitives/Container";
 import { Eyebrow } from "@/components/primitives/Eyebrow";
 import { SectionHeading } from "@/components/primitives/SectionHeading";
 import { BodyBlocks } from "@/components/sections/BodyBlocks";
+import { CtaCard } from "@/components/sections/CtaCard";
 import { FeaturedCard } from "@/components/sections/FeaturedCard";
 import {
   DISCIPLINE_LABELS,
@@ -120,21 +120,8 @@ export default async function CaseStudyPage({
             <BodyBlocks blocks={project.body} />
           </div>
 
-          {/* Every study ends on the same ask the footer makes, said louder. */}
-          <aside
-            className="mt-(--space-section) flex flex-col items-start gap-(--spacing-6) rounded-(--radius-sm) bg-brand-500 p-(--spacing-4) text-cream md:flex-row md:items-center md:justify-between [&_:focus-visible]:outline-(--color-cream)"
-          >
-            <p className="type-h4 max-w-[20ch]">
-              Got something like this on your plate?
-            </p>
-            <ButtonLink
-              href="/work-with-me"
-              variant="glass"
-              className="shrink-0"
-            >
-              Work with me <span aria-hidden="true">→</span>
-            </ButtonLink>
-          </aside>
+          {/* Every study ends on the same ask, said louder. */}
+          <CtaCard className="mt-(--space-section)" />
 
           {/* Two more studies, last on the page. Same card as the homepage.
            * previous/next wrap at both ends, so the reader is never

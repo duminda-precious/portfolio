@@ -1,4 +1,6 @@
 import { Footer } from "@/components/layout/Footer";
+import { LazyVideo } from "@/components/media/LazyVideo";
+import { ParallaxLayer } from "@/components/media/ParallaxLayer";
 import { Chip } from "@/components/primitives/Chip";
 import { Container } from "@/components/primitives/Container";
 import { CtaCard } from "@/components/sections/CtaCard";
@@ -11,7 +13,8 @@ import { getExperiments, getFeaturedProjects } from "@/lib/content";
  *
  * Structure per §9.1: full-bleed video band → the 1280px white container
  * below it (separated by --hero-content-gap) → footer on the grey page
- * OUTSIDE the container.
+ * OUTSIDE the container. The video runs 120px past the container's top
+ * edge, behind it.
  */
 export default async function HomePage() {
   const [featured, experiments] = await Promise.all([
@@ -22,18 +25,26 @@ export default async function HomePage() {
   return (
     <>
       {/*
-        Full-bleed hero band — 74vh, capped at the artboard's 800px.
-
-        Phase 2 swaps this for the Gumlet loop. The <video> needs
-        `object-cover object-bottom` so framing stays anchored to the BOTTOM
-        CENTRE on resize — the subject sits low in frame and top-cropping
-        would cut it. This wrapper already clips overflow.
+        Full-bleed hero band. The band keeps its height (it sets where the
+        paper starts), but the video inside is taller: it runs the 120px gap
+        PLUS 120px more, so its bottom edge slides behind the top of the
+        paper, which sits in front (z-media). It scrolls away with the page
+        (not fixed), and lags behind the scroll (parallax) so the paper
+        slides over it. The clip's own background is the page grey, so it reads
+        as part of the background. Decorative and silent.
       */}
       <div
-        className="h-(--hero-band-height) w-full overflow-hidden bg-page"
+        className="relative h-(--hero-band-height) w-full"
         aria-hidden="true"
       >
-        {/* <video className="h-full w-full object-cover object-bottom" … /> */}
+        <ParallaxLayer className="absolute inset-x-0 top-0 h-[calc(var(--hero-band-height)+var(--hero-content-gap)*2)] overflow-hidden bg-page">
+          <LazyVideo
+            src="/video/hero/hero.mp4"
+            poster="/video/hero/hero-poster.jpg"
+            eager
+            className="h-full w-full object-cover"
+          />
+        </ParallaxLayer>
       </div>
 
       <Container as="main" paper belowHero className="pb-(--container-pad)">

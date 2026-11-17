@@ -196,8 +196,9 @@
    * ----------------------------------------------------------------- */
   --hero-band-height: 50vh;
 
-  /* Gap between the bottom of the video band and the hero content.
-   * Constant at every viewport — this rhythm is deliberate, so it does
+  /* Gap between the bottom of the video band and the hero content (the
+   * video itself runs on behind the paper by this much again). Constant at
+   * every viewport — this rhythm is deliberate, so it does
    * NOT scale with --space-section. */
   --hero-content-gap: 120px;
 

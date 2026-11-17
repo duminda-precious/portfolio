@@ -12,13 +12,10 @@ type ContainerProps = {
    */
   paper?: boolean;
   /**
-   * Sit the container directly beneath the full-bleed hero band, separated by
-   * the measured --hero-content-gap (120px, constant at every viewport).
-   *
-   * ⚠️ Note for whoever revisits this: the original plan described the white
-   * container OVERLAPPING the video by ~56px (negative margin). The redlined
-   * artboard measures a 120px GAP instead, so the container no longer rises
-   * into the band. If the overlap comes back, this is the one place to change.
+   * Sit the container beneath the hero band, --hero-content-gap (120px,
+   * constant at every viewport) below the band's bottom edge. The hero
+   * video itself runs taller than the band and slides behind this
+   * container (see the homepage).
    */
   belowHero?: boolean;
   as?: ElementType;

@@ -506,7 +506,10 @@ export const PROJECTS: Project[] = [
     // never named. On-screen branding was swapped for the fictional
     // "Kestrel & Co." mark at capture time. The SwiftUI step is planned, not
     // done. Compositions were rendered from HTML (scratchpad/rec/comp) using
-    // screens captured from the live prototype.
+    // screens captured from the live prototype. Updated 2026-11-22 for the
+    // iOS 26 system (Liquid Glass, Apple text styles) and the rebuilt
+    // walkthrough: lineup, split, uicards, type, system and closing are v3,
+    // glass is new.
     slug: "safari-guest-app",
     title:
       "We built the safari guest app first and designed it second. It took seven days.",
@@ -643,8 +646,8 @@ export const PROJECTS: Project[] = [
         kind: "media",
         media: {
           kind: "image",
-          src: "/images/guest-app/split-v2.jpg",
-          alt: "A safari truck beside the PIN setup screen. Looks like the brand. Behaves like iOS.",
+          src: "/images/guest-app/split-v3.jpg",
+          alt: "A safari truck beside the PIN setup screen with Liquid Glass keys. Looks like the brand. Behaves like iOS.",
           aspect: "16/9",
           hasAudio: false,
         },
@@ -655,8 +658,8 @@ export const PROJECTS: Project[] = [
         kind: "media",
         media: {
           kind: "image",
-          src: "/images/guest-app/uicards-v2.jpg",
-          alt: "Close-ups: the date strip and stay card, chat with the liaison, saved documents, and a setup step.",
+          src: "/images/guest-app/uicards-v3.jpg",
+          alt: "Close-ups: the date strip and stay card, chat with the liaison, saved documents, and the permissions step.",
           aspect: "16/9",
           hasAudio: false,
         },
@@ -672,11 +675,18 @@ export const PROJECTS: Project[] = [
         ],
       },
       {
+        kind: "section",
+        heading: "Then the walkthrough went native",
+        paragraphs: [
+          "Sign-in became an email and a one-time code. Setup became one question per screen, with a step bar, a back button and a Skip, the way iOS onboarding works. Contacts come from the phone, permissions explain themselves before iOS asks, and the PIN pad uses the system's glass keys.",
+        ],
+      },
+      {
         kind: "media",
         media: {
           kind: "image",
-          src: "/images/guest-app/lineup-v2.jpg",
-          alt: "Six screens in a row: welcome, details, Home, Itinerary, Travel and Chat.",
+          src: "/images/guest-app/lineup-v3.jpg",
+          alt: "Seven walkthrough screens in a row: sign-in, welcome, details, emergency contact, medical info, updates and permissions.",
           aspect: "16/9",
           hasAudio: false,
         },
@@ -687,8 +697,21 @@ export const PROJECTS: Project[] = [
         kind: "media",
         media: {
           kind: "image",
-          src: "/images/guest-app/type-v2.jpg",
-          alt: "Crimson Pro and Hanken Grotesk, with the six colour roles from canvas to ink.",
+          src: "/images/guest-app/glass-v1.jpg",
+          alt: "Three screens showing Liquid Glass: the tab bar on Home, bar buttons and one tinted Continue on a setup step, and a button over a photograph.",
+          aspect: "16/9",
+          hasAudio: false,
+        },
+        caption: "Glass for what you act on. Lists, cards and photos stay solid.",
+        fullWidth: true,
+        solo: true,
+      },
+      {
+        kind: "media",
+        media: {
+          kind: "image",
+          src: "/images/guest-app/type-v3.jpg",
+          alt: "Apple's eleven text styles set in Crimson Pro and Hanken Grotesk, beside eight colour roles from canvas to ink.",
           aspect: "16/9",
           hasAudio: false,
         },
@@ -699,16 +722,16 @@ export const PROJECTS: Project[] = [
         kind: "section",
         heading: "The system came last",
         paragraphs: [
-          "Only what survived testing became a component. Brands fill in roles, not hex values, so the next operator is a new token file, not a redesign. The guidelines site sits beside the app, written for engineers, designers and writers alike.",
+          "Only what survived testing became a component. Brands fill in roles, not hex values, so the next operator is a new token file, not a redesign. Then we lined it up with iOS 26: Apple's eleven text styles, Liquid Glass only on the navigation layer, and the SwiftUI line beside every pattern. The guidelines site sits beside the app, written for engineers, designers and writers alike.",
         ],
       },
       {
         kind: "media",
         media: {
           kind: "local-loop",
-          src: "/images/guest-app/system-v2.mp4",
-          poster: "/images/guest-app/system-v2.jpg",
-          alt: "Scrolling the design system guidelines site: icons, buttons, rows, fields and cards.",
+          src: "/images/guest-app/system-v3.mp4",
+          poster: "/images/guest-app/system-v3.jpg",
+          alt: "Scrolling the Liquid Glass page of the design system guidelines site: where glass is used, its variants and its accessibility settings.",
           aspect: "16/9",
           hasAudio: false,
         },
@@ -719,8 +742,8 @@ export const PROJECTS: Project[] = [
         kind: "media",
         media: {
           kind: "image",
-          src: "/images/guest-app/closing-v2.jpg",
-          alt: "Week two: tokens and specs moving into a native SwiftUI build, beside a camp pool at golden hour.",
+          src: "/images/guest-app/closing-v3.jpg",
+          alt: "Week two: the same roles written as SwiftUI, with a glass-prominent Continue button, beside a camp pool.",
           aspect: "16/9",
           hasAudio: false,
         },

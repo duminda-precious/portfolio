@@ -1,12 +1,12 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import type { NavItem } from "@/lib/content";
 import { cn } from "@/lib/utils/cn";
 
+import { AnimatedLogo } from "./AnimatedLogo";
 import { MobileMenu } from "./MobileMenu";
 import { Nav } from "./Nav";
 
@@ -49,22 +49,17 @@ export function Header({ items }: { items: NavItem[] }) {
            * the colour change already makes them clickable. */}
           <Link
             href="/"
-            aria-label="Duminda M — home"
+            aria-label="Duminda Madushan — home"
             className="inline-flex min-h-[44px] items-center"
           >
             {/*
-              The supplied mark: blue face, white border, transparent
-              ground. Same file on every field — it does not recolor with
-              the page. The link's aria-label carries the name.
+              The supplied mark (public/logo-mark.svg): blue line art, white
+              face and border, transparent ground. Same art on every field —
+              it does not recolor with the page. It follows the cursor and
+              glances around when idle (see AnimatedLogo). The link's
+              aria-label carries the name.
             */}
-            <Image
-              src="/logo.png"
-              alt=""
-              width={500}
-              height={512}
-              priority
-              className="h-(--spacing-12) w-(--spacing-12) object-contain"
-            />
+            <AnimatedLogo className="h-(--spacing-12) w-(--spacing-12)" />
           </Link>
 
           <nav aria-label="Main" className="hidden md:block">

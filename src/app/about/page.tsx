@@ -6,10 +6,13 @@ import { Container } from "@/components/primitives/Container";
 import { StoryPlayer } from "@/components/sections/StoryPlayer";
 import { getSite } from "@/lib/content";
 
+/** Absolute, so the layout's " · Duminda Madushan" suffix isn't added twice. */
 export const metadata: Metadata = {
-  title: "About me",
+  title: {
+    absolute: "About Duminda Madushan · Full-stack designer, Sri Lanka",
+  },
   description:
-    "A decade across branding, UI/UX, motion and 3D, and it all started with comics drawn in the corner of a classroom.",
+    "I'm a full-stack designer in Sri Lanka with 10+ years in product, motion and 3D, now Director of Design at Precious Studio.",
 };
 
 /**
@@ -38,7 +41,7 @@ export default async function AboutPage() {
               <div className="shrink-0 rotate-2 self-end bg-cream p-3 pb-10 shadow-[0_14px_28px_rgb(0_0_0/0.22)] sm:self-center">
                 <Image
                   src="/images/about/duminda.png"
-                  alt="Portrait of Duminda M"
+                  alt="Portrait of Duminda Madushan"
                   width={256}
                   height={256}
                   priority

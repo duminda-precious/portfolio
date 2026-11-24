@@ -508,8 +508,8 @@ export const PROJECTS: Project[] = [
     // done. Compositions were rendered from HTML (scratchpad/rec/comp) using
     // screens captured from the live prototype. Updated 2026-11-22 for the
     // iOS 26 system (Liquid Glass, Apple text styles) and the rebuilt
-    // walkthrough: lineup, split, uicards, type, system and closing are v3,
-    // glass is new.
+    // walkthrough: lineup, split, type, system and closing are v3, uicards is
+    // v4 (whole components with padding), glass is new.
     slug: "safari-guest-app",
     title:
       "We built the safari guest app first and designed it second. It took seven days.",
@@ -658,8 +658,8 @@ export const PROJECTS: Project[] = [
         kind: "media",
         media: {
           kind: "image",
-          src: "/images/guest-app/uicards-v3.jpg",
-          alt: "Close-ups: the date strip and stay card, chat with the liaison, saved documents, and the permissions step.",
+          src: "/images/guest-app/uicards-v4.jpg",
+          alt: "Close-ups: the date strip and stay card, the permissions step, saved documents, and chat with the liaison.",
           aspect: "16/9",
           hasAudio: false,
         },

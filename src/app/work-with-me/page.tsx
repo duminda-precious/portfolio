@@ -6,10 +6,13 @@ import { Container } from "@/components/primitives/Container";
 import { SectionHeading } from "@/components/primitives/SectionHeading";
 import { getCv, getSite, getSocialLinks } from "@/lib/content";
 
+/** Absolute, so the layout's " · Duminda Madushan" suffix isn't added twice. */
 export const metadata: Metadata = {
-  title: "Work with me",
+  title: {
+    absolute: "Work with Duminda Madushan · Product, motion and 3D design",
+  },
   description:
-    "Open for work right now. Product design, motion and 3D, from the first question to the last keyframe. Send a rough idea and we'll work out the rest.",
+    "Got something that needs designing, moving or building in 3D? I'm a full-stack designer in Sri Lanka. Send me a rough idea. I don't need a brief.",
 };
 
 /**
@@ -24,6 +27,10 @@ export const metadata: Metadata = {
  * submissions go before it is worth building.
  *
  * Every claim here is from a case study or the CV. Keep it that way.
+ *
+ * The location and AI lines in the pitch came from the content brief
+ * (2026-11-22). The hours were confirmed directly; "weeks into days" rests
+ * on the seven-day guest app and the one-week fractal build.
  */
 
 const STEPS = [
@@ -76,6 +83,11 @@ export default async function WorkWithMePage() {
               <br />
               Send a rough idea and we&apos;ll work out the shape of it
               together.
+              <br />
+              I&apos;m based in Sri Lanka and work with teams abroad. My
+              evenings overlap with US mornings.
+              <br />I direct AI the way I&apos;d direct a team: a clear brief,
+              strong opinions, my name on the result. It turns weeks into days.
             </p>
 
             {/* Primary (solid), secondary (glass), tertiary (ghost, far
@@ -132,7 +144,7 @@ export default async function WorkWithMePage() {
                   The resume, no download needed.
                 </SectionHeading>
                 <p className="type-section-text mt-(--spacing-4) text-pretty text-ink-muted">
-                  {cv.name}. {cv.title}. {cv.summary}
+                  {cv.intro} {cv.summary}
                 </p>
               </div>
               <div className="shrink-0">

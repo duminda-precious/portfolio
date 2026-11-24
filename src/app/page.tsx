@@ -3,6 +3,7 @@ import { LazyVideo } from "@/components/media/LazyVideo";
 import { ParallaxLayer } from "@/components/media/ParallaxLayer";
 import { Chip } from "@/components/primitives/Chip";
 import { Container } from "@/components/primitives/Container";
+import { SectionHeading } from "@/components/primitives/SectionHeading";
 import { CtaCard } from "@/components/sections/CtaCard";
 import { ExperimentsGrid } from "@/components/sections/ExperimentsGrid";
 import { FeaturedCard } from "@/components/sections/FeaturedCard";
@@ -54,6 +55,13 @@ export default async function HomePage() {
             <span className="text-brand-500">Literally.</span>
           </h1>
 
+          {/* The plain facts the joke leaves out: full name, title,
+            disciplines and Sri Lanka (content brief, 2026-11-22). */}
+          <p className="type-body mt-(--spacing-6) text-pretty text-ink-muted">
+            Duminda Madushan, Director of Design at Precious Studio. Full-stack
+            designer in Sri Lanka: product, motion and 3D.
+          </p>
+
           {/*
             Non-interactive for now (§9.4) — a Chip with no onClick renders a
             <span>, not a <button>. A disabled-looking control with no action
@@ -75,21 +83,29 @@ export default async function HomePage() {
             The work&apos;s down here
           </Chip>
 
-          {/* Featured work — never hardcoded, always from the content layer. */}
+          {/* Featured work — never hardcoded, always from the content layer.
+            The heading (content brief, 2026-11-22) takes the same style and
+            gap as "Things that kept me up", so the page reads hero, featured
+            work, experiments, contact. */}
           {featured.length > 0 ? (
             <section
               id="featured-work"
-              aria-label="Featured work"
-              className="mt-(--space-section) space-y-(--space-section)"
+              aria-labelledby="featured-heading"
+              className="mt-(--space-section)"
             >
-              {featured.map((project, index) => (
-                <FeaturedCard
-                  key={project.slug}
-                  project={project}
-                  /* Only the first card is an LCP candidate. */
-                  priority={index === 0}
-                />
-              ))}
+              <SectionHeading id="featured-heading">
+                The big ones.
+              </SectionHeading>
+              <div className="mt-(--spacing-8) space-y-(--space-section)">
+                {featured.map((project, index) => (
+                  <FeaturedCard
+                    key={project.slug}
+                    project={project}
+                    /* Only the first card is an LCP candidate. */
+                    priority={index === 0}
+                  />
+                ))}
+              </div>
             </section>
           ) : null}
 

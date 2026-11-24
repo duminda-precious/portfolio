@@ -24,18 +24,25 @@ const rethinkSans = Rethink_Sans({
   weight: ["400", "500", "600", "700", "800"],
 });
 
+/**
+ * Home's title and description live here as the defaults (Home sets none of
+ * its own). Wording is from the content and SEO brief (2026-11-22): plain
+ * words where search engines and link previews read, the jokes stay in the
+ * headings. Next copies each page's title and description into the Open
+ * Graph and Twitter tags, so previews pick these up without a separate copy.
+ */
 export const metadata: Metadata = {
   title: {
-    default: "Duminda M · I design things, then I make them move. Literally.",
-    template: "%s · Duminda M",
+    default: "Duminda Madushan · Full-stack designer in Sri Lanka",
+    template: "%s · Duminda Madushan",
   },
   description:
-    "Head of Motion at Precious Studio. Product design, motion and 3D, by someone who started out drawing comics in the corner of a classroom.",
+    "I'm Duminda Madushan, Director of Design at Precious Studio. Full-stack designer in Sri Lanka: product, motion and 3D.",
   metadataBase: new URL(SITE_URL),
   openGraph: {
     type: "website",
     locale: "en_GB",
-    siteName: "Duminda M",
+    siteName: "Duminda Madushan",
   },
 };
 

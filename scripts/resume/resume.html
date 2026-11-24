@@ -1,0 +1,414 @@
+<!doctype html>
+<!--
+  Source of public/cv/duminda-madushan-resume.pdf, the one-page resume linked
+  from Work with me. Export it with `pnpm resume:pdf`, which prints this file
+  with Chrome and stops if it runs past one page.
+
+  The facts here match the resume on Work with me (CV in content/site.ts).
+  This version has fuller bullets, contact details and tools. Update the two
+  together.
+
+  The layout copies the 2026-11-16 PDF point for point: A4, 24pt margins,
+  a 166pt left column, a 24pt gap and a 357pt right column. The spacing values
+  below are worked back from that PDF's baselines, so keep them as they are.
+  The one-page rule is fixed: trim words before touching the spacing.
+
+  Rethink Sans is the site's brand face (SIL Open Font License 1.1). The three
+  .ttf files are fixed 400, 600 and 700 cuts of the Latin subset the site
+  serves. Chrome turns a variable font into outlines in a PDF, but it embeds
+  these as real fonts, which resume parsers read more reliably.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Duminda Madushan — Resume</title>
+    <style>
+      @font-face {
+        font-family: "Rethink Sans";
+        src: url("RethinkSans-Regular.ttf") format("truetype");
+        font-weight: 400;
+      }
+
+      @font-face {
+        font-family: "Rethink Sans";
+        src: url("RethinkSans-SemiBold.ttf") format("truetype");
+        font-weight: 600;
+      }
+
+      @font-face {
+        font-family: "Rethink Sans";
+        src: url("RethinkSans-Bold.ttf") format("truetype");
+        font-weight: 700;
+      }
+
+      @page {
+        size: A4;
+        margin: 0;
+      }
+
+      :root {
+        --ink: #1f1f1f;
+        --blue: #1035bf;
+        --grey: #747474;
+      }
+
+      html {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+
+      body {
+        position: relative;
+        margin: 0;
+        padding: 23.657pt 24pt 0;
+        font-family: "Rethink Sans", sans-serif;
+        font-size: 9pt;
+        color: var(--ink);
+      }
+
+      h1,
+      h2,
+      h3,
+      p,
+      ul {
+        margin: 0;
+        padding: 0;
+        font: inherit;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      /* Header: name and title on the left, contacts top right. */
+      .name {
+        font-size: 23pt;
+        font-weight: 700;
+        line-height: 30pt;
+      }
+
+      .title {
+        margin-top: 1.91pt;
+        font-size: 13pt;
+        font-weight: 600;
+        line-height: 17pt;
+        color: var(--blue);
+      }
+
+      .contacts {
+        position: absolute;
+        top: 31.431pt;
+        right: 24pt;
+        display: grid;
+        grid-auto-flow: column;
+        column-gap: 16pt;
+      }
+
+      /* fit-content keeps each link's clickable area to its text. */
+      .contacts a,
+      .contacts .value {
+        display: block;
+        width: fit-content;
+        line-height: 11pt;
+        color: var(--blue);
+      }
+
+      .contacts .label {
+        display: block;
+        margin-top: 0.341pt;
+        font-size: 8pt;
+        line-height: 11pt;
+        color: var(--grey);
+      }
+
+      .summary {
+        margin-top: 18.864pt;
+        line-height: 16pt;
+      }
+
+      /* Two columns. Work experience comes first in the source so text
+       * readers reach it right after the summary; the grid puts it on the
+       * right. */
+      .columns {
+        display: grid;
+        grid-template-columns: 166pt 357pt;
+        column-gap: 24pt;
+        align-items: start;
+        margin-top: 20.136pt;
+      }
+
+      .main,
+      .side {
+        display: flex;
+        flex-direction: column;
+        grid-row: 1;
+      }
+
+      .main {
+        grid-column: 2;
+      }
+
+      .side {
+        grid-column: 1;
+      }
+
+      h2 {
+        font-size: 13pt;
+        font-weight: 700;
+        line-height: 17pt;
+      }
+
+      li {
+        position: relative;
+        list-style: none;
+      }
+
+      li::before {
+        content: "•";
+        position: absolute;
+        left: 0;
+      }
+
+      /* Right column: roles. */
+      .main h2 + .role {
+        margin-top: 7.523pt;
+      }
+
+      .role + .role {
+        margin-top: 21.659pt;
+      }
+
+      .role:not(:has(ul)) + .role {
+        margin-top: 19.568pt;
+      }
+
+      .role h3 {
+        font-size: 10pt;
+        font-weight: 600;
+        line-height: 14pt;
+      }
+
+      .date {
+        margin-top: 0.932pt;
+        font-size: 8pt;
+        line-height: 12pt;
+        color: var(--grey);
+      }
+
+      .role ul {
+        margin-top: 3.409pt;
+      }
+
+      .role li {
+        padding-left: 12pt;
+        line-height: 14pt;
+      }
+
+      .role li + li {
+        margin-top: 6pt;
+      }
+
+      /* Left column: skills, tools, education, languages. */
+      .side ul {
+        margin-top: 8.364pt;
+      }
+
+      .side li {
+        padding-left: 10pt;
+        line-height: 16pt;
+      }
+
+      .side li + li {
+        margin-top: 4pt;
+      }
+
+      .side ul + h2 {
+        margin-top: 18.636pt;
+      }
+
+      .degree {
+        margin-top: 3.523pt;
+        font-size: 10pt;
+        font-weight: 600;
+        line-height: 14pt;
+      }
+
+      .school {
+        margin-top: 0.341pt;
+        line-height: 15pt;
+      }
+
+      .side .date {
+        margin-top: 0.341pt;
+      }
+
+      .side .date + h2,
+      .languages + h2 {
+        margin-top: 5.795pt;
+      }
+
+      .languages {
+        margin-top: 4.364pt;
+        line-height: 16pt;
+      }
+
+      /* Keeps a hyphenated word whole, as the old PDF did. */
+      .nowrap {
+        white-space: nowrap;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1 class="name">Duminda Madushan</h1>
+      <p class="title">Director of Design</p>
+      <div class="contacts">
+        <p>
+          <a href="https://www.duminda.design/">www.duminda.design</a>
+          <span class="label">Portfolio</span>
+        </p>
+        <p>
+          <a href="mailto:mduminda93@gmail.com">mduminda93@gmail.com</a>
+          <span class="label">Email</span>
+        </p>
+      </div>
+    </header>
+
+    <p class="summary">
+      I’m Duminda Madushan, Director of Design at Precious Studio, based in Sri
+      Lanka. Full-stack designer, meaning I design it, animate it, and build it,
+      even in 3D. I direct AI the way I’d direct a team: a clear brief, strong
+      opinions, my name on the result. It turns weeks into days. 10+ years, and
+      I lead teams from concept to delivery.
+    </p>
+
+    <div class="columns">
+      <main class="main">
+        <h2>Work experience</h2>
+
+        <section class="role">
+          <h3>Director of Design – Precious Studio, Austin, TX, USA</h3>
+          <p class="date">2025 – Present</p>
+          <ul>
+            <li>
+              Advising clients on motion, product and interface direction, and
+              turning a business goal into a scope.
+            </li>
+            <li>
+              Reviewing concepts, prototypes and motion, and recommending the
+              direction that meets the client objective.
+            </li>
+            <li>
+              Shaping pitch-ready stories for start-ups speaking to investors
+              and accelerators.
+            </li>
+          </ul>
+        </section>
+
+        <section class="role">
+          <h3>Head of Motion Design – Precious Studio, Austin, TX, USA</h3>
+          <p class="date">2023 – 2025</p>
+          <ul>
+            <li>
+              Streamlined client discovery so deliveries close in 2 rounds of
+              revisions, with technical implementation and handoffs meeting 100%
+              of project goals.
+            </li>
+            <li>
+              Mentored and inspired the design team with visual exercises that
+              built team spirit and shared trends and technologies.
+            </li>
+            <li>
+              Managed multiple projects from concept through to completion, with
+              both <span class="nowrap">in-house</span> resources and 3rd party
+              vendors.
+            </li>
+          </ul>
+        </section>
+
+        <section class="role">
+          <h3>Senior Creative Director – Precious Studio, Austin, TX, USA</h3>
+          <p class="date">2021 – 2023</p>
+          <ul>
+            <li>
+              Set concepts and strategies for digital products, and built pitch
+              content that helped start-ups reach investors and accelerators.
+            </li>
+            <li>
+              Part of the core team that ranked the studio among Clutch’s Top
+              B2B Companies in Texas, 2022, within a year of opening.
+            </li>
+          </ul>
+        </section>
+
+        <section class="role">
+          <h3>Motion Designer – Thiken, Austin, TX, USA</h3>
+          <p class="date">2018 – 2021</p>
+          <ul>
+            <li>
+              Produced Lottie, 2D and 3D animation, storyboards and animatics,
+              shortening delivery by 3 days with an almost 80% success rate.
+            </li>
+          </ul>
+        </section>
+
+        <section class="role">
+          <h3>Experience Designer – Xcendant, Nugegoda, Sri Lanka</h3>
+          <p class="date">2016 – 2017</p>
+        </section>
+
+        <section class="role">
+          <h3>
+            Senior User Interface Designer – Arimac Lanka, Colombo, Sri Lanka
+          </h3>
+          <p class="date">2015 – 2016</p>
+        </section>
+      </main>
+
+      <aside class="side">
+        <h2>Skills</h2>
+        <ul>
+          <li>
+            Product: UI Design, Wireframing, HF Prototyping, Design System,
+            Design Strategy
+          </li>
+          <li>Brand and story: Branding, Storytelling, Illustration</li>
+          <li>Motion and 3D: Motion Design, 2D Animation, 3D Modeling</li>
+          <li>
+            AI: AI Augmentation, AI+Coding, AI+Design Audit, AI Design
+            Direction, AI System Design
+          </li>
+        </ul>
+
+        <h2>Tools</h2>
+        <ul>
+          <li>Design: Figma, Adobe CC, Procreate</li>
+          <li>Motion and video: After Effects with expressions, DaVinci</li>
+          <li>3D: Blender and Spline3D, for modeling, animation and rigging</li>
+          <li>
+            AI: Claude, Claude Code, Codex and Gemini, plus MCP and skills tuned
+            to tasks in Blender, Figma, DaVinci and Spline3D
+          </li>
+          <li>Front end: HTML, CSS, Next.js</li>
+        </ul>
+
+        <h2>Education</h2>
+        <p class="degree">BA (Hons.) Graphic Design</p>
+        <p class="school">Northumbria University,<br />Newcastle, UK</p>
+        <p class="date">2012 – 2015</p>
+
+        <h2>Languages</h2>
+        <p class="languages">English (fluent)<br />Sinhala (native)</p>
+
+        <h2>Contact</h2>
+        <p class="languages">
+          +94 70 214 0827<br />
+          <a href="https://www.linkedin.com/in/dumindahettiarachchi/"
+            >linkedin.com/in/dumindahettiarachchi</a
+          >
+        </p>
+      </aside>
+    </div>
+  </body>
+</html>

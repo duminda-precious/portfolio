@@ -97,12 +97,10 @@ export type CvRole = {
 };
 
 /**
- * The CV, as read on Work with me. Every line is from
- * public/cv/duminda-madushan-resume.pdf: update the two together.
- *
- * ⚠️ Ahead of the PDF since 2026-11-22: the intro, the Director of Design
- * entry and the Head of Motion end date come from the content brief. The PDF
- * still shows the old title and timeline until it is re-exported.
+ * The CV, as read on Work with me. The one-page PDF
+ * (public/cv/duminda-madushan-resume.pdf) carries the same facts with fuller
+ * bullets. It is built from scripts/resume/resume.html: change the two
+ * together, then run `pnpm resume:pdf`. In sync since 2026-11-24.
  */
 export const CV = {
   name: "Duminda Madushan",
